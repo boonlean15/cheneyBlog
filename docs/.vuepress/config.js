@@ -39,6 +39,10 @@ module.exports = {
                         title: 'JAVA语法基础',
                         path: '/repository/java/core_one/first_unit'
                     },
+                    {
+                        title: 'JAVA 流库',
+                        path: '/repository/java/core_one/java_core_stream'
+                    },
                 ]
             },
         ]
