@@ -1,5 +1,7 @@
 # Vuepress + Github Pages + Github Actions 构建开源文档
+
 ## Vuepress
+
 1. 通过Vuepress构建文档
    
     [访问Vuepress](https://vuepress.vuejs.org/zh/)
