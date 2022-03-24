@@ -28,24 +28,28 @@ module.exports = {
                 sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
-                        title: '不可变类',
-                        path: '/java/unableClass',
-                    },
-                    {
                         title: 'JDK JRE JVM三者关系',
                         path: '/java/jdkRelationship',
+                    },
+                    {
+                        title: '不可变类',
+                        path: '/java/unableClass',
                     },
                     {
                         title: 'JAVA语法基础',
                         path: '/java/firstUnit'
                     },
                     {
-                        title: 'JAVA 流库',
-                        path: '/java/javaCoreStream'
-                    },
-                    {
                         title: 'JAVA 泛型',
                         path: '/java/generics'
+                    },
+                    {
+                        title: 'JAVA 并发',
+                        path: '/java/javaConcurrent'
+                    },
+                    {
+                        title: 'JAVA 流库',
+                        path: '/java/javaCoreStream'
                     },
                 ]
             },
