@@ -44,6 +44,10 @@ module.exports = {
                         path: '/java/generics'
                     },
                     {
+                        title: 'JAVA 集合',
+                        path: '/java/javaCollection'
+                    },
+                    {
                         title: 'JAVA 并发',
                         path: '/java/javaConcurrent'
                     },
