@@ -24,8 +24,8 @@ module.exports = {
             },
             {
                 title: 'JAVA基础',   // 必要的
-                collapsable: false, // 可选的, 默认值是 true,
-                sidebarDepth: 0,    // 可选的, 默认值是 1
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
                         title: 'JDK JRE JVM三者关系',
