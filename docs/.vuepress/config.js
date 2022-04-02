@@ -5,7 +5,7 @@ module.exports = {
     themeConfig: {
         nav: [
             { text: '首页', link: '/' },
-            { text: 'JAVA', link: '/repository/java/core_one/jdk_relationship' },
+            { text: 'JAVA', link: '/java/jdkRelationship' },
             { text: '前端', link: 'http://www.lvyestudy.com/'},
             { text: 'Github', link: 'https://github.com/boonlean15'},
           ],

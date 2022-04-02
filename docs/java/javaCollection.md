@@ -4,6 +4,21 @@ priorityQueue 可用于任务执行，执行优先级最高的任务(每次添�
 
 **LinkedHashMap 最近最少使用非常有用(根据访问顺序，而非添加顺序)**
 
+**可以set操作的称为可修改的集合，可以add或者remove的称为可改变大小**
+
+> 不可变集合--Arrays和Collections获取的视图集合，不能add和remove，Arrays和Collections获取的subList子范围，不能clear，否则unSupportOperationException
+
+> 可remove不可add--一些集合的keyset，values，entrySet，只可以删除不能添加
+
+- 集合框架---常用的一些集合
+  - ArrayList-数组列表 
+  - LinkedList-链表列表
+  - HashMap-哈希键值对 
+  - TreeMap-红黑树Map 
+  - PriorityQueue-优先级队列 
+  - LinkedHashMap-链表哈希键值对 
+  - ArrayDueue-数组双端队列
+
 ### 1.集合框架中的类
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaImg/collection1.jpg" alt="jpg">
