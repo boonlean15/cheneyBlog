@@ -1,25 +1,25 @@
-## 流库
+# 流库
 
 流提供了一种让我们可以再比集合更高的概念级别上指定计算的数据视图 。
 
-### 1.从迭代到流的操作
+## 1.从迭代到流的操作
 
-#### 特性
+### 特性
 
 - 流并不存储其元素
 - 流的操作不会改变其数据源
   
-#### 操作流程
+### 操作流程
 
 1. 创建一个流  ： 通过stream()方法
 2. 指定将初始流转换为其他流的中间操作，可能包含多个步骤.如：filter()，flatMap()，map()，等等
 3. 应用终止操作，从而产生结果。如：count()，collect();
 
-#### parallelStream
+### parallelStream
 
 可以让流库以并行方式来执行过滤和计数。
 
-### 2.流的创建
+## 2.流的创建
 
 - Collection接口的stream方法
 - Stream.of方法
@@ -29,24 +29,24 @@
 - Pattern类的splitAsStream方法
 - Files.lines方法等等
 
-### 3.filter、map、flatMap
+## 3.filter、map、flatMap
 
-#### 1.filter 
+### 1.filter 
 > filter转换会产生一个流，它的元素和某种条件相匹配。
 >> filter的引元是Predicate<T> ，即从T到boolean的函数
 
-#### 2.map
+### 2.map
 
 > 使用map时，会有一个函数应用到每个元素上，并且其结果是包含了应用该函数后所产生的所有结果的流。
 
-#### 3.flatMap
+### 3.flatMap
 
 - Stream<Stream<String>> result = words.stream().map(w -> letters(w));
   > 一个包含流的流，可以使用flatMap将包含流的流平摊为字母流。
 - Stream<String> flatResult = words.stream().flatMap(w -> letters(w));
   > flatMap 产生一个流，它是通过将mapper应用到当前流中的所有元素所产生的结果连接到一起而获得。**这里的每个结果都是一个流**
 
-### 4.抽取子流和连接流
+## 4.抽取子流和连接流
 
 - stream.limit(n) 返回一个新的流，截取流的前n个元素生成一个新流
 - stream.skip(n) 丢弃前n个元素
@@ -58,9 +58,9 @@ Stream<String> words = Stream.of(contents.split("\\PL+")).skip(100);
 Stream<String> combined = Stream.concat(letters("hello"),letters("world"));
 ```
 
-### 5.其他的流转换
+## 5.其他的流转换
 
-#### 1.distinct方法
+### 1.distinct方法
     
 元素从原有流中产生，原来的元素按照同样的顺序剔除重复元素后产生
 
@@ -68,7 +68,7 @@ Stream<String> combined = Stream.concat(letters("hello"),letters("world"));
 Stream<String> uniqueWords = Stream.of("merrily","java","java").distinct();
 ```
 
-#### 2.sort方法
+### 2.sort方法
 
 一种用于操作Comparable元素的流，另一种用于接收一个Comparator
 
@@ -76,7 +76,7 @@ Stream<String> uniqueWords = Stream.of("merrily","java","java").distinct();
 Stream<String> longestFirst = words.stream().sorted(Comparator.comparing(String::length).reversed());
 ```
 
-#### 3.peek方法
+### 3.peek方法
 
 产生另一个流，它的元素和原来流中的元素相同，但是再每次获取一个元素时，都会调用一个函数。对于调试来说很方便
 
@@ -95,7 +95,7 @@ public void testStreamPeek(){
 }
 ```
 
-###  6.简单约简
+##  6.简单约简
 
 从流数据中获取答案，称为约简。将流约简为可以在程序中使用的非流值。
 
@@ -107,19 +107,19 @@ public void testStreamPeek(){
 - allMatch(Predicate<? super T> predicate)
 - noneMatch(Predicate<? super T> predicate)
 
-###  7.Optional类型
+##  7.Optional类型
 > Optional<T>对象是一种包装器对象，要么包装了T类型的对象，要么没有包装任何对象。
 
-#### 1.使用Optional值
+### 1.使用Optional值
     orElse、orElseGet、orElseThrow、ifPresent、map
 
-#### 2.不正确的使用
+### 2.不正确的使用
     get、isPresent、
 
-#### 3.创建Optional
+### 3.创建Optional
     of、ofNullable、empty、
 
-#### 4.flatMap
+### 4.flatMap
 类似Stream的map和flatMap的操作、map操作结果->Optional<T> 、flatMap是Optional<T>,T->Optional<U>操作的结果-> Optional<U>
 
 ```java
@@ -181,7 +181,7 @@ public class OptionalTest
 }
 ```
 
-###  8.收集结果到集合或者列表
+##  8.收集结果到集合或者列表
 
 - toArray 结果存储到数组中，可以提供数组的new，确定数组类型。因为运行时，不能确定类型，未提供的情况下，结果是Object[]
 - collect（Collector ）方法，使用给定的的收集器收集当前流中的元素
@@ -192,7 +192,7 @@ public class OptionalTest
   - joining
   - sumarizing 可以获取max，min，average，等
 
-### 9.收集结果到映射表中
+## 9.收集结果到映射表中
 
 ```java
 @NotNull 
@@ -205,7 +205,7 @@ java.util.function.Supplier<M> mapSupplier)
 >产生一个收集器，产生一个映射表或者并发映射表。keyMapper和valueMapper函数会引用到每个收集的元素上，从而产生映射表中的键/值项。默认情况，当两个元素的键相同时，会抛出
 
 >一个IllegalStateException异常。提供一个mergeFunction，来合并相同键的值。默认结果是HashMap或者ConcurrentHashMap，可以提供一个mapSupplier，它产生期望的映射表实例。        
-### 10.群组和分区
+## 10.群组和分区
 1. **groupingBy 产生一个收集器，键是应用classifier分类函数后所有元素收集到的结果。**
 
 ```java
@@ -226,7 +226,7 @@ System.out.println("partition: locales1" + locales1);
 System.out.println("partition: locales2" + locales2);
 ```
 
-### 11.下游收集器
+## 11.下游收集器
 
 groupingBy的每个值都是一个列表，如果想以某种方式处理列表，那么就需要提供一个下游收集器
 
@@ -294,8 +294,8 @@ public static void main(String[] args) throws IOException
 - mapping(Function<? super T,? extends U> mapper, Collector<? super U,A,R> downstream)
    > 产生一个收集器，它会产生一个映射表，其键是将mapper应用到收集到的数据上而产生的，其值是使用downStream收集器收集到的具有相同键的元素
 
-### 12.约简操作
-#### reduce
+## 12.约简操作
+### reduce
 
 - 约简操作 操作持续作用在两个元素上
 >例如：collects.reduce(0,(a, b) -> a + b); 计算两个数的和，持续作用，0为幺元素，如果流为空，则会返回幺元素，这样就不用操作Optional
@@ -307,11 +307,11 @@ public static void main(String[] args) throws IOException
 
 - BitSet result = stream.collect(BitSet::new, BitSet::set, BitSet::or);//一般用于并行化操作的时候
 
-### 13.基本类型流
+## 13.基本类型流
 - 1.对象流-> 基本类型流  mapToInt()
 - 2.基本类型流 -> 对象流 boxed()
 
-### 14.并行流
+## 14.并行流
 
 只有在对已经存在于内存中的数据进行大量的计算时，才采用并行流。
 **并行流使用Fork-join框架**
