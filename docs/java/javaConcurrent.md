@@ -100,7 +100,7 @@ interrupt方法可以用来请求终止线程
    >Thread.sleep,Object.await,Thread.join,Lock.tryLock,Condition.await计时版方法
 6. **terminate 被终止**　　run方法正常退出死亡/ 因为未捕获异常终止run方法死亡  可以调用stop方法杀死线程，但已经过时，不建议使用。
 
-- - join方法：当调用join方法时，调用的线程对象进入等待状态
+- - join方法：当调用join方法时，调用的线程对象进入等待状态。`线程A中调用线程B的join方法时，线程A会挂起，直到线程B执行完毕后，才会继续执行线程A。`
   > 如：调用的current线程是main主线程，进入了等待，时间到后，继续后面的log打印
 
 ```java
@@ -297,6 +297,7 @@ java提供了两种机制解决并发访问的问题
 **如果线程调度器选择忽略掉一个线程，即使使用了公平锁，那么该线程虽然等待了很长时间，但仍然不会获得执行权。**
 
 ### 4.条件对象 Condition
+- 调用condition的await方法时，进入等待并放弃锁对象
 
 当一个线程获得锁对象时，需要同时满足某一个条件时，才能执行时，应该考虑使用条件对象。
 > 例如：银行转账的例子，需要账号金额大于转账金额时，才可以使用。如果金额小于转账金额，需要等待其他线程转入，达到条件方可执行
@@ -389,7 +390,7 @@ public class Bank
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaImg/concurrent12.jpg" alt="jpg">
 
-obj的创建仅仅是用来使用每个java对象使用的锁。客户端锁是非常脆弱的，通常不建议使用
+obj的创建仅仅是用来使用每个java对象持有的锁。客户端锁是非常脆弱的，通常不建议使用
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaImg/concurrent13.jpg" alt="jpg">
 
@@ -592,8 +593,8 @@ String result = map.search(threshold, (k, v) -> v > 1000 ? k : null);
 ```
 forEach、遍历，可以提供消费Consumer，或者添加转换transfer再使用consumer
 ```java
-map.forEach(threshold,(k, v)•> k + " -> " + v，// Transformer
-    Syste«.out::println); // Consumer        
+map.forEach(threshold,(k, v) -> k + " -> " + v，// Transformer
+    System.out::println); // Consumer        
 ```
 reduce、归约 需要提供一个累加函数，Long::sum,Long::max等
 ```java
@@ -701,7 +702,7 @@ Integer result = task.getO;// it's a Future
 
 ### 2.预定执行
 
-Executors 类的 newScheduledThreadPool 和 newSingleThreadScheduledExecutor 方法将返回实现了 Scheduled¬ ExecutorService 接口的对象。
+Executors 类的 newScheduledThreadPool 和 newSingleThreadScheduledExecutor 方法将返回实现了 ScheduledExecutorService 接口的对象。
 
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaImg/concurrent32.jpg" alt="jpg">
@@ -723,9 +724,9 @@ Executors 类的 newScheduledThreadPool 和 newSingleThreadScheduledExecutor 方
 ```java
 ExecutorCompletionService<T> service = new ExecutorCompletionService<>(executor): 
 for (Callable<T> task : tasks) 
-service,submit(task);
+service.submit(task);
 for (int i = 0; i < tasks.size();i++) 
-processFurt her(servi ce.take().get());
+processFurther(service.take().get());
 ```
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaImg/concurrent33.jpg" alt="jpg">
@@ -743,20 +744,22 @@ break problem into subproblems recursively solve each subproblem combine the res
 }
 ```
 
-要采用框架可用的一种方式完成这种递归计算， 需要提供一个扩展 RecursiveTaskO 的 类(如果计算会生成一个类型为 T 的结果)或者提供一个扩展 RecursiveActicm 的类(如果不 生成任何结果 )。再覆盖 compute 方法来生成并调用子任务， 然后合并其结果　
+要采用框架可用的一种方式完成这种递归计算， 需要提供一个扩展 RecursiveTaskO 的 类(如果计算会生成一个类型为 T 的结果)或者提供一个扩展 RecursiveAction 的类(如果不生成任何结果 )。再覆盖 compute 方法来生成并调用子任务， 然后合并其结果　
 
 ```java
 class Counter extends RecursiveTask<Integer> {
-protected Integer compute()
-{
-if (to - fro« < THRESHOLD) {
-solve problem directly }
-else
-{
-int mid = (from + to) / 2;
-Counter first = new Counter(va1ues, from, mid, filter); Counter second = new Counter(va1ues, mid, to, filter); invokeAll(first, second):
-return first.joinO + second.joinO;
-} }
+    protected Integer compute()
+    {
+        if (to - from < THRESHOLD) {
+            solve problem directly 
+        }else{
+            int mid = (from + to) / 2;
+            Counter first = new Counter(va1ues, from, mid, filter); 
+            Counter second = new Counter(va1ues, mid, to, filter); 
+            invokeAll(first, second):
+            return first.joinO + second.joinO;
+        } 
+    }
 }
 ```
 
