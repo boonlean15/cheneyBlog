@@ -489,6 +489,8 @@ class Employee extends SerialCloneable
 
 ## 操作文件
 
+### Path
+
 文件管理的内涵远远要比读写要广，输入输出流关心的是文件内容的读写。而文件管理关心的是在磁盘上如何存储
 - Paths
   - static Path get(String first, String...more) 连接给定的字符串创建一个路径
