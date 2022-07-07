@@ -55,6 +55,10 @@ module.exports = {
                         title: 'JAVA 流库',
                         path: '/java/javaCoreStream'
                     },
+                    {
+                        title: 'JAVA 输入与输出',
+                        path: '/java/javaStream'
+                    },
                 ]
             },
             {
