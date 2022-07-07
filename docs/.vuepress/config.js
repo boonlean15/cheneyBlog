@@ -57,8 +57,8 @@ module.exports = {
                     },
                     {
                         title: 'JAVA 输入与输出',
-                        path: '/java/javaStream'
-                    },
+                        path: '/java/javaInputOutput'
+                    }
                 ]
             },
             {
