@@ -587,3 +587,4 @@ Files.walk(source).forEach(p -> {
 
 ### Zip文件系统
 
+Paths类在默认的文件系统中查找路径
