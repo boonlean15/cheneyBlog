@@ -510,3 +510,80 @@ class Employee extends SerialCloneable
   - Path toPath() 从该文件创建一个Path对象
 
 
+### 读写文件
+
+Files类可以使得普通文件操作变得快捷
+- Files类的便捷方法适合操作中等长度的文件。例如：Files.readAllBytes();Files.readAllLines();
+- Files.newInputStream();Files.newBufferReader();适合操作文件长度长的文件
+
+### 创建文件和目录
+
+- API
+  > static Path createFile(Path path, FileAttribute<?>..attrs)
+  > static Path createDirectory(Path path,FileAttribute<?> attrs)
+  > static Path createDirectories(Path path, FileAttribute<?> attrs)
+  创建一个文件或目录，createDirectories还会创建路径中的所有中间目录
+  > static Path createTempFile(String prefix,String subfix, FileAttribute<?> attrs)
+  > static Path createTempFile(Path parentDir,String prefix,FileAttribute<?> attrs)
+  > static Path createTempDirectory(String prefix,FileAttribute<?> attrs)
+  在适合的位置创建临时文件或临时目录，返回创建的临时目录/文件的路径
+
+### 复制、移动和删除文件
+
+- API
+  > static Path copy(Path from, Path to, CopyOperation...options);
+  > static Path move(Path from, Path to, CopyOperation...options);
+  将from复制或移动到to，并返回to
+  > static long copy(InputStream from, Path to, CopyOperation...options);
+  > static long copy(Path from, OuputStream to, CopyOperation...options);
+  从文件流中复制到文件，或者从文件中复制到输出流
+  > static void delete(Path path);
+  > static boolean deleteIfExists(Path path);
+  删除给定文件或空目录，第一个方法会在文件不存在时抛出异常，第二个会返回false
+
+### 获取文件信息
+
+文件基本属性集都封装在BasicFileAttributes
+- Files  static long size(Path p) 返回文件都字节大小、 A readAttributes(Path p, Class< A > type, LinkOption...options )
+读取类型为A的文件属性
+
+### 访问目录中的项
+
+- Files.list()方法返回一个可以读取目录中的各个项的Stream< Path >对象
+- Files.walk() list方法不会进入子目录，walk方法会进入子目录
+- Files.walk(Path,depth)限制想要访问的树的深度
+- 复制一个目录到另一个目录
+```java
+Files.walk(source).forEach(p -> {
+    try{
+        Path q = target.resolve(source.relativize(p));
+        if(Files.isDirectory(p)){
+            Files.createDirectory(q);
+        }else{
+            Files.copy(p,q);
+        }
+    }catch (IOException e){
+        throw new UncheckIOException(e);
+    }
+});
+```
+
+### 使用目录流
+
+如果希望对路径进行更加细粒度的访问处理，应该使用Files.walkFileTree
+- static DirectoryStream< Path> newDirectoryStream(Path path)
+- static DirectoryStream< Path> newDirectoryStream(Path path, String glop)
+- 获取给定目录中可以遍历所有文件和目录的迭代器，第二个方法只接受给定glop模式匹配的项
+- static Path walkFileTree(Path start, FileVisitor< ? super Path> visitor)
+- 遍历给定目录的所有子孙，并把访问器应用到这些子孙之上
+- SimpleFileVisitor
+   - static FileVisitResult visitFile(T path,BasicFileAttributes attrs);
+   - 访问文件或目录时被调用，返回CONTINUE，SKIP_SUBTREE，SKIP_SIBLING，TERMINATE，默认实现是不做任何操作而继续访问
+   - static FileVisitResult preVisitDirectory(T dir,BasicFileAttributes attrs)
+   - static FileVisitResult postVisitDirectory(T dir, BasicFileAttributes attrs)
+   - 访问目录之前和之后调用，默认不做操作而继续访问
+   - static FileVisitResult visitFileFaild(T path, IOException e)
+   - 试图获取给定文件或目录信息时抛出异常，则该方法被调用。默认实现是重新抛出异常。如果想自己访问，则覆盖此方法
+
+### Zip文件系统
+
