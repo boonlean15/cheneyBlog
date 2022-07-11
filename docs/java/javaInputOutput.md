@@ -588,3 +588,43 @@ Files.walk(source).forEach(p -> {
 ### Zip文件系统
 
 Paths类在默认的文件系统中查找路径
+API
+- static FileSystem newFileSystem(Path path,ClassLoader classLoader)
+  返回由第一个可以接受给定路径的文件系统提供者创建的文件系统。默认，zip文件系统有一个提供者
+- static Path getPath(String first,String...more)
+  将给定字符串连接起来创建一个路径
+
+## 内存映射文件
+操作系统可以利用虚拟内存实现将一个文件或者文件的一部分映射到内存中。
+
+### 内存映射文件性能
+- java的nio包，是的把文件映射到内存变得简单，例如：通过使用FileChannel
+- FileInputStream/FileOutputStream/RandomAccessFile都有getChannel方法获取channel通道
+- FileChannel：
+   - static FileChannel open(Path path，OpenOption...option) 打开一个FileChannel
+   - MappedByteBuffer map(FileChannel.MapMode mode,long position, long size) position映射起始位置，size映射区域的大小
+- Buffer  hasRemaining 缓冲区位置是否到达界限位置 limit()返回缓冲区的界限位置
+- ByteBuffer get/put方法，获取和写数据到缓冲区
+- CharBuffer get/put方法，获取和写入char值
+
+### 缓冲区数据结构
+
+- 一个容量，它永远不能改变
+- 一个读写位置，下一个值将在此进行读写
+- 一个界限，超过它进行读写是没有意义的
+- 一个可勾选的标记，用于重复一个读入或写出操作
+- 0<标记<位置<界限<容量
+- API
+ > Buffer clear()为缓冲区写出做准备、Buffer rewind()读写位置复位到0，保持界限不变，为重新读入做准备
+
+ > Buffer filp()界限设置到位置，位置复位到0，为读入做准备
+
+ ### 文件加锁机制
+
+ - FileChannel
+   > FileLock lock()独占锁 FileLock tryLock()独占锁，无法获得锁时返回null
+   
+   > FileLock lock(long position,long size, boolean shared)锁定区域的起始位置，锁定区域的大小，true为共享锁，false为独占锁
+
+- FileLock
+   > void close() 释放这个锁
