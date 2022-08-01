@@ -76,6 +76,17 @@ module.exports = {
                     }
                 ]
             },
+            {
+                title: 'Netty in action',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'Netty',
+                        path: '/netty/netty_in_action',
+                    }
+                ]
+            }
         ]
     }
 }
