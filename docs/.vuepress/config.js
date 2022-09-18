@@ -82,8 +82,8 @@ module.exports = {
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
-                        title: 'Netty',
-                        path: '/netty/netty_in_action',
+                        title: 'Netty的概念及体系结构',
+                        path: '/netty/netty_system_construt',
                     }
                 ]
             }
