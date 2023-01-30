@@ -86,6 +86,12 @@ module.exports = {
                         path: '/netty/netty_system_construt',
                     }
                 ]
+            },
+            {
+                title: '凤凰架构',   // 必要的
+                collapsable: false, // 可选的, 默认值是 true,
+                sidebarDepth: 0,
+                path: '/buildBlog/buildBlog',
             }
         ]
     }
