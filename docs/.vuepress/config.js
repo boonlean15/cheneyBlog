@@ -88,10 +88,10 @@ module.exports = {
                 ]
             },
             {
-                title: '凤凰架构',   // 必要的
+                title: '重新定义spring cloud',   // 必要的
                 collapsable: false, // 可选的, 默认值是 true,
                 sidebarDepth: 0,
-                path: '/buildBlog/buildBlog',
+                path: '/springcloud/redefinition_springcloud',
             }
         ]
     }
