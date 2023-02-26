@@ -251,6 +251,133 @@ Feign没有实现SpringMVC的全部功能，不支持GET方法传递POJO参数
 1. 解决SpringMVC不支持继承Feign接口方法上的注解
 2. 解决Feign的Get方法不支持传递POJO问题
 
+## Ribbon
+负载均衡 利用特定方式将流量分摊到多个操作单元
+
+**分类**
+* 软负载 Nginx
+* 硬负载 F5
+* 服务端负载 典型实现:Nginx
+* 客户端负载 典型实现:Ribbon
+
+> Ribbon默认使用轮询方式访问源服务
+
+### 实战
+
+**Ribbon负载均衡策略与自定义配置**
+* 全局策略设置-添加Config并设置bean-RandomRule
+* 基于注解的策略设置
+  > TestConfiguration 类创建并注入 bean设置策略-@Configuration @AvoidScan -- IClientConfig
+
+  > @RibbonClient-@ComponentScan 单源服务生效，需设置@AvoidScan避免全局生效
+
+  > @RibbonClients 可设置多个源服务策略
+* 基于配置文件
+  > client-a：ribbon：NFLoadBalancerRuleClassName
+
+**Ribbon超时与重试**
+* 配置文件配置
+
+**Ribbon饥饿加载**
+* 配置文件配置
+
+**利用配置文件自定义 Ribbon客户端**
+* 利用Ribbon实现类，也可以自实现
+  > client-a：ribbon：NFLoadBalancerRuleClassName
+
+**Ribbon脱离Eureka使用**
+> 如果Eureka是一个供许多人共同使用的公共注册中心，容易产生服务侵入性问题
+
+### 核心工作原理
+
+**核心接口**
+* IClientConfig
+* IRule
+* IPing
+* ServerList<Server>
+* ServerListFilter<Server>
+* ILoadBalancer
+* ServerListUpdater
+  
+**工作原理涉及到几个主要类和注解**
+* RestTempalte 
+* @LoadBalanced
+* LoadBalancerClient
+* * execute()
+* * reconstructURI()
+* ServiceInstanceChooser
+* * chose(service)
+
+**重点类** **LoadBalancerAutoConfiguration**
+* 必须有RestTemplate
+* 必须初始化LoadBalancerClient
+* LoadBalancerRequestFactory->LoadBalancerRequest
+* LoadBalancerInterceptorConfig->LoadBalancerInterceptor、->RestTemplateCustomizer
+* LoadBalancerInterceptor-拦截每次请求进行绑定到Ribbon负载均衡生命周期
+* RestTemplateCustomizer为每个RestTemplate绑定LoadBalancerInterceptor
+* LoadBalancerInterceptor.execute()方法
+* LoadBalancerClient-唯一实现类RibbonLoadBalancerClient->getServer（）-> choseServer（）-> rule.chose()方法，获取服务实现负载策略选择
+**总结**
+> Interceptor拦截请求->然后LoadBalancerClient选择服务->由rule.chose（）根据策略选择对应的服务
+
+**负载均衡策略源码导读**
+* IRule
+* * choose(Object key)
+* * setLoadBalancer(ILoadBalancer ib)
+* * getLoadBalancer()
+
+## spring cloud config
+
+### spring cloud config概述和入门
+> 一个集中化外部配置的分布式系统，不依赖于注册中心，可单独使用。支持多种方式存储配置信息：jdbc、native、git、svn、默认git
+
+**git版工作原理**
+> client发起请求，server向git remote拉取配置到本地仓库，然后再返回给客户端client。好处是即使git remote 不可用，本地仍然有配置信息，保证server端可用。
+
+**config入门案例**
+* 添加依赖
+* 添加配置文件配置地址
+* client端访问server获取地址：需要配置一个属性类存储配置信息
+
+**手动刷新**
+* 需要添加配置，放开csrf安全校验，然后访问/actutor/refresh，实现手动刷新  
+
+**结合bus实现自动刷新**
+* rabbitMQ作为消息中间件
+* bus实现update配置文件后，通知server端，然后server端发布消息给client
+* client重新发送请求访问server获取配置，实现自动刷新
+
+### conig实战
+
+#### GIT配置
+
+**服务端GIT配置**
+* git中uri占位符 
+* * 例如：
+  > spring.cloud.config.server.git.uri: https://github.com/boolean/{application}
+
+  > client端配置spring.cloud.config.name: spring-cloud-config
+  获取server端配置端时候，name会对应到server到uri配置到application上，访问的是spring-cloud-config的仓库，仓库和配置文件要同名，因为会搜索spring-cloud-config.yml文件
+
+**模式匹配和多个存储库**
+* 通过修改application.yml文件配置repos：最好通过上网搜索参考案例进行实战
+
+**路径搜索占位符**
+* 用到了searchPaths参数，这里可以通过通配符匹配
+* * 比如：search-paths：SC-CONFIG，SC-*，会匹配SC-CONFIG，或SC-开头的多个路径
+* * search-paths：* {application} * ，这样可以通过不同是项目匹配不同的路径
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
