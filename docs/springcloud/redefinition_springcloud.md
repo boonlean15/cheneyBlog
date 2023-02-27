@@ -367,8 +367,27 @@ Feign没有实现SpringMVC的全部功能，不支持GET方法传递POJO参数
 * * 比如：search-paths：SC-CONFIG，SC-*，会匹配SC-CONFIG，或SC-开头的多个路径
 * * search-paths：* {application} * ，这样可以通过不同是项目匹配不同的路径
 
+#### springcloud config 关系型数据库配置
+**关系型数据库配置中心实现 mysql**
+* **原理** config-client请求config-server，config-server访问mysql数据库获取配置，返回给config-client
 
+**非关系型数据库配置中心实现 mongoDB**
+* **原理** config-client请求config-server，config-server访问mongoDB获取配置，返回给config-client
+> @EnableMongoConfigServer **db做了界面化的配置和管理，提交配置成功到db时，调用config-server到刷新接口，即可实现git到webHook一样的提交绑定功能**
 
+#### springcloud config使用技能
+**本地参数覆盖远程参数**
+``` yml
+spring:
+    cloud:
+        config:
+            allowOverride: true
+            overrideNone: true
+            overrideSystemProperties: false
+# allowOverride标识overrideSystemProperties属性是否启用，默认true，设置false意味着禁止用户配置
+# overrideNone当allowOverride为true时，设置overrideNone为true，外部的配置优先级低，而且不能覆盖任何属性源，默认false
+# overrideSystemProperties标识外部配置是否能覆盖本地配置系统属性，默认true
+```
 
 
 
