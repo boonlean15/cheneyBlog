@@ -1,4 +1,4 @@
-# 重新定义springcloud
+# springcloud
 
 ## 微服务与springcloud
 
@@ -696,6 +696,299 @@ public class CommonConfiguration extends WebMvcConfigurerAdapter{
 * client-service客户端工程
   * 添加核心工程依赖 
   * 增加接口调用其他服务接口
+
+## spring cloud gateway
+
+### spring cloud gateway概述
+**什么是spring cloud gateway**
+> spring官方开发的网关，旨在为微服务架构提供简单，有效且统一的Api路由管理方式。基于filter还提供了，安全，监控，埋点，限流的功能
+
+**出现原因**
+> 网关提供api全托管服务，辅助企业管理大规模的api，降低管理成本和安全风险。包括：协议适配，协议转发，安全策略，防刷，流量和监控日志等。
+* 网关的核心是filter和filter chain
+
+**核心概念**
+* 路由：网关最基础的部分，路由信息由一个ID，一个目的url，一组断言工厂，一组filter组成。如果断言为真，则说明请求的url和配置的路由匹配
+* 断言：java8断言函数。gateway是spring的serverWebExchange，允许匹配request中的所有信息，如请求头和参数等。
+* filter：标准的webfilter，gateway中filter分为两种类型，gateway filter和global filter。
+
+### 工作原理
+client -> httpWebHandlerAdapter -> DispatcherHandler -> RoutePredicateHandlerMapping -> lookupRoute -> 
+filterWebHandler -> pre Filter -> proxy service -> post Filter
+
+gateway client 发起请求 -> httpWebHandlerAdapter (组装网关上下文) -> DispatcherHandler (循环遍历mapping，获取handler)
+->  RoutePredicateHandlerMapping(匹配路由信息，断言是否可用) -> lookupRoute -> filterWebHandler(创建过滤器链，调用过滤器) -> 
+pre filter -> proxy service -> post filter
+
+### 入门案例
+**协议适配和协议转发是gateway最基础的功能**
+> 配置依赖-> 添加入口程序 -> 通过代码或者yml配置 Path路由断言工厂实现url直接转发
+```yml
+spring:
+  cloud:
+    gateway:
+      routes: #当访问http://localhost:8080/baidu,直接转发到https://www.baidu.com/
+      - id: baidu_route
+        uri: http://baidu.com:80/
+        predicates:
+        - Path=/baidu
+      - id: remoteaddr_route
+        uri: http://baidu.com
+        predicates:
+          - RemoteAddr=127.0.0.1
+      - id: between_route
+        uri: http://xujin.org
+        predicates:
+          - name: Between
+            args:
+              datetime1: 2018-03-15T00:02:48.513+08:00[Asia/Shanghai]
+              datetime2: 2018-03-15T02:02:48.516+08:00[Asia/Shanghai]
+```
+
+### spring cloud gateway 路由断言
+> gateway的路由匹配(routePredicateHandlerMapping)是以spring webflux的handler mapping为基础实现的。gateway也是由很多路由断言工参组成的
+> 。request进来，gateway的路由断言工厂，根据配置的路由规则进行断言匹配。成功则进入下一步，失败则返回错误信息
+
+**After路由断言工厂**
+* after route predicate factory 取一个UTC时间格式的时间参数，请求进来的当前时间在配置的UTC时间之后，则匹配成功，否则失败
+
+**before路由断言工厂**
+* before跟after正好相反，判断的是时间是否在配置时间之前，是则路由匹配
+
+**between路由断言工厂**
+* between判断的是时间是否在配置的时间范围内，是则路由匹配
+> after、before、between三个路由断言工厂可归为一类，以时间作为断言规则
+```java
+@SpringBootApplication
+public class SCGatewayApplication {
+
+  @Bean
+  public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+    //生成比当前时间早一个小时的UTC时间
+    ZonedDateTime minusTime = LocalDateTime.now().minusHours(1).atZone(ZoneId.systemDefault());
+    return builder.routes()
+            .route("after_route", r -> r.after(minusTime)
+                    .uri("http://baidu.com"))
+            .build();
+  }
+  public static void main(String[] args) {
+    SpringApplication.run(SCGatewayApplication.class, args);
+  }
+}
+/**
+ * 生成UTC时间
+ */
+public class UtcTimeUtil {
+
+  public static void main(String[] args) {
+    ZonedDateTime time=  ZonedDateTime.now();
+    System.out.println("zonedDateTime:"+time);
+
+    String  maxTime=ZonedDateTime.now().plusHours(1).format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+    System.out.println("maxTime："+maxTime);
+
+    String  minTime=ZonedDateTime.now().minusHours(1).format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+    System.out.println("minTime:"+minTime);
+
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String str=time.format(formatter);
+    System.out.println(str);
+  }
+
+}
+```
+
+**cookie路由断言工厂**
+* 断言工厂会取两个参数，cookie名称对应的key和value，请求中携带的cookie和cookie断言工厂配置的一致，则匹配成功
+
+**header路由断言工厂**
+* 根据配置的路由header信息进行断言匹配路由
+
+**Host路由断言工厂**
+* 根据配置的路由Host信息进行断言匹配路由
+
+**Method路由断言工厂**
+* 根据配置的路由Method信息对请求方法是GET或者POST进行断言匹配路由
+
+**query路由断言工厂**
+* 根据配置的路由请求参数query进行断言匹配路由
+
+**RemoteAddr路由断言工厂**
+* 配置一个ipv4或ipv6网段的字符串或ip，请求的ip地址在网段内或ip相同，则匹配成功
+> cookie、header、host，method、query可用归为一类，即与客户端的信息相关，要么是header(cookie)，要么是url里面的信息或方法类型，参数
+```java
+@SpringBootApplication
+public class SpringCloudGatewayApplication {
+
+  @Bean
+  public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+    return builder.routes()
+            .route("header_route", r -> r.header("X-Request-Id", "xujin")
+                    .uri("http://localhost:8071/test/head"))
+            .build();
+    return builder.routes()
+            .route("cookie_route", r -> r.cookie("chocolate", "ch.p")
+                    .uri("http://localhost:8071/test/cookie"))
+            .build();
+    return builder.routes()
+            .route("host_route", r -> r.host("**.baidu.com:8080")
+                    .uri("http://jd.com"))
+            .build();
+    return builder.routes()
+            .route("method_route", r -> r.method("GET")
+                    .uri("http://jd.com"))
+            .build();
+    return builder.routes()
+            .route("query_route", r -> r.query("foo","baz")
+                    .uri("http://baidu.com"))
+            .build();
+    return builder.routes()
+            .route("remoteaddr_route", r -> r.remoteAddr("127.0.0.1")
+                    .uri("http://baidu.com"))
+            .build();
+  }
+  public static void main(String[] args) {
+    SpringApplication.run(SpringCloudGatewayApplication.class, args);
+  }
+}
+```
+
+### spring cloud gateway 内置filter
+> gateway内置了很多路由过滤器，可自己根据实际应用场景定制自己的路由过滤器工厂。路由过滤器允许以某种方式修改进来的http请求和http响应，主要作用于特定的
+> 路由。gateway提供了很多过滤器工厂，有二十多种，主要可归类为，header、parameter、path、status、redirect、hytrix、rateLimiter
+
+* AddRequestHeader过滤器工厂 对匹配上的请求加上header
+* AddRequestParameter 对匹配上的请求加上param
+* RewritePath过滤器 替换zuul的stripPrefix功能，去掉前缀
+* AddResponseHeader 网关返回的响应添加header
+* StripPrefix过滤器 对请求url前缀进行处理 StripPrefixGatewayFilterFactory
+```java
+@SpringBootApplication
+public class SpringCloudGatewayApplication {
+
+	@Bean
+	public RouteLocator testRouteLocator(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route("add_request_header_route", r ->
+						r.path("/test").filters(f -> f.addRequestHeader("X-Request-Acme", "ValueB"))
+								.uri("http://localhost:8071/test/head"))
+				.build();
+        return builder.routes()
+                .route("add_request_parameter_route", r ->
+                        r.path("/addRequestParameter").filters(f -> f.addRequestParameter("example", "ValueB"))
+                                .uri("http://localhost:8071/test/addRequestParameter"))
+                .build();
+        return builder.routes()
+                .route("rewritepath_route", r ->
+                        r.path("/foo/**").filters(f -> f.rewritePath("/foo/(?<segment>.*)","/$\\{segment}"))
+                                .uri("http://www.baidu.com"))
+                .build();//访问http://localhost:8080/foo/cache/sethelp/help.html
+      // 相当于把前缀去掉，直接访问http://www.baidu.com/cache/sethelp/help.html
+        return builder.routes()
+                .route("add_request_header_route", r ->
+                        r.path("/test").filters(f -> f.addResponseHeader("X-Response-Foo", "Bar"))
+                                .uri("http://www.baidu.com"))
+                .build();
+	}
+	public static void main(String[] args) {
+		SpringApplication.run(SpringCloudGatewayApplication.class, args);
+	}
+}
+```
+* PrefixPathGatewayFilterFactory 用于增加前缀
+```yml
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: baidu_route
+        uri: http://www.baidu.com
+        predicates:
+        - Path=/baidu/test/**
+        filters:
+        - StripPrefix=2
+```
+* **Retry过滤器 出现异常或网络抖动，对请求进行重试**
+```java
+@SpringBootApplication
+public class CH1736GatewayApplication {
+
+	@Bean
+	public RouteLocator retryRouteLocator(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route("retry_route", r -> r.path("/test/retry")
+						.filters(f ->f.retry(config -> config.setRetries(2).setStatuses(HttpStatus.INTERNAL_SERVER_ERROR)))
+						.uri("http://localhost:8071/retry?key=abc&count=2"))
+				.build();
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(CH1736GatewayApplication.class, args);
+	}
+	//service的方法测试
+    @GetMapping("/retry")
+    public String testRetryByException(@RequestParam("key") String key, @RequestParam(name = "count") int count) {
+      AtomicInteger num = map.computeIfAbsent(key, s -> new AtomicInteger());
+      //对请求或重试次数计数
+      int i = num.incrementAndGet();
+      log.warn("重试次数: "+i);
+      //计数i小于重试次数2抛出异常，让Spring Cloud Gateway进行重试
+      if (i < count) {
+        throw new RuntimeException("Deal with failure, please try again!");
+      }
+      //当重试两次时候，清空计数，返回重试两次成功
+      map.clear();
+      return "重试"+count+"次成功！";
+    }
+}
+```
+* hystrix过滤器 服务降级，友好提示
+> 例子：当访问的服务不可用，gateway通过hystrix返回了友好提示信息
+```java
+@RestController
+public class FallbackController {
+
+  @GetMapping("/fallback")
+  public String fallback() {
+    return "Spring Cloud Gateway Fallback！";
+  }
+  //服务的方法
+  @GetMapping("/test/Hystrix")
+  public String index(@RequestParam("isSleep") boolean isSleep) throws InterruptedException {
+    log.info("issleep is " + isSleep);
+    //isSleep为true开始睡眠，睡眠时间大于Gateway中的fallback设置的时间
+    if (isSleep) {
+      TimeUnit.MINUTES.sleep(10);
+    }
+    return "No Sleep";
+  }
+}
+```
+```yaml
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: prefix_route
+        uri: http://localhost:8071/test/Hystrix?isSleep=true
+        predicates:
+        - Path=/test/Hystrix
+        filters:
+        - name: Hystrix # Hystrix Filter的名称
+          args: # Hystrix配置参数
+            name: fallbackcmd #HystrixCommand的名字
+            fallbackUri: forward:/fallback #fallback对应的uri
+```
+
+
+
+eureka + ribbon + feign（spring-cloud-dubbo） + apollo + gateway 
+
+
+
+
+
 
 
 
