@@ -88,7 +88,7 @@ module.exports = {
                 ]
             },
             {
-                title: '重新定义spring cloud',   // 必要的
+                title: 'spring cloud',   // 必要的
                 collapsable: false, // 可选的, 默认值是 true,
                 sidebarDepth: 0,
                 path: '/springcloud/redefinition_springcloud',
