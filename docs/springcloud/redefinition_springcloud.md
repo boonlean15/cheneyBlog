@@ -981,11 +981,434 @@ spring:
             fallbackUri: forward:/fallback #fallback对应的uri
 ```
 
+### spring cloud gateway基于服务发现的路由规则
+**gateway的服务发现路由概述**
+> gateway考虑从zuul迁移到gateway到兼容性和迁移成本。服务发现路由规则和zuul类似，访问方式：http://http://Gateway_Host:Gateway_Port/大写的serviceId/**
 
+**在不同注册中心下差异如下**
+*  eureka 大写的serviceId 可通过配置使用小写的serviceId：
+> spring.cloud.gateway.discovery.locator.lowerCaseServiceId = true
+*  zookeeper 小写的serviceId
+*  consul 小写的serviceId
 
-eureka + ribbon + feign（spring-cloud-dubbo） + apollo + gateway 
+**服务路由规则案例**
+* eureak 注册中心 简单的作为注册中心
+* gateway 网关 配置spring.cloud.gateway.discovery.locator.enable=true 配置与服务发现组件一起使用，lowerCaseServiceId小写服务名
+* consumer 消费者 通过feign调用provider的接口
+* provider 服务提供者 提供controller接口供调用
 
+### gateway filter 和 global filter
+**gateway filter**
+> 从web filter中复制过来，相当于一个filter过滤器，可对访问的url过滤，进行切面处理
 
+**global filter**
+> 是一个全局filter，作用于所有的路由
+
+**gateway filter 和 global filter的区别**
+> 路由范围：global filter作用于全局，gateway filter作用于单个或一组路由上。
+> 源码：gateway filter继承ShortcutConfigurable，global filter没有任何继承
+
+**自定义Gateway Filter**
+1. 创建自定义的Gateway Filter CustomGatewayFilter 实现自GatewayFilter和Ordered，重写filter()方法
+2. 把CustomGatewayFilter注入bean实现配置到路由上
+```java
+@Bean
+public RouteLocator customRouteLocator(RouteLocatorBuilder builder){
+return builder.routes().route(r -> r.path("/test").filters(f -> f.filter(new CustomGatewayFilter()))
+    .uri("http://localhost:8071/customFilter?name=cheney")
+    .order(0)
+    .id("custom_filter")).build();
+}
+```
+
+**自定义global filter**
+* 创建自定义的GolbalFilter AuthSignatureFilter 实现自GolbalFilter和Ordered，重写filter方法。需要添加注解@Component即可，此全局FIlter生效
+
+### Gateway实战
+
+**Gateway权重路由**
+当灰度发布时，比如实现金丝雀测试
+```yml
+spring:
+  application:
+    name: ch18-3-gateway
+  cloud:
+    gateway:
+      routes:
+      - id: service1_v1
+        uri: http://localhost:8081/v1
+        predicates:
+        - Path=/test
+        - Weight=service1, 95
+      - id: service1_v2
+        uri: http://localhost:8081/v2
+        predicates:
+        - Path=/test
+        - Weight=service1, 5
+```
+**gateway使用https**
+> 当全站需要https安全时，网关需要支持https。(常规的做法是nginx配置SSL证书)
+* 只需要将生成的https证书放到gateway的类路径下即可
+1. 生成ssl证书，并放到gateway项目的resource目录下
+2. 配置yml文件
+```yaml 
+server:
+  ssl:
+    key-alias: spring
+    enabled: true
+    key-password: spring
+    key-store: classpath:selfsigned.jks
+    key-store-type: JKS
+    key-store-provider: SUN
+    key-store-password: spring
+```
+3. LoadBalancerClientFilter的filter方法的loadbalance对http请求进行封装，如gateway进来的是https，则用https封装，是http则用http封装，并且为预留修改的接口。
+4. 自定义HttpsToHttpFilter，实现自globalFilter，实现把Https转为http
+```java
+@Component
+public class HttpsToHttpFilter implements GlobalFilter, Ordered {
+
+    private static final int HTTPS_TO_HTTP_FILTER_ORDER = 10099;
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        URI originalUri = exchange.getRequest().getURI();
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpRequest.Builder mutate = request.mutate();
+        String forwardedUri = request.getURI().toString();
+        if (forwardedUri != null && forwardedUri.startsWith("https")) {
+            try {
+                URI mutatedUri = new URI("http",
+                        originalUri.getUserInfo(),
+                        originalUri.getHost(),
+                        originalUri.getPort(),
+                        originalUri.getPath(),
+                        originalUri.getQuery(),
+                        originalUri.getFragment());
+                mutate.uri(mutatedUri);
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
+        ServerHttpRequest build = mutate.build();
+        return chain.filter(exchange.mutate().request(build).build());
+    }
+
+    /**
+     * 由于LoadBalancerClientFilter的order是10100，
+     * 要在LoadBalancerClientFilter执行之前将Https修改为Http，需要设置
+     * order为10099
+     * @return
+     */
+    @Override
+    public int getOrder() {
+        return HTTPS_TO_HTTP_FILTER_ORDER;
+    }
+}
+```
+
+**gateway集成swagger**
+1. 添加依赖
+2. 编写swaggerProvider，以获取SwaggerResource，因为Swagger不支持WebFlux项目
+3. 创建Swagger-Resource端点 因为没有在Gateway配置SwaggerConfig，但是运行Swagger-Ui需要依赖一些接口
+4. 创建SwaggerHeaderFilter，因为Gateway转发的时候，没有把X- Forward-Prefix的header添加到Reques上，需要用这个Filter添加这个Header
+5. 配置Gateway路由信息
+```yml
+spring:
+  application:
+    name: sc-gateway
+  cloud:
+      gateway:
+        locator:
+          enabled: true
+        routes:
+        - id: sc-service
+          uri: lb://sc-service
+          predicates:
+          - Path=/admin/**
+          filters:
+          - GwSwaggerHeaderFilter
+          - StripPrefix=1
+```
+6. 然后service工程，则正常的添加依赖，并且配置SwaggerConfig，和Swagger相关Api
+
+**Gateway限流**
+
+**自定义过滤器实现限流 - Bucket4J**
+1. 添加依赖
+   ```yml
+   <dependencies>
+        <!-- Spring Cloud Gateway的依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <!-- Bucket4j限流依赖-->
+        <dependency>
+            <groupId>com.github.vladimir-bukhtoyarov</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+    </dependencies>
+   ```
+2. 自定义过滤器对特定资源进行限流
+```java
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.Refill;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * 自定义过滤器进行限流
+ * @author xujin
+ */
+public class GatewayRateLimitFilterByIp implements GatewayFilter, Ordered {
+
+    private final Logger log = LoggerFactory.getLogger(GatewayRateLimitFilterByIp.class);
+
+    /**
+     * 单机网关限流用一个ConcurrentHashMap来存储 bucket，
+     * 如果是分布式集群限流的话，可以采用 Redis等分布式解决方案
+     */
+    private static final Map<String, Bucket> LOCAL_CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * 桶的最大容量，即能装载 Token 的最大数量
+     */
+    int capacity;
+    /**
+     * 每次 Token 补充量
+     */
+    int refillTokens;
+    /**
+     *补充 Token 的时间间隔
+     */
+    Duration refillDuration;
+
+    public GatewayRateLimitFilterByIp() {
+    }
+
+    public GatewayRateLimitFilterByIp(int capacity, int refillTokens, Duration refillDuration) {
+        this.capacity = capacity;
+        this.refillTokens = refillTokens;
+        this.refillDuration = refillDuration;
+    }
+
+    private Bucket createNewBucket() {
+        Refill refill = Refill.of(refillTokens, refillDuration);
+        Bandwidth limit = Bandwidth.classic(capacity, refill);
+        return Bucket4j.builder().addLimit(limit).build();
+    }
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String ip = exchange.getRequest().getRemoteAddress().getAddress().getHostAddress();
+        Bucket bucket = LOCAL_CACHE.computeIfAbsent(ip, k -> createNewBucket());
+        log.debug("IP:{} ,令牌通可用的Token数量:{} " ,ip,bucket.getAvailableTokens());
+        if (bucket.tryConsume(1)) {
+            return chain.filter(exchange);
+        } else {
+           //当可用的令牌书为0是，进行限流返回429状态码
+            exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+            return exchange.getResponse().setComplete();
+        }
+    }
+
+    @Override
+    public int getOrder() {
+        return -1000;
+    }
+}
+```
+3. java流式api的方式配置路由规则
+```java
+@SpringBootApplication
+public class GatewayApplication {
+    @Bean
+    public RouteLocator customerRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(r -> r.path("/test/rateLimit")
+                        .filters(f -> f.filter(new GatewayRateLimitFilterByIp(10,1,Duration.ofSeconds(1))))
+                        .uri("http://localhost:8000/hello/rateLimit")
+                        .id("rateLimit_route")
+                ).build();
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
+}
+```
+
+**Gateway内置工厂过滤器实现限流 RequestRateLimiterGatewayFilterFactory**
+使用名为request_rate_limiter.lua lua脚本实现限流
+1. 添加依赖
+```yml
+<dependencies>
+    <!-- Spring Cloud Gateway的依赖-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-gateway</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+    </dependency>
+</dependencies>
+```
+2. gateway相关限流配置
+```yml
+spring:
+  application:
+    name: ch18-6-1-gateway
+  redis:
+      host: localhost
+      port: 6379
+  cloud:
+    gateway:
+      routes:
+        - id: rateLimit_route
+          uri: http://localhost:8000/hello/rateLimit
+          order: 0
+          predicates:
+            - Path=/test/rateLimit
+          filters:
+            #filter名称必须是RequestRateLimiter
+            - name: RequestRateLimiter
+              args:
+                #使用SpEL按名称引用bean
+                key-resolver: "#{@remoteAddrKeyResolver}"
+                #允许用户每秒处理多少个请求
+                redis-rate-limiter.replenishRate: 1
+                #令牌桶的容量，允许在一秒钟内完成的最大请求数
+                redis-rate-limiter.burstCapacity: 5
+```
+3. 编写key-resolver对应的remoteAddrKeyResolver
+```java
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+public class RemoteAddrKeyResolver implements KeyResolver {
+    public static final String BEAN_NAME = "remoteAddrKeyResolver";
+
+    @Override
+    public Mono<String> resolve(ServerWebExchange exchange) {
+        return Mono.just(exchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
+    }
+}
+```
+4. key对应的解析器配置加载到spring容器
+```java
+@SpringBootApplication
+public class GatewayApplication {
+    @Bean(name = RemoteAddrKeyResolver.BEAN_NAME)
+    public RemoteAddrKeyResolver remoteAddrKeyResolver() {
+        return new RemoteAddrKeyResolver();
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
+}
+```
+
+**基于CPU使用率进行限流**
+1. 添加依赖
+```yml
+<dependencies>
+    <!-- Spring Cloud Gateway的依赖-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-gateway</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+</dependencies>
+```
+2. 自定义过滤器并开启基于CPU使用情况的限流
+```java
+/**
+ * 根据CPU的使用情况限流
+ * @author: xujin
+ **/
+@Component
+public class GatewayRateLimitFilterByCpu implements GatewayFilter, Ordered {
+
+    private final Logger log = LoggerFactory.getLogger(GatewayRateLimitFilterByCpu.class);
+
+    @Autowired
+    private MetricsEndpoint metricsEndpoint;
+
+    private static final String METRIC_NAME = "system.cpu.usage";
+
+    private static final double MAX_USAGE = 0.50D;
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        //获取网关所在机器的CPU使用情况
+        Double systemCpuUsage = metricsEndpoint.metric(METRIC_NAME, null)
+                .getMeasurements()
+                .stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(MetricsEndpoint.Sample::getValue)
+                .filter(Double::isFinite)
+                .orElse(0.0D);
+
+        boolean isOpenRateLimit = systemCpuUsage >MAX_USAGE;
+        log.debug("system.cpu.usage: {}, isOpenRateLimit:{} ",systemCpuUsage , isOpenRateLimit);
+        if (isOpenRateLimit) {
+            //当CPU的使用超过设置的最大阀值开启限流
+            exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+            return exchange.getResponse().setComplete();
+        } else {
+            return chain.filter(exchange);
+        }
+    }
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+```
+3. java流式api配置作用于某个路由
+```java
+@SpringBootApplication
+public class GatewayApplication {
+
+    @Autowired
+    private GatewayRateLimitFilterByCpu gatewayRateLimitFilterByCpu;
+
+    @Bean
+    public RouteLocator customerRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(r -> r.path("/test/rateLimit")
+                        .filters(f -> f.filter(gatewayRateLimitFilterByCpu))
+                        .uri("http://localhost:8000/hello/rateLimit")
+                        .id("rateLimit_route")
+                ).build();
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
+}
+```
+
+### gateway动态路由
 
 
 
