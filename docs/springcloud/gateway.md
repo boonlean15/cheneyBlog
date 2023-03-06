@@ -802,6 +802,7 @@ public class NacosGatewayConfigListener implements ApplicationRunner {
 ## Gateway 源码
 
 ### Gateway的处理流程
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/springcloud/gateway-process.jpg" alt="jpg">
 * 2.0版本 流程见图
   > HttpWebHandlerAdapter -> DispatcherHandler -> RoutePredicateHandlerMapping -> FilteringWebHandler
   * HttpWebHandlerAdapter： 组装网关上下文
