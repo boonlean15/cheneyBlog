@@ -89,9 +89,38 @@ module.exports = {
             },
             {
                 title: 'spring cloud',   // 必要的
-                collapsable: false, // 可选的, 默认值是 true,
-                sidebarDepth: 0,
-                path: '/springcloud/redefinition_springcloud',
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'spring cloud 概述',
+                        path: '/springcloud/generics',
+                    },
+                    {
+                        title: 'Eureka',
+                        path: '/springcloud/eureka',
+                    },
+                    {
+                        title: 'Feign',
+                        path: '/springcloud/feign'
+                    },
+                    {
+                        title: 'Ribbon',
+                        path: '/springcloud/ribbon'
+                    },
+                    {
+                        title: 'Config',
+                        path: '/springcloud/config'
+                    },
+                    {
+                        title: 'spring cloud 认证和鉴权',
+                        path: '/springcloud/auth'
+                    },
+                    {
+                        title: 'spring cloud gateway网关',
+                        path: '/springcloud/gateway'
+                    }
+                ]
             }
         ]
     }
