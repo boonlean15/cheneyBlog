@@ -93,8 +93,12 @@ module.exports = {
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
-                        title: 'Netty的概念及体系结构',
-                        path: '/netty/netty_system_construt',
+                        title: 'Netty 异步和事件驱动',
+                        path: '/netty/netty_nio_event',
+                    },
+                    {
+                        title: '第一个netty应用',
+                        path: '/netty/netty_first_app',
                     }
                 ]
             },
