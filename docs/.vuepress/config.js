@@ -99,6 +99,10 @@ module.exports = {
                     {
                         title: '第一个netty应用',
                         path: '/netty/netty_first_app',
+                    },
+                    {
+                        title: 'netty组件和设计',
+                        path: '/netty/netty_component_design',
                     }
                 ]
             },

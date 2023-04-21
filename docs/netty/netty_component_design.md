@@ -80,7 +80,7 @@ public void channelActive(ChannelHandlerContext ctx) throws Exception {
 ### ServerBootstrap
 - 将一个进程绑定到指定端口
 - 服务端使用
-- 2个EventLoopGroup 一个用于服务器自身绑定到某个本地端口的正在监听到套接字、另外一个用于传入客户端连的channel
+- 2个EventLoopGroup 一个serverChannel用于服务器自身绑定到某个本地端口的正在监听到套接字、另外一个用于传入客户端连接的channel
 - 与ServerChannel相关联的EventLoopGroup将分配一个负责为传入连接请求创建Channel的EventLoop。一旦连接被建立，第二个EventLoopGroup就会给它的Channel分配EventLoop
 
 ### Bootstrap
