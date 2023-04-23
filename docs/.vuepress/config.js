@@ -103,6 +103,10 @@ module.exports = {
                     {
                         title: 'netty组件和设计',
                         path: '/netty/netty_component_design',
+                    },
+                    {
+                        title: 'netty传输',
+                        path: '/netty/netty_transport',
                     }
                 ]
             },
