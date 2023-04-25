@@ -48,13 +48,24 @@ netty内置了可开箱即用的传输，因为不是所有传输都支持所有
    - 并非所有操作系统都支持这一特性，例如：实现了数据加密和压缩文件的文件系统不可用。
    - 传输已被加密的文件则不是问题
 
-<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/markdown/selector_flow.jpg" alt="png"> 
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/selector_flow.jpg" alt="png"> 
 
 ## Epoll--用于Linux的本地非阻塞I/O
+- Netty的NIO基于java提供的异步/非阻塞网络编程的通用抽象。保证了netty的NIO可以在任何平台使用，
+- Linux的epoll：一个高度可拓展的I/O事件通知特性，比select和poll系统调用更好的性能，Linux JDK NIO API使用了epoll调用
+- Netty为Linux提供了一组NIO API，以和它本身的设计更加一致的方式使用epoll，更加轻量的方式使用中断。
+- 高负载下的性能优于JDK的NIO实现
 
+> 传输语义跟selector图一样，使用的话只需要吧NIO改为Epoll即可，如EpollEventLoopGroup、EpollServerSocketChannel
 
 ## OIO--阻塞I/O
+> 通过常规传输API使用，建立在java.net之上，不是异步的。
+> java.net的服务器例子，通过new线程来处理每一个新连接
 
+- Netty使用和用于异步传输相同的API来支持OIO
+  > Netty利用了SO_TIMEOUT这个socket标志，它指定了等待一个I/O操作完成的最大毫秒数。如果操作在指定时间间隔内没有完成，则抛出一个SocketTimeoutException。Netty捕获这个异常并继续处理循环。在EventLoop的下一次运行时，再次尝试。
+- 实际上也是类似Netty这样的异步框架能够支持OIO的唯一方式
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/1.png" alt="png"> 
 
 
 ## Local--用于JVM内部通信的local传输
