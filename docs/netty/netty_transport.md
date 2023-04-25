@@ -65,11 +65,32 @@ netty内置了可开箱即用的传输，因为不是所有传输都支持所有
 - Netty使用和用于异步传输相同的API来支持OIO
   > Netty利用了SO_TIMEOUT这个socket标志，它指定了等待一个I/O操作完成的最大毫秒数。如果操作在指定时间间隔内没有完成，则抛出一个SocketTimeoutException。Netty捕获这个异常并继续处理循环。在EventLoop的下一次运行时，再次尝试。
 - 实际上也是类似Netty这样的异步框架能够支持OIO的唯一方式
-<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/1.png" alt="png"> 
+
+  <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/1.png" alt="png"> 
 
 
 ## Local--用于JVM内部通信的local传输
+> Netty提供了一个Local传输，用于在同一个JVM中运行的客户端和服务器程序之间的异步通信。
+- 不能够和其他传输实现进行互操作，客户端希望连接到使用了这个传输到服务器时页必须使用它
+  > 和服务器channel相关联的SocketAddress并没有绑定物理网络地址；相反，只要服务器还在运行，就存储在注册表里，在channel关闭时注销。
+- 除了上面的限制，使用方式和其他传输一摸一样
 
 ## Embedded传输--用于测试自己的ChannelHandler实现
+> Netty提供了一种额外的传输，使得你可以将一组ChannelHandler作为帮助类嵌入到其他的ChannelHandler内部。**可以拓展一个ChannelHandler的功能，又不需要修改其内部代码**
+- Embedded传输的关键是Channel实现的EmbeddedHandler
 
-## 传输示例
+## 传输的用例
+- 传输和其所支持的协议
+   - 传输-------------TCP-----UDP-----SCTP------UDT
+   - NIO--------------是------是-------是--------是
+   - Epoll(Linux)------是------是-------否--------否
+   - OIO--------------是------是-------是--------是
+- RFC 2960 www.ietf.org/rfc/rfc2960.txt
+- SCTP 流控制传输协议
+- UDT 实现了基于UDP协议的可靠传输，https://zh.wikipedia.org/zh-cn/UDT
+
+### 应用程序最佳传输
+- 非阻塞代码库或一个常规的起点   NIO(或在Linux上使用epoll)
+- 阻塞代码库    OIO
+- 同一个JVM内部     Local
+- 测试ChannelHandler的实现    Embedded
