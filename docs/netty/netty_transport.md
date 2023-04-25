@@ -48,11 +48,14 @@ netty内置了可开箱即用的传输，因为不是所有传输都支持所有
    - 并非所有操作系统都支持这一特性，例如：实现了数据加密和压缩文件的文件系统不可用。
    - 传输已被加密的文件则不是问题
 
-<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/markdown/selector_flow.png" alt="png"> 
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/markdown/selector_flow.jpg" alt="png"> 
+
+## Epoll--用于Linux的本地非阻塞I/O
+
 
 ## OIO--阻塞I/O
 
-## Epoll--用于Linux的本地非阻塞I/O
+
 
 ## Local--用于JVM内部通信的local传输
 
