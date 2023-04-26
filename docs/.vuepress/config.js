@@ -107,6 +107,10 @@ module.exports = {
                     {
                         title: 'netty传输',
                         path: '/netty/netty_transport',
+                    },
+                    {
+                        title: 'ByteBuf',
+                        path: '/netty/netty_bytebuf',
                     }
                 ]
             },
