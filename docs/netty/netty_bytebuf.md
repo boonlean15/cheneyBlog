@@ -190,10 +190,87 @@ assert buf.getByte(0) != copy.getByte(0);  //将会成功，因为数据不是�
 - get/set操作，从指定的索引开始，并保持索引不变
 - read/write操作，从指定的索引开始，索引对应变化
 
+```java
+getBytes(int,...);//将该缓冲区中从给定索引开始的数据传送到指定目的地
+setByte(int index, int value);//设置给定索引处的字节值
+readByte();//返回当前readerIndex的字节，readerIndex增加1
+readMedium();//返回当前readerIndex处的24位的中等int值，并将readerIndex增加3
+readInt();//返回当前readerIndex的int值，并将readerIndex增加4”
+readBytes(ByteBuf | byte[] destination, int dstIndex [,int length]);//将当前ByteBuf中从当前readerIndex处开始的（如果设置了，length长度的字节）数据传送到一个目标ByteBuf或者byte[]，从目标的dstIndex开始的位置。本地的readerIndex将被增加已经传输的字节数
+writeByte(int);//在当前writerIndex处写入一个字节值，并将writerIndex增加1
+writeBytes(ByteBuf source |byte[] [,int srcIndex ,int length]);//从当前writerIndex开始，传输来自于指定源（ByteBuf或者byte[]）的数据。如果提供了srcIndex和length，则从srcIndex开始读取，并且处理长度为length的字节。当前writerIndex将会被增加所写入的字节数”
+```
  <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/7.png" alt="png"> 
 
- <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/8.png" alt="png"> 
 
- <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/9.png" alt="png"> 
+## ByteBufHolder
+> 除了实际数据负载外，还需要存储各种属性,例如Http响应。netty提供了ByteBufHolder来处理，它支持缓冲区池化，可以从池中借用ByteBuf，在需要时自动释放
 
+- content() 返回ByteBufHolder所持有的ByteBuf
+- copy() 深拷贝这个ByteBufHolder，包括它所包含的ByteBuf的非共享拷贝
+- duplicate() 浅拷贝这个ByteBufHolder
 
+## ByteBuf实例管理方式
+
+### 按需分配ByteBufAllocator
+> Netty通过ByteBufAllocator实现ByteBuf的池化，用来分配任意类型的ByteBuf实例。它不会改变ByteBuf API
+
+- 可以从Channel或者ChannelHandlerContext获取ByteBufAllocator
+- netty默认使用pooledByteBufAllocator，可通过ChannelConfig或引导时配置
+- ByteBufAllocator实现
+   - PooledByteBufAllocator 池化了ByteBuf实例以提高性能并最大限度减少内存碎片。jemalloc-分配内存的方法-被大量现代操作系统采用
+   - UnpooledByteBufAllocator 不池化ByteBuf实例，每次调用都是一个新的实例
+```java
+buffer();
+buffer(int initialCapacity);
+buffer(int initialCapacity, maxCapaccity);//返回一个基于堆或直接内存存储的ByteBuf
+heapBuffer();
+heapBuffer(int initialCapacity);
+heapBuffer(int initialCapacity,int maxCapacity);//返回一个基于堆内存存储的ByteBuf
+directBuffer();
+directBuffer(int initialCapacity);
+directBuffer(int initialCapacity,int maxCapacity);//返回一个基于直接内存存储的ByteBuf
+compositeBuffer();//返回一个可以通过添加最大到指定数目的基于堆或直接内存存储的缓冲区来拓展的CompositeByteBuf
+ioBuffer();//返回一个用于套接字的I/O操作的ByteBuf
+```
+
+### Unpooled缓冲区
+> 未能获取ByteBufAllocator的情况，netty提供了Unpooled的工具类，静态辅助方法创建未池化的ByteBuf实例。
+
+```java
+buffer();
+buffer(int initialCapacity);
+buffer(int initialCapacity,int maxCapacity);//返回一个未池化的基于堆内存存储的ByteBuf
+directBuffer();//返回一个未池化的基于直接内存存储的ByteBuf
+wrappedBuffer();//返回一个包装了给定数据的ByteBuf
+copiedBuffer();//返回一个复制了给定数据的ByteBuf
+```
+- Unpooled使得ByteBuf可用于不需要Netty的其他组件的非网络项目，使得其能得益于高性能的可扩展的缓冲区API
+  
+### ByteBufUtil
+> ByteBufUtil提供操作ByteBuf的静态的辅助方法。和池化无关
+
+- hexdump() 十六进制的表示形式打印ByteBuf的内容
+- boolean equals(ByteBuf，ByteBuf) 判断两个ByteBuf实例的相等性
+  
+## 引用计数 
+Netty第4版中为ByteBuf和ByteBufHolder引入引用计数，实现自ReferenceCounted
+> 引用计数：通过在某个对象所持有的资源不再被其他对象引用时释放该对象所持有的资源来优化内存使用和性能的技术
+
+- 通常以活动的引用计数为1开始，引用计数大于0，对象不会被释放。减少到0时，该实例会被释放。
+- 已经释放到对象应该不可在用了
+- 引用计数对于池化的实现是至关重要的，它降低内存分配的开销
+- 谁负责释放：一般由最后访问(引用计数)对象的那一方负责释放
+
+示例：引用计数
+```java
+Channel channel = ...;
+ByteBufAllocator alloc = channel.alloc();//获取ByteBufAllocator
+ByteBuf buff = alloc.directbuffer();//从ByteBufAllocator分配一个ByteBuf
+assert buff.refCnt() == 1;//检查引用计数是否为预期的1
+```
+示例：释放引用计数的对象
+```java
+ByteBuf buffer = ...;
+boolean released = buffer.release();//减少该对象的活动引用。当减少到0，该对象呗释放，并且该方法返回true
+```
