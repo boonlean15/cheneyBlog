@@ -111,6 +111,10 @@ module.exports = {
                     {
                         title: 'ByteBuf',
                         path: '/netty/netty_bytebuf',
+                    },
+                    {
+                        title: 'ChannelHandler和ChannelPipeline',
+                        path: '/netty/netty_channelhandler',
                     }
                 ]
             },
