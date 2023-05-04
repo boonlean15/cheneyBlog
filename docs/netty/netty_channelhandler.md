@@ -133,3 +133,95 @@ public class DiscardOutboundHandler
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/23.png" alt="png">
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/24.png" alt="png">
+
+### ChannelHandlerContext高级用法
+
+- 通过添加ChannelHandler到ChannelPipeline中，实现动态协议切换
+- 通过缓存ChannelHandlerContext，供后面使用，甚至是不同线程使用
+  ```java
+      public class WriteHandler extends ChannelHandlerAdapter {
+      　　private ChannelHandlerContext ctx;
+      　　@Override
+      　　public void handlerAdded(ChannelHandlerContext ctx) {
+      　　　　this.ctx = ctx;//存储到ChannelHandlerContext的引用以供稍后使用
+      　　}
+      　　public void send(String msg) {　//使用之前存储的到ChannelHandlerContext的引用来发送消息
+      　　　　ctx.writeAndFlush(msg);
+      　　}
+      }
+  ```
+- ChannelHandler可以从属于多个ChannelPipeline，因此可以跟多个ChannelHandlerContext绑定
+   - 需要保证它是线程安全的
+   - Sharable可共享的
+  ```java
+   @Sharable 
+   public class SharableHandler extends ChannelInboundHandlerAdapter {//使用注解@Sharable标注
+   　　@Override
+   　　public void channelRead(ChannelHandlerContext ctx, Object msg) {
+   　　　　System.out.println("Channel read message: " + msg);
+   　　　　ctx.fireChannelRead(msg);//记录方法调用，并转发给下一个ChannelHandler
+   　　}
+   }
+  ```
+  > 为何要共享同一个ChannelHandler　在多个ChannelPipeline中安装同一个ChannelHandler的一个常见的原因是用于收集跨越多个Channel的统计信息
+
+## 异常处理
+
+### 处理入站异常
+> 如果在处理入站事件的过程中有异常被抛出，那么它将从它在ChannelInboundHandler里被触发的那一点开始流经ChannelPipeline
+```java
+public class InboundExceptionHandler extends ChannelInboundHandlerAdapter {
+　　@Override
+　　public void exceptionCaught(ChannelHandlerContext ctx,
+　　　　Throwable cause) {
+　　　　cause.printStackTrace();
+       ctx.close();
+　　}
+}
+```
+总结一下：
+- ChannelHandler.exceptionCaught()的默认实现是简单地将当前异常转发给ChannelPipeline中的下一个ChannelHandler；
+- 如果异常到达了ChannelPipeline的尾端，它将会被记录为未被处理；
+- 要想定义自定义的处理逻辑，你需要重写exceptionCaught()方法。然后你需要决定是否需要将该异常传播出去。
+
+### 处理出站异常
+处理出站操作中的正常完成以及异常的选项，都基于以下的通知机制
+- 每个出站操作都将返回一个ChannelFuture。注册到ChannelFuture的ChannelFutureListener将在操作完成时被通知该操作是成功了还是出错了
+- 几乎所有的ChannelOutboundHandler上的方法都会传入一个ChannelPromise的实例。作为ChannelFuture的子类，ChannelPromise也可以被分配用于异步通知的监听器。但是，ChannelPromise还具有提供立即通知的可写方法
+   - ChannelPromise setSuccess();
+   - ChannelPromise setFailure(Throwable cause);
+   > 通过调用ChannelPromise上的setSuccess()和setFailure()方法，可以使一个操作的状态在ChannelHandler的方法返回给其调用者时便即刻被感知到
+
+添加ChannelFutureListener的方式：
+```java
+ChannelFuture future = channel.write(someMessage);
+future.addListener(new ChannelFutureListener() {
+　　@Override
+　　public void operationComplete(ChannelFuture f) {
+　　　　if (!f.isSuccess()) {
+　　　　　　f.cause().printStackTrace();
+　　　　　　f.channel().close();
+　　　　}
+　　}
+});
+``` 
+```java
+public class OutboundExceptionHandler extends ChannelOutboundHandlerAdapter {
+　　@Override
+　　public void write(ChannelHandlerContext ctx, Object msg,
+　　　　ChannelPromise promise) {
+　　　　promise.addListener(new ChannelFutureListener() {
+　　　　　　@Override
+　　　　　　public void operationComplete(ChannelFuture f) {
+　　　　　　　　if (!f.isSuccess()) {
+　　　　　　　　　　f.cause().printStackTrace();
+　　　　　　　　　　f.channel().close();
+　　　　　　　　}
+　　　　　　}
+　　　　});
+　　}
+}
+```
+**如果你的ChannelOutboundHandler本身抛出了异常会发生什么呢？在这种情况下，Netty本身会通知任何已经注册到对应ChannelPromise的监听器**
+
+

@@ -115,6 +115,10 @@ module.exports = {
                     {
                         title: 'ChannelHandler和ChannelPipeline',
                         path: '/netty/netty_channelhandler',
+                    },
+                    {
+                        title: 'ChannelHandler和ChannelPipeline',
+                        path: '/netty/netty_eventloop',
                     }
                 ]
             },
