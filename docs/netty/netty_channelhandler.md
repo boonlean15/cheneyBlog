@@ -114,3 +114,22 @@ public class DiscardOutboundHandler
 - ChannelPipeline有着丰富的API用以被调用，以响应入站和出站事件
 
 
+## ChannelHandlerContext
+> ChannelhandlerContext代表了ChannelHandler和ChannelPipeline之间的关联，当channelHandler被添加到ChannelPipeline时都会创建Context。**主要功能是管理它所关联的Channelhandler和在同一个ChannelPipeline上的其他ChannelHandler之间的交互**
+
+> 调用Channel或者ChannelPipeline上的这些方法，它们将沿着整个ChannelPipeline进行传播。而调用位于ChannelHandlerContext上的相同方法，则将从当前所关联的ChannelHandler开始，并且只会传播给位于该ChannelPipeline中的下一个能够处理该事件的ChannelHandler
+
+- ChannelHandlerContext和ChannelHandler之间的关联（绑定）是永远不会改变的，所以缓存对它的引用是安全的；
+- 如同我们在本节开头所解释的一样，相对于其他类的同名方法，ChannelHandlerContext的方法将产生更短的事件流，应该尽可能地利用这个特性来获得最大的性能
+
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/20.png" alt="png">
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/21.png" alt="png">
+
+### 使用ChannelHandlerContext
+- ChannelhandlerContext用法
+
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/22.png" alt="png">
+
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/23.png" alt="png">
+
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/24.png" alt="png">
