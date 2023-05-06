@@ -64,14 +64,77 @@ while (!terminated) {
 ## 任务调度
 
 ### JDK的任务调度API
-
+java5之前使用Timer类，java5开始提供了线程池，可以通过线程池实现任务调度
+```java
+ScheduledExecutorService executor = Executors.newScheduledThreadPool(10); // 创建一个其线程池具有10 个线程的ScheduledExecutorService
+ScheduledFuture<?> future = executor.schedule(
+　　new Runnable() {
+　　@Override
+　　public void run() {
+　　　　System.out.println("60 seconds later"); //该任务要打印的消息
+　　}
+}, 60, TimeUnit.SECONDS); //调度任务在从现在开始的60 秒之后执行
+executor.shutdown(); //一旦调度任务执行完成，就关闭ScheduledExecutorService 以释放资源
+```
+#### 局限性
+- 作为线程池管理的一部分，将会有额外的线程创建。
+- 如果有大量任务被紧凑的调度，那么这将成为一个瓶颈
 
 ### 使用EventLoop调度任务
+- Netty通过Channel的EventLoop实现任务调度解决了JDK任务调度的瓶颈
+- Netty的EventLoop扩展了ScheduleExecutorService，所以它提供了JDK实现可用的所有方法
+- 要想取消或者检查（被调度任务的）执行状态，可以使用每个异步操作所返回的ScheduledFuture
 
+**EventLoop调度任务的用法**
+```java
+Channel ch = ...
+ScheduledFuture<?> future = ch.eventLoop().scheduleAtFixedRate(//创建一个Runnable，以供调度稍后执行 
+　　new Runnable() {
+　　@Override
+　　public void run() {
+　　　　System.out.println("Run every 60 seconds");//这将一直运行，直到ScheduledFuture 被取消
+　　}
+}, 60, 60, TimeUnit.Seconds);//调度在60 秒之后，并且以后每间隔60 秒运行
+future.cancel(false);//取消该任务，防止它再次运行
+```
 
 ## 实现细节
 
 ### 线程管理
+> Netty线程模型的卓越性能取决于对于当前执行的thread的身份的确定，确定它是否是分配给当前Channel以及它的EventLoop的那一个线程。**EventLoop负责处理一个Channel的整个生命周期内的所有事件**
 
+- 每个EventLoop都有自己的任务队列，独立于其他EventLoop
+- EventLoop确定线程thread的调度细节
+   > 如果当前调用线程正是支撑EventLoop的线程，那么所提交的代码块将会被直接执行。否则，EventLoop将调度该任务以便稍后执行，并将它放入到内部队列中。当EventLoop下次处理它的事件时，它会执行队列中的那些任务/事件。这也就解释了任何的thread是如何与Channel直接交互而无需在ChannelHandler中进行额外的同步的。
+
+**EventLoop调度任务的执行逻辑，也是Netty的线程模型的关键组成部分**
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/27.png" alt="png">
 
 ### EventLoop/线程的分配
+
+
+
+
+
+
+
+Channel ---- 连接
+Channel ---- 发生的IO操作是事件
+EventLoop ---- 通过任务处理chhannel上发生的IO事件
+
+
+EventLoopGroup  包含一个或多个   EventLoop
+EventLoop    对应一个     Thread
+EventLoop    对应一个或多个  Channel
+Channel的实现是线程安全的
+Channel  对应一个  ChannelPipeline
+Channelhandler 如果是isSharable和线程安全的 可以被添加到多个Pipeline，否则只能添加到一个Pipeline
+ChannelhandlerContext  ChannelPipeline和ChannelHandler的关联
+ChannelhandlerContext和ChannelHandler的关联是不会改变的  缓存它的引用是安全的
+
+
+ChannelFuture  --- 将来的操作的结果占位符
+channelHandler  --- 处理入站和出站数据或事件
+ChannelPipeline  --- channelHandler的容器
+
+
