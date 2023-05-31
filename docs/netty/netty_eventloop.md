@@ -111,30 +111,16 @@ future.cancel(false);//取消该任务，防止它再次运行
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/27.png" alt="png">
 
 ### EventLoop/线程的分配
+#### 异步IO
 
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/28.png" alt="png">
 
+> 一个EventLoop对应一个线程，一个EventLoop可以分配给多个channel，一个channel只对应跟一个EventLoop。另外，需要注意的是，EventLoop的分配方式对ThreadLocal的使用的影响。因为一个EventLoop通常会被用于支撑多个Channel，所以对于所有相关联的Channel来说，ThreadLocal都将是一样的
 
+#### 同步IO
 
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/29.png" alt="png">
 
-
-
-Channel ---- 连接
-Channel ---- 发生的IO操作是事件
-EventLoop ---- 通过任务处理chhannel上发生的IO事件
-
-
-EventLoopGroup  包含一个或多个   EventLoop
-EventLoop    对应一个     Thread
-EventLoop    对应一个或多个  Channel
-Channel的实现是线程安全的
-Channel  对应一个  ChannelPipeline
-Channelhandler 如果是isSharable和线程安全的 可以被添加到多个Pipeline，否则只能添加到一个Pipeline
-ChannelhandlerContext  ChannelPipeline和ChannelHandler的关联
-ChannelhandlerContext和ChannelHandler的关联是不会改变的  缓存它的引用是安全的
-
-
-ChannelFuture  --- 将来的操作的结果占位符
-channelHandler  --- 处理入站和出站数据或事件
-ChannelPipeline  --- channelHandler的容器
+> 每个channel对应分配一个eventLoop，一个eventloop对应一个thread
 
 

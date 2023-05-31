@@ -119,6 +119,10 @@ module.exports = {
                     {
                         title: 'EventLoop和线程模型',
                         path: '/netty/netty_eventloop',
+                    },
+                    {
+                        title: '引导Boostrap',
+                        path: '/netty/netty_bootstrap',
                     }
                 ]
             },
