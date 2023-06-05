@@ -123,6 +123,10 @@ module.exports = {
                     {
                         title: '引导Boostrap',
                         path: '/netty/netty_bootstrap',
+                    },
+                    {
+                        title: '单元测试EmbeddedChannel',
+                        path: '/netty/netty_embedded',
                     }
                 ]
             },
