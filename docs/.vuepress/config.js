@@ -77,6 +77,12 @@ module.exports = {
                 ]
             },
             {
+                title: 'RPC',   // 必要的
+                collapsable: false, // 可选的, 默认值是 true,
+                sidebarDepth: 0,
+                path: '/rpc/rpc',
+            },
+            {
                 title: 'Maven',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
