@@ -130,4 +130,8 @@ class DynamicProxyHandler implements InvocationHandler {
 2. RequestHandler 用于数据的处理，最重要的是一点是：channelRead0的时候，执行了InvocationTask的run方法，就是对应方法的反射
 3. InvocationTask，实现自Runable，run方法中执行反射，如果非异步通过channel写回方法执行结果
 - 客户端
-1. 
+1. RpcClients getProxy 获取需要调用的Interface的代理类ClientInvocationHandler
+2. ClientInvocationHandler 代理类invoke方法将在Interface方法被调用时执行
+3. invoke方法：创建Invocation invocation = new Invocation(method, args);-包装方法调用信息，然后通过conn.send(invocation);或request方法发送给Server
+
+至此形成闭环，也就是总体思路的通过网络通讯的方式发布接口和客户端通过代理类封装网络请求的步骤使用了netty来实现
