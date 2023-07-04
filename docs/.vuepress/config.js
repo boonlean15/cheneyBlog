@@ -133,6 +133,10 @@ module.exports = {
                     {
                         title: '单元测试EmbeddedChannel',
                         path: '/netty/netty_embedded',
+                    },
+                    {
+                        title: '编解码器框架',
+                        path: '/netty/netty_encode_frame',
                     }
                 ]
             },

@@ -160,7 +160,7 @@ com.sc.book.config.ConfigClientRefreshAutoConfiguration
 * 服务端高可用 - 主要是config server 集群，和ribbon负载均衡体现服务端高可用
 
 ## spring cloud config 和 Apollo的使用
-* 主要是Apollo使用了eureka作为注册中心，是的两者可以无缝衔接
+* 主要是Apollo使用了eureka作为注册中心，使得两者可以无缝衔接
 * Apollo有Admin service，config service两个都是多实例、无状态部署，然后在eureka上套了一层meta server
 * config service服务对象上apollo客户端，admin service服务对象上apollo portal管理界面
 * client通过meta server获取config service服务列表(ip+port)，然后通过ip+port进行访问，同时client端会进行loadbalance，错误重试
