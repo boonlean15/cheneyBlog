@@ -187,3 +187,49 @@ protected abstract encode(ChannelHandlerContext ctx, OUTBOUND_IN msg, List<Objec
 ```
 - 将INBOUND_IN看作是通过网络发送的类型，OUTBOUND_IN看作是应用程序所处理的类型
 
+
+## CombinedChannelDuplexHandler
+“通过这种方式结合实现相对于使用编解码器类的方式来说可能更加的简单也更加的灵活”，“选择结合他们，而无需扩展任何抽象的编解码器类”
+
+> 编解码器结合了编码器和解码器，对可重用性造成了影响。使用CombinedChannelDuplexHandler可以避免造成可重用性影响，并保持单个编码器或解码器的便利性。
+```java
+public class CombinedChannelDuplexHandler<I extends ChannelInboundHandler,O extends ChannelOutboundHandler>
+//这个类充当了ChannelInboundHandler和ChannelOutboundHandler（该类的类型参数I和O）的容器
+```
+示例：
+```java
+public class ByteToCharDecoder extends ByteToMessageDecoder {   //  扩展了ByteToMessageDecoder
+　　@Override
+　　public void decode(ChannelHandlerContext ctx, ByteBuf in,
+　　　　List<Object> out) throws Exception {
+　　　　　　while (in.readableBytes() >= 2) {  //  将一个或者多个Character对象添加到传出的List 中
+　　　　　　　　out.add(in.readChar());　
+　　　　}
+　　}
+}
+public class CharToByteEncoder extends
+　　MessageToByteEncoder<Character> {   //  扩展了MessageToByteEncoder
+　　@Override
+　　public void encode(ChannelHandlerContext ctx, Character msg,
+　　　　ByteBuf out) throws Exception {
+　　　 out.writeChar(msg);//将Character 解码为char，并将其写入到出站ByteBuf 中
+　　}
+}
+public class CombinedByteCharCodec extends
+　　CombinedChannelDuplexHandler<ByteToCharDecoder, CharToByteEncoder> {//通过该解码器和编码器实现参数化CombinedByteCharCodec
+　　public CombinedByteCharCodec() {
+　　　　super(new ByteToCharDecoder(), new CharToByteEncoder());　//将委托实例传递给父类
+　　}
+}
+```
+
+
+
+
+
+
+
+
+
+
+

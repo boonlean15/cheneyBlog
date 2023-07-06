@@ -137,6 +137,10 @@ module.exports = {
                     {
                         title: '编解码器框架',
                         path: '/netty/netty_encode_frame',
+                    },
+                    {
+                        title: '预置的ChannelHandler和编解码器',
+                        path: '/netty/netty_encode_frame_pre',
                     }
                 ]
             },
