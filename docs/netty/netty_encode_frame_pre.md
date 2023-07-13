@@ -60,5 +60,196 @@ close(ChannelHandlerContext,ChannelPromise);
 
 ## 构建基于Netty的Http/Https应用程序
 
-https
-http
+## Http编码器 解码器 编解码器
+
+### http请求和响应组成部分
+
+- 所有类型的http消息(FullHttpRequest、LastHttpContent、HttpRequest、HttpContent)都实现了HttpObject接口
+- 请求行-请求头-空行-请求体
+> 第一部分包含http头部信息，httpcontent包含了数据，后面可能还跟着一个或多个Httpcontent，LastHttpContent标记Http请求的结束，可能还包含尾随的Http头部信息
+
+----------------------FullHttpRequest-----------------------
+---HttpRequest---HttpContent---HttpContent---LasthttpContent
+
+----------------------FullHttpResponse-----------------------
+---HttpResponse---HttpContent---HttpContent---LasthttpContent
+
+- 处理和生成这些消息的Http编、解码器
+
+### 将正确的ChannelHandler添加到ChannelPipeline中，实现支持Http
+```java
+HttpRequestEncoder//将HttpRequest、HttpContent、LastHttpContent消息编码为字节
+HttpResponseEncoder//将HttpResponse、HttpContent、LastHttpContent消息编码为字节
+HttpRequestDecoder、HttpResponseDecoder//则为解码   
+
+public class HttpPipelineInitializer extends ChannelInitializer<Channel>{
+    private final boolean client;
+    public HttpPipelineInitializer(boolean client){
+        this.client = client;
+    }
+
+    @Override
+    protected void initChannel(Channel ch) throws Exception {
+        ChannelPipeline pipeline = ch.pipeline();
+        if(client){//客户端，添加HttpResponseDecoder处理来自服务器的响应、以此类推
+            pipeline.addLast("decoder", new HttpResponseDecoder());
+            pipeline.addLast("encoder", new HttpRequestEncoder());
+        } else {
+            pipeline.addLast("decoder", new HttpRequestDecoder());
+            pipeline.addLast("encoder", new HttpResponseEncoder())
+        }
+    }
+}
+```
+
+## 聚合Http消息
+
+ChannelHandler添加到ChannelPipeline后，便可处理不同类型的HttpObject消息了。由于Http消息由多部分组成，需要聚合他们形成完整的消息。
+
+### Http聚合器
+
+- 将多个消息部分合并为FullHttpRequest、FullHttpResponse
+
+```java
+public class HttpAggregatorInitializer extends ChannelInitializer<Channel> {
+    private final boolean isClient;
+    public HttpAggregatorInitializer(boolean isClient){
+        this.isClient = isClient;
+    }
+
+    @Override
+    protected void initChannel(Channel ch) throws Exception {
+        ChannelPipeline pipeline = ch.pipeline();
+        if(isClient){//添加HttpClientCodec
+            pipeline.addLast("codec", new HttpClientCodec());
+        } else {//添加HttpServerCodec
+            pipeline.addLast("codec", new HttpServerCodec());
+        }
+        pipeline.addLast("aggregator", new HttpObjectAggregator(512 * 1024));//将最大消息大小为512Kb的HttpObjectAggregator添加到ChannelPipeline
+    }
+}
+```
+
+## Http压缩
+
+使用Http时，建议开启压缩以尽可能减少传输数据的大小。Netty为压缩和解压提供了ChannelHandler实现，它们同时支持gzip和deflate编码
+**服务器没有义务压缩它所发送的数据**
+
+- 示例：
+```java
+public class HttpCompressionInitializer extends ChannelInitializer<Channel> {
+    private final boolean isClient;
+    public HttpCompressionInitializer(boolean isClient){
+        this.isClient = isClient;
+    }
+
+    @Override
+    protected void initChannel(Channel ch) throws Exception {
+        ChannelPipeline pipeline = ch.pipeline();
+        if(isClient) {
+            pipeline.addLast("codec", new HttpClientCodec());
+            pipelien.addLast("decompressor", new HttpContentDecompressor());//添加解压器、处理来自服务器的压缩内容
+        } else {
+            pipeline.addLast("codec", new HttpServerCodec());
+            pipeline.addLast("compressor", new HttpContentCompressor());//添加压缩器、压缩数据(如果客户端支持它)
+        }
+    }
+}
+```
+
+## 使用Https
+
+- 启用Https只需要将SslHandler添加到ChannelPipeline的ChannelHandler组合中
+
+```java
+public cliass HttpsCodecInitializer extends ChannelInitializer<Channel> {
+    private final SslContext context;
+    private final boolean isClient;
+
+    public HttpsCodecInitializer(SslContext context, boolean isClient){
+        this.context = context;
+        this.isClient = isClient;
+    }
+
+    @Override
+    protected void initChannel(Channel ch) throws Exception {
+        ChannelPipeline pipeline = ch.pipeline();
+        SSLEngine engine = context.newEngine(ch.alloc());
+        pipeline.addFirst("ssl", new SslHandler(engine));//将SslHandler添加到ChannelPipeline中以使用Https
+        if(isClient){
+            pipeline.addLast("codec", new HttpClientCodec());
+        } else {
+            pipeline.addLast("codec", new HttpServerCodec());
+        }
+    }
+}
+```
+
+**这些代码例子，说明netty的架构方式如何将代码重用变为杠杆作用的。只需添加一个ChannelHandler到Pipeline中，就提供了一项新功能**
+
+## WebSocket
+http 请求/响应模式的交互序列
+
+> webSocket提供了“在一个单个的TCP连接上提供双向的通信，为网页和远程服务器之间的双向通信提供了一种替代Http轮询的方案”
+
+- 应用程序实现对webSocket支持 通过将适当的客户端和服务器WebSocket ChannelHandler添加到ChannelPipeline中
+
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/netty/37.png" alt="png">
+
+- WebSocketFrame类型
+   - BinaryWebsocketFrame 数据帧：二进制数据
+   - TextWebSocketFrame 数据帧： 文本数据
+   - ContinuationWebSocketFrame 数据帧： 属于上一个BinaryWebSocketFrame或TextWebSocketFrame的文本或者二进制数据
+   - CloseWebSocketFrame 控制帧：一个Close请求、关闭的状态码以及关闭的原因
+   - PingWebSocketFrame 控制帧： 请求一个PongWebSocketFrame
+   - PongWebSocketFrame 控制帧： 对PingWebSocketFrame请求的响应
+
+- 示例
+```java
+/**
+ * WebSocketServerProtocolHandler这个类处理协议升级握手，以及三种控制帧
+ */
+public class WebSocketServerInitializer extends ChannelInitializer<Channel>{
+    @Override
+    protected void initChannel(Channel ch) throws Exception {
+        ch.pipeline().addLast(
+            new HttpServerCodec(),
+            new HttpObjectAggregator(65536),//为握手提供聚合的HttpRequest 
+            new WebSocketServerProtocolHandler("/websocket"), //如果被请求的端点是/websocket，则处理该升级握手
+            new TextFrameHandler(), //处理
+            new BinaryFrameHandler(), 
+            new ContinuationFrameHandler());
+    }
+}
+```
+## 空闲的连接和超时
+
+- IdleStateHandler 当空闲时间太长时，触发IdleStateEvent事件。然后，通过在ChannelInboundHandler中重写userEventTriggered()方法来处理该事件
+- ReadTimeoutHandler 指定时间内没收到入站数据，则抛出ReadTimeoutException并关闭对应的Channel。可以重写你的ChannelHandler中的exceptionCaught()方法来检测该异常
+- WriteTimeoutHandler 对应的出站数据写出
+
+```java
+public class IdleStateHandlerInitializer extends ChannelInitializer<Channel> {
+    @Override
+    protected void initChannel(Channel ch) throws Exception{
+        ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast(new IdleStateHandler(0,0,60,TimeUnit.SECONDS));//IdleStateHandler将在被触发时发送一个IdleStateEvent事件
+        pipeline.addLast(new HeartbeatHandler());//添加心跳Handler
+    }
+    public static final class HeartbeatHandler extends ChannelInboundHandlerAdapter{//实现userEventTriggered()方法以发送心跳消息
+        private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("HEARTBEAT", CharsetUtil.ISO_8859_1));
+
+        @Override
+        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception{
+            if(evt instanceof IdleStateEvent){
+                ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate()).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            } else {
+                super.userEventTriggered(ctx,evt);//非IdleStateEvent事件，传递给下一个
+            }
+        }
+    }
+}
+```
+以上，连接超过60s没有入站或出站数据，那么IdleStateHandler触发IdleStateEvent事件调用fireUserEventTriggered方法。HeartbeatHandler实现了userEventTriggered方法，检测到IdleState事件，发送心跳消息，并添加发送操作失败时关闭该连接的ChannelFutureListener
+
+
