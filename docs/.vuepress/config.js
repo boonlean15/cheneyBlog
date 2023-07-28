@@ -1,6 +1,6 @@
 module.exports = {
     title: '我的知识库',
-    description: '十一家的林先生',
+    description: '一蓑烟雨任平生',
     base: '/cheneyBlog/',
     themeConfig: {
         nav: [
@@ -58,6 +58,15 @@ module.exports = {
                     {
                         title: 'JAVA 输入与输出',
                         path: '/java/javaInputOutput'
+                    }
+                ]
+            },
+            {
+                title: 'Mybatis',   // 必要的
+                children: [
+                    {
+                        title: 'Mybatis',
+                        path: '/mybatis/mybatis',
                     }
                 ]
             },
