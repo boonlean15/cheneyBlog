@@ -68,6 +68,80 @@ SSL/TLS 是一种密码通信方案、SSL/TLS 涉及到了密码学中的对称�
 ## springboot+nginx配置https
 其中springboot是单向https，nginx是双向https，vue的资源是客户端，nginx需要实现双向https
 
+具体流程：
+1.springboot开启https
+- 生成证书
+keytool -genkey -alias myhttps -keyalg RSA -keysize 2048 -validity 36500 -keystore  "D:/tmp/ssl/myhttps.keystore"
+命令：keytool -genkey -alias testhttps -keyalg RSA -keysize 2048 -validity 36500 -keystore  "D:/tmp/ssl/testhttps.keystore"
+
+- 命令解释:
+• -genkey 表示要创建一个新的密钥。 
+
+• -alias 表示 keystore 的别名。 
+
+• -keyalg 表示使用的加密算法是 RSA。
+
+• -keysize 表示密钥的长度．。
+
+• -keystore 表示生成的密钥存放位直。 
+
+• -validity 表示密钥的有效时间，单位为天。
+
+- 将目录下的myhttps.keystore文件移动到resource下面
+- 配置文件
+```yml
+  server:
+  port: 9987
+  non-ssl-port: 8089
+# 用于 非ssl请求 强制转成 ssl 请求
+# 当使用 访问地址：http://127.0.0.1:8089/hello 访问时 后台会 将请求 转换成 https://127.0.0.1:9987/hello
+#  servlet:
+#    context-path: /ssl-service
+  ssl:
+    key-store: classpath:myhttps.keystore  #类路径下的自签证书
+    key-alias: myhttps # 证书别名
+    key-store-password: 123456 #证书密码
+    key-store-type: JKS # 证书类型
+    enabled: true  # 开启证书验证
+```
+
+2.nginx配置双向https
+- openssl genrsa -des3 -out server.key 2048  创建服务器私钥
+- openssl req -new -key server.key -out server.csr  创建CSR证书请求文件
+- openssl rsa -in server.key -out server.key  去掉私钥文件的密码
+- openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt    使用服务器私钥签署服务器公钥证书
+
+修改nginx.conf
+```json
+# 二级路由跳转、接口代理、https信任自签证书
+    server {
+        server_name  192.168.43.20;
+
+        listen 443 ssl;        # 监听443端口, 开启ssl(必须)
+
+        # 引用ssl证书(必须,如果放在nginx/conf/ssl下可以用相对路径,其他位置必须用绝对路径)
+        ssl_certificate   ../ssl/server.crt;
+        ssl_certificate_key ../ssl/server.key;
+
+        # 协议优化(可选,优化https协议,增强安全性)
+        ssl_protocols    TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
+        ssl_prefer_server_ciphers on;
+        ssl_session_cache  shared:SSL:10m;
+        ssl_session_timeout 10m;
+
+        # 二级路由跳转
+        location /ayyingyong20221119 {
+            try_files $uri $uri/ /ayyingyong20221119/index.html;
+            index index.html;
+        }
+
+        # 当遇到/api （也就是我们的接口）对其进行反向代理
+        location /ayyingyong20221119/api {
+            proxy_pass https://localhost:9090/ayyingyong20221119/api;
+        }
+    }
+```
 
 ## 认证
 
