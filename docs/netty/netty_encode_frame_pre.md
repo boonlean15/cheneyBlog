@@ -252,4 +252,45 @@ public class IdleStateHandlerInitializer extends ChannelInitializer<Channel> {
 ```
 以上，连接超过60s没有入站或出站数据，那么IdleStateHandler触发IdleStateEvent事件调用fireUserEventTriggered方法。HeartbeatHandler实现了userEventTriggered方法，检测到IdleState事件，发送心跳消息，并添加发送操作失败时关闭该连接的ChannelFutureListener
 
+## 解码基于分隔符的协议和基于长度的协议
+
+## 基于分隔符的协议
+
+基于分隔符的消息协议使用定义的字符来标记消息或者消息段的开头或者结尾。例如：SMTP/POP3/IMAP/Telnet
+
+- **DelimiterBasedFrameDecoder** 使用任何由用户提供的分隔符来提取帧的通用解码器
+- **LineBasedFrameDecoder** 提取由行尾符\n \r\n分隔的帧的解码器。这个解码器比DelimitedBasedFrameDecoder更快
+
+```java
+public class LineBasedHandlerInitializer extends ChannelInitializer<Channel>{
+    @Override
+    protected void initChannel(Channel ch) throws Exception{
+        ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast(new LineBasedFrameDecoder(64*1024));//该LineBasedFrameDecoder将提取的帧转发给下一个ChannelInboundHandler
+        pipeline.addLast(new FrameHandler());//添加FrameHandler以接收帧
+    }
+
+    public static final class FrameHandler extends SimpleChannelInboundHandler<ByteBuf>{
+        @Override
+        public void channelRead0(ChannelHandlerContext ctx,ByteBuf msg)throws Exception{//传入了单个帧的内容
+            // Do something with the data extracted from the frame
+        }
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
