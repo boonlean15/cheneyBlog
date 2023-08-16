@@ -150,6 +150,10 @@ module.exports = {
                     {
                         title: '预置的ChannelHandler和编解码器',
                         path: '/netty/netty_encode_frame_pre',
+                    },
+                    {
+                        title: '网络协议',
+                        path: '/netty/netty_protocol',
                     }
                 ]
             },
