@@ -152,8 +152,12 @@ module.exports = {
                         path: '/netty/netty_encode_frame_pre',
                     },
                     {
-                        title: '网络协议',
+                        title: '网络协议WebSocket',
                         path: '/netty/netty_protocol',
+                    },
+                    {
+                        title: 'UDP广播事件',
+                        path: '/netty/netty_udp',
                     }
                 ]
             },
