@@ -201,6 +201,21 @@ module.exports = {
                         path: '/springcloud/gateway'
                     }
                 ]
+            },
+            {
+                title: '其他',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'xss漏洞',
+                        path: '/others/xss',
+                    },
+                    {
+                        title: '前后端开启https',
+                        path: '/others/https-active',
+                    }
+                ]
             }
         ]
     }
