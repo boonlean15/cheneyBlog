@@ -216,6 +216,17 @@ module.exports = {
                         path: '/others/https-active',
                     }
                 ]
+            },
+            {
+                title: 'java并发编程实战',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: '并发编程bug源头 - 可见性、原子性、有序性',
+                        path: '/java-concurrent/concurrent-bug-source',
+                    }
+                ]
             }
         ]
     }
