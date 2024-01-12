@@ -48,3 +48,24 @@
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/4.jpg" alt="png"> 
 
 
+## 编译优化带来的有序性问题
+> 编译器和解释器会优化我们写的代码的执行顺序，举例：比如 Single sin = new Single();直观的我们以为是1.分配内存 2.new 对象 3.赋值，而实际编译器优化后是：1.分配内存 2.赋值内存地址给变量 3.new 对象
+
+### doulbe check的并发问题
+
+```java
+public class Singleton {
+  static Singleton instance;
+  static Singleton getInstance(){
+    if (instance == null) {
+      synchronized(Singleton.class) {
+        if (instance == null)
+          instance = new Singleton();
+        }
+    }
+    return instance;
+  }
+}
+```
+- 如果线程A、B同时启动，然后在获取锁时A拿到，B阻塞，那A可以正常创建单例对象
+- 如果A先启动，然后获取锁，在new Singleton时，执行到2.赋值内存地址给变量，此时cpu线程切换，B在第一步判断instance == null时，不为null，但实际并未new对象，此时会出现null空指针异常
