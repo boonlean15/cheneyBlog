@@ -217,9 +217,9 @@ server:
   #  servlet:
   #    context-path: /ssl-service
   ssl:
-    key-store: classpath:cmp.p12  #类路径下的自签证书
+    key-store: classpath:xxx.p12  #类路径下的自签证书
     key-alias: cmp # 证书别名
-    key-store-password: cmp1qaz@WSX #证书密码
+    key-store-password: WSX #证书密码
     key-store-type: PKCS12 # 证书类型
     enabled: true  # 开启证书验证
 ```  
@@ -390,13 +390,13 @@ server {
         }
 
         # 当遇到/api （也就是我们的接口）对其进行反向代理
-        location ~^/rjgf {
+        location ~^/xxx {
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection "upgrade";
                 proxy_pass   https://${API_PATH};
         }
 
-        location ~^/cmp-fil {
+        location ~^/cmp-xxx {
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection "upgrade";
                 proxy_pass   http://${MINIO_PATH};

@@ -65,12 +65,8 @@ commit;
 ## 数据备份
 ### 备份单表数据
 ```shell
-docker exec -it postgres pg_dump -U postgres -d cmdi_cmp -t cmp_order  -f cmp_order.sql
-docker exec -it postgres pg_dump -U postgres -d cmdi_cmp  -t cmp_change_list_record -f cmp_change_list_record.sql
-mkdir  cmd_order
-cd cmd_order
-docker cp  postgres:/cmp_order.sql ./
-docker cp  postgres:/cmp_change_list_record.sql ./
+docker exec -it postgres pg_dump -U postgres -d cmp -t order  -f order.sql
+docker exec -it postgres pg_dump -U postgres -d cmp  -t change_list -f change_list.sql
 ```
 
 ## pg查看表结构信息
@@ -91,7 +87,7 @@ select count(tablename) from pg_tables where schemaname='public' --- 得到用�
 - 统计数据库大小
 ```shell
 单个数据库的大小
-select pg_size_pretty (pg_database_size(‘test_database’)；
+select datname, pg_size_pretty (pg_database_size(datname)) AS size from pg_database where datname = 'cmp'; 
 所有数据库的大小
 select datname, pg_size_pretty (pg_database_size(datname)) AS size from pg_database;
 ```
@@ -103,10 +99,6 @@ select pg_size_pretty(pg_relation_size(‘mytab’)) as size;
 select pg_size_pretty(pg_total_relation_size(‘tab’)) as size;
 所有表大小
 select relname, pg_size_pretty(pg_relation_size(relid)) from pg_stat_user_tables order by pg_relation_size(relid) desc;
-```
-- 所有表的记录数
-```shell
-select relname as TABLE_NAME, reltuples as rowCounts from pg_class where relkind = 'r' order by rowCounts desc
 ```
 - 查询单个表的数据大小，索引大小，表大小，并按表大小倒序排列
 ```sql
@@ -127,6 +119,10 @@ FROM (
     ) AS all_tables
     ORDER BY total_size DESC
 ) AS pretty_sizes;
+```
+- 所有表的记录数
+```shell
+select relname as TABLE_NAME, reltuples as rowCounts from pg_class where relkind = 'r' order by rowCounts desc
 ```
 - 查询数据库及大小
 ```sql
