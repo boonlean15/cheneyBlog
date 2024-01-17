@@ -405,7 +405,9 @@ server {
 }
 ```
 参考：
-正式证书：[基于NGINX实现双向HTTPS部署并实现数字证书登录](https://www.freesion.com/article/49521570591/)
+[基于NGINX实现双向HTTPS部署并实现数字证书登录](https://www.freesion.com/article/49521570591/)
 [自签名证书](https://www.cnblogs.com/lasding/p/16924679.html)
+
 [springboot开启https](https://blog.csdn.net/weixin_41463944/article/details/131604251)
+
 [springboot使用https协议](https://blog.csdn.net/demon7552003/article/details/125631771)

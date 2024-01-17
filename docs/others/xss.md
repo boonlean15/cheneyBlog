@@ -183,3 +183,5 @@ asyncSupported = true 配置支持异步，sync-supported是servlet 3.0后推出
 ```java
 response.addHeader("Set-Cookie", "username=123456; Path=/; HttpOnly")
 ```
+
+参考自：[xss漏洞修复](https://www.cnblogs.com/fswhq/p/16981419.html)
