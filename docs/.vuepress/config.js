@@ -90,6 +90,10 @@ module.exports = {
                     {
                         title: '并发编程bug源头 - 可见性、原子性、有序性',
                         path: '/java-concurrent/concurrent-bug-source',
+                    },
+                    {
+                        title: 'Java内存模型：看Java如何解决可见性和有序性问题',
+                        path: '/java-concurrent/java-heap-model',
                     }
                 ]
             },
