@@ -62,15 +62,6 @@ module.exports = {
                 ]
             },
             {
-                title: 'Mybatis',   // 必要的
-                children: [
-                    {
-                        title: 'Mybatis',
-                        path: '/mybatis/mybatis',
-                    }
-                ]
-            },
-            {
                 title: 'NIO',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
@@ -92,13 +83,13 @@ module.exports = {
                 path: '/rpc/rpc',
             },
             {
-                title: 'Maven',   // 必要的
+                title: 'java并发编程实战',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
-                        title: 'Maven基本使用',
-                        path: '/maven/maven',
+                        title: '并发编程bug源头 - 可见性、原子性、有序性',
+                        path: '/java-concurrent/concurrent-bug-source',
                     }
                 ]
             },
@@ -162,12 +153,6 @@ module.exports = {
                 ]
             },
             {
-                title: '认证',   // 必要的
-                collapsable: false, // 可选的, 默认值是 true,
-                sidebarDepth: 0,
-                path: '/authentication/authentication',
-            },
-            {
                 title: 'spring cloud',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
@@ -203,6 +188,32 @@ module.exports = {
                 ]
             },
             {
+                title: '认证',   // 必要的
+                collapsable: false, // 可选的, 默认值是 true,
+                sidebarDepth: 0,
+                path: '/authentication/authentication',
+            },
+            {
+                title: 'Mybatis',   // 必要的
+                children: [
+                    {
+                        title: 'Mybatis',
+                        path: '/mybatis/mybatis',
+                    }
+                ]
+            },
+            {
+                title: 'Maven',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'Maven基本使用',
+                        path: '/maven/maven',
+                    }
+                ]
+            },
+            {
                 title: '其他',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
@@ -212,19 +223,16 @@ module.exports = {
                         path: '/others/xss',
                     },
                     {
-                        title: '前后端开启https',
+                        title: 'springboot+vue 前后端开启https',
                         path: '/others/https-active',
-                    }
-                ]
-            },
-            {
-                title: 'java并发编程实战',   // 必要的
-                // collapsable: false, // 可选的, 默认值是 true,
-                // sidebarDepth: 0,    // 可选的, 默认值是 1
-                children: [
+                    },
                     {
-                        title: '并发编程bug源头 - 可见性、原子性、有序性',
-                        path: '/java-concurrent/concurrent-bug-source',
+                        title: 'Linux常用命令',
+                        path: '/linux-shell/linux-shell',
+                    },
+                    {
+                        title: '常用统计和其他sql',
+                        path: '/usedsql/usedsql',
                     }
                 ]
             }
