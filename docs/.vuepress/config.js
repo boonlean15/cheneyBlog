@@ -237,6 +237,10 @@ module.exports = {
                     {
                         title: '常用统计和其他sql',
                         path: '/usedsql/usedsql',
+                    },
+                    {
+                        title: 'Springboot 常用note',
+                        path: '/others/springboot',
                     }
                 ]
             }

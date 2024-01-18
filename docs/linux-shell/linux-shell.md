@@ -1,4 +1,5 @@
 # Linux常用命令
+[linux博文](https://www.linuxprobe.com/linux-securecrt-sftp.html)
 
 ## docker清理常用命令
 ### docker 命令清除
@@ -87,3 +88,43 @@ systemctl enable docker
 docker info
 ```
 > 显示  Docker Root Dir: /home/docker/lib/docker 确定容器没问题后删除/var/lib/docker/目录中的文件
+
+
+## linux使用lrzsz工具上传下载文件
+
+- 安装lrzsz 
+```shell
+sudo yum install -y lrzsz
+```
+- rz - 上传文件
+```shell
+# 键入rz命令, 然后回车，服务器接收文件的目录下有同名的文件, 将跳过上传过程
+# 上传时用rz -be, 并且不要勾选弹出的对话框中"Upload files as ASCII"前选框.
+-b: 用binary的方式上传下载, 不解释字符为ASCII.
+-e: 强制escape所有控制字符, 比如Ctrl+x, DEL等.
+```
+- sz - 下载文件
+```shell
+# 键入sz download_files命令, 然后回车
+sz filename # 下载一个文件
+sz filename1 filename2 # 下载多个文件
+sz dir/* # 下载dir目录下的所有文件, 不包含dir下的文件夹
+
+# 修改SecureCRT默认的上传/下载目录:
+# 选择菜单栏的[Options(选项)] --> [Session Options(会话选项)] --> [X/Y/Zmodem], 然后修改Upload/Download路径即可.
+```
+
+
+## curl发送请求
+### GET
+curl -G -k "https://188.104.78.170:9190/rjgf/api/cmp/cmp-manage/open/rest/test/setOrderTime" --data-urlencode "id=e2b75ec4f17043cf9f7ce7b8e316ffef" --data-urlencode "startTime=2024-01-14 09:00:00" --data-urlencode "endTime=2024-01-14 10:00:00"
+
+
+
+
+
+
+
+
+
+
