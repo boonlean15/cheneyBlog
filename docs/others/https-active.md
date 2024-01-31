@@ -5,17 +5,197 @@
 > 客户端到Nginx采用双向Https访问，客户端选择数字证书进行登录，由Nginx配置双向Https认证，Nginx可以自动解析数字证书，并且我们可以拿到Nginx解析数字证书后的信息，获取到Nginx中的DN值后，放入请求头中，当Nginx反向代理请求Web应用时，就可以将数字证书中的用户信息数据DN传递给Web应用，应用拿到后就可以进行登录。
 > > 在此过程中，为了安全起见，Nginx到Web应用的请求采用的是单向Https。
 
-## 后端开启https
+## 后端开启https示例
+### 生成证书
+```shell
+keytool -genkey -alias myhttps -keyalg RSA -keysize 3068 -validity 36500 -keystore  "/Users/myhttps.jks"
+# 然后输入密钥库口令
+# 再次输入新口令
+# 输入名字姓氏那些，然后y确认生成证书
 
-### 制作证书
+Warning:
+JKS 密钥库使用专用格式。建议使用 "keytool -importkeystore -srckeystore /Users/myhttps.jks -destkeystore /Users/myhttps.jks -deststoretype pkcs12" 迁移到行业标准格式 PKCS12。
 
-- 生成密钥cmp.p12、制作证书采用jdk自带keytool工具创建.示例1:
+# 执行命令迁移到PKCS12
+keytool -importkeystore -srckeystore /Users/myhttps.jks -destkeystore /Users/myhttps.jks -deststoretype pkcs12
+
+# JKS转换为P12
+keytool -importkeystore -srckeystore /Users/myhttps.jks -srcstoretype JKS -deststoretype PKCS12 -destkeystore /Users/myhttps.p12
+```
+
+### springboot开启https
+> 项目使用的PKCS12类型证书，步骤：使用示例创建证书、项目配置application.yml文件。
+- 在application.properties或者application.yml中进行配置
+```yml
+server:
+  port: 9987
+  non-ssl-port: 8089
+  # 用于 非ssl请求 强制转成 ssl 请求
+  # 当使用 访问地址：http://127.0.0.1:8089/hello 访问时 后台会 将请求 转换成 https://127.0.0.1:9987/hello
+  #  servlet:
+  #    context-path: /ssl-service
+  ssl:
+    key-store: classpath:myhttps.p12  #类路径下的自签证书
+    key-alias: myhttps # 证书别名
+    key-store-password: myhttps #证书密码
+    key-store-type: PKCS12 # 证书类型
+    enabled: true  # 开启证书验证
+```  
+> 配置了如上属性后，默认开启了https，此时配置文件中的server.port配置的端口为https请求的端口
+
+- springboot兼容http方式开启https
+> 以下可配置为http、https共同使用，实现思路是监听http请求转发到https请求
+```java
+package com.bisp.common.config;
+
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * @ClassName TomcatConfig
+ * @Description TODO
+ * @Author yzx
+ * @Date 2022/11/24 10:59
+ **/
+@Configuration
+public class TomcatConfig {
+    /**获取配置端口*/
+    @Value("${server.port}")
+    private Integer httpPort;
+    @Bean
+    public ServletWebServerFactory servletContainer() {
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory(){
+            @Override
+            protected void postProcessContext(Context context) {
+                SecurityConstraint constraint = new SecurityConstraint();
+                constraint.setUserConstraint("CONFIDENTIAL");
+                SecurityCollection collection = new SecurityCollection();
+                collection.addPattern("/*");
+                constraint.addCollection(collection);
+                context.addConstraint(constraint);
+            }
+        };
+        factory.addAdditionalTomcatConnectors(tomcatConnector());
+        return factory;
+    }
+    private Connector tomcatConnector() {
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setScheme("http");
+        //http端口号，可以自行指定（不能和其它已经使用的端口重复，否则会报错）
+        //设置http的监听端口为80端口，这样访问的时候也可以不用带上端口号
+        connector.setPort(9090);
+        connector.setSecure(false);
+        //监听到的http的端口号后转向到https的端口号，可以自行指定
+        connector.setRedirectPort(httpPort);
+        return connector;
+    }
+}
+```
+
+### 证书格式
+```shell
+.DER 扩展名
+用于二进制DER编码证书
+
+.PEM 扩展名
+用于不同类型的X.509v3文件，是以“ - BEGIN …”前缀的ASCII（Base64）数据
+
+.CRT 扩展名
+CRT扩展用于证书。 证书可以被编码为二进制DER或ASCII PEM。 CER和CRT扩展几乎是同义词。 最常见的于Unix 或类Unix系统
+
+.CER 扩展名
+.crt的替代形式
+
+.KEY 扩展名
+
+KEY扩展名用于公钥和私钥PKCS＃8。 键可以被编码为二进制DER或ASCII PEM
+```
+
+### 证书格式转换
+```shell
+#查看PEM编码证书
+openssl x509 -in cert.pem -text -noout
+openssl x509 -in cert.cer -text -noout
+openssl x509 -in cert.crt -text -noout
+#查看DER编码证书
+openssl x509 -in certificate.der -inform der -text -noout
+
+#转换证书格式
+#转换可以将一种类型的编码证书存入另一种。（即PEM到DER转换）
+#PEM到DER
+openssl x509 -in cert.crt -outform der -out cert.der
+#DER到PEM
+openssl x509 -in cert.crt -inform der -outform pem -out cert.pem
+
+#PEM -> DER -> JKS的转换(无私钥情况下转换pem格式证书为jks格式)
+#pem文件 转换为 der文件
+openssl x509 -outform der -in cert.pem -out cert.der
+#der文件 转换为 jks文件
+keytool -import -keystore cert.jks -file cert.der
+
+#查看证书信息
+keytool -list -v -keystore  D:/demo.jks -storepass 123456@store2
+
+# JKS与P12相互转换
+# JKS转换为P12
+keytool -importkeystore -srckeystore /Users/myhttps.jks -srcstoretype JKS -deststoretype PKCS12 -destkeystore /Users/myhttps.p12
+# P12转换为JKS
+keytool -importkeystore -srckeystore server.p12 -srcstoretype PKCS12 -deststoretype JKS -destkeystore server.jks
+
+# JKS与PEM转换
+# JKS——>PEM
+JSK转换为PEM需要先，JKS–>P12–>PEM
+//jks--->p12[需要注意这里必须add -alias keyOwnerAlias 否则会报错]
+keytool -importkeystore -srckeystore sert.jks -destkeystore sert.p12 -srcstoretype jks -deststoretype pkcs12 -alias keyOwnerAlias
+//p12--->pem
+openssl pkcs12 -in sert.p12 -out sert.pem
+# PEM——>JKS
+//PEM--->PFX
+openssl pkcs12 -export -out test.pfx -inkey test.key -in test.pem
+//PFX--->JKS
+keytool -importkeystore -srckeystore test.pfx -destkeystore test.jks -srcstoretype PKCS12 -deststoretype JKS
+# P12证书库导出CER
+keytool -export -alias server -keystore server.p12 -storetype PKCS12 -storepass huawei -rfc -file huawei.cer
+# 证书库JKS，添加为一个信任证书CER/PEM
+# 导出CER
+keytool -import -v -file server.cer -keystore client.jks
+# 导出PEM
+openssl pkcs12 -in server.p12 -out server.pem -nokeys 
+
+# 查看证书库
+keytool -list -keystore client.jks
+
+# JKS—–>KEYSTORE
+//JKS--->P12
+keytool -importkeystore -srckeystore D:\test.keystore -srcstoretype JKS -deststoretype PKCS12 -destkeystore test1.p12
+//P12---->KEYSTORE
+keytool -v -importkeystore -srckeystore D:\test.p12 -srcstoretype PKCS12 -destkeystore D:\test.keystore -deststoretype JKS
+
+# KEYSTORE——>JKS
+//keystore--->crt
+keytool -export -alias test -file D:\test.crt -keystore D:\test.keystore
+//CRT-->CER
+openssl x509 -inform pem -in test.crt -outform der -out test.cer
+//CER--->JKS
+keytool -import -v -alias test -file test.cer -keystore test.jks -storepass 123456 -noprompt 
+```
+
+### 制作证书命令
+
+- **制作证书采用jdk自带keytool工具创建.示例1:**
 ```shell
 keytool -genkey -alias myhttps -keyalg RSA -keysize 2048 -validity 36500 -keystore  "D:/tmp/ssl/myhttps.keystore"
 
 命令：keytool -genkey -alias testhttps -keyalg RSA -keysize 2048 -validity 36500 -keystore  "D:/tmp/ssl/testhttps.keystore"
 
-命令解释:
+# 命令解释:
 • -genkey 表示要创建一个新的密钥。 
 
 • -alias 表示 keystore 的别名。 
@@ -49,7 +229,7 @@ CN=lihz, OU=org, O=org, L=wuhan, ST=hubei, C=CN是否正确?
 Warning:
 JKS 密钥库使用专用格式。建议使用 "keytool -importkeystore -srckeystore D:/demo.jks -destkeystore D:/demo.jks -deststoretype pkcs12" 迁移到行业标准格式 PKCS12。
 ```  
-> 按照提示生成PKCS12格式证书
+> **可以按照提示生成PKCS12格式证书**
 
 - keytool参数
 ```shell
@@ -104,7 +284,7 @@ keytool -genkeypair [OPTION]...
  -protected                      通过受保护的机制的口令
 ```
 
-- 导出证书
+### 导出证书
 ```shell
 #导出证书
 keytool -export -alias demo -keystore D:/demo.jks -rfc -file D:/demo.cer -storepass 123456@store
@@ -118,170 +298,6 @@ keytool -printcert -rfc -file D:/demo.cer > D:/demo.crt
 
 #可以使用openssl 工具转换，一般linux操作系统上都有，windows没有。
 openssl  x509 -inform PEM -in D:/demo.cer -out D:/demo.crt 
-```
-
-- 证书格式转换
-```shell
-#查看PEM编码证书
-openssl x509 -in cert.pem -text -noout
-openssl x509 -in cert.cer -text -noout
-openssl x509 -in cert.crt -text -noout
-
-#查看DER编码证书
-openssl x509 -in certificate.der -inform der -text -noout
-
-#转换证书格式
-#转换可以将一种类型的编码证书存入另一种。（即PEM到DER转换）
-#PEM到DER
-openssl x509 -in cert.crt -outform der -out cert.der
-#DER到PEM
-openssl x509 -in cert.crt -inform der -outform pem -out cert.pem
-
-#PEM -> DER -> JKS的转换(无私钥情况下转换pem格式证书为jks格式)
-#pem文件 转换为 der文件
-openssl x509 -outform der -in cert.pem -out cert.der
-#der文件 转换为 jks文件
-keytool -import -keystore cert.jks -file cert.der
-
-#PKCS12证书
-keytool -importkeystore -srckeystore D:/demo.jks -destkeystore D:/demo.jks -deststoretype pkcs12 -srcstorepass 123456@store -deststorepass 123456@store2  -srckeypass 123456@key -destkeypass 123456@key2 -srcalias demo  -destalias demo2
-警告: PKCS12 密钥库不支持其他存储和密钥口令。正在忽略用户指定的-destkeypass值。
-Warning:
-已将 "D:/demo.jks" 迁移到 Non JKS/JCEKS。将 JKS 密钥库作为 "D:/demo.jks.old" 进行了备份。
-
-#查看证书信息
-keytool -list -v -keystore  D:/demo.jks -storepass 123456@store2
-密钥库类型: jks
-密钥库提供方: SUN
-
-您的密钥库包含 1 个条目
-
-别名: demo2
-创建日期: 2022-5-23
-条目类型: PrivateKeyEntry
-证书链长度: 1
-证书[1]:
-所有者: CN=lihz, OU=org, O=org, L=wuhan, ST=hubei, C=CN
-发布者: CN=lihz, OU=org, O=org, L=wuhan, ST=hubei, C=CN
-序列号: 5e39fbc9
-有效期为 Mon May 23 10:43:46 CST 2022 至 Tue May 23 10:43:46 CST 2023
-证书指纹:
-         MD5:  4E:1F:2D:FE:6F:A7:45:3C:F8:BD:94:67:85:5E:0E:3A
-         SHA1: CC:97:DB:29:4E:10:0B:6F:A5:CB:32:69:7B:3A:43:23:B2:C1:AE:68
-         SHA256: 04:F3:CD:A7:7B:65:2F:F2:D8:68:30:7C:33:03:CE:04:3D:A9:C4:3F:63:D7:3B:9F:5B:8A:DB:17:72:2E:E8:B2
-签名算法名称: SHA256withRSA
-主体公共密钥算法: 1024 位 RSA 密钥
-版本: 3
-
-扩展:
-
-#1: ObjectId: 2.5.29.14 Criticality=false
-SubjectKeyIdentifier [
-KeyIdentifier [
-0000: B2 28 51 3E A2 9B 93 5A   71 76 A6 7B 19 6B 5A 49  .(Q>...Zqv...kZI
-0010: FD AC CB 6A                                        ...j
-]
-]
-*******************************************
-*******************************************
-```
-
-- 证书格式
-```shell
-.DER 扩展名
-用于二进制DER编码证书
-
-.PEM 扩展名
-用于不同类型的X.509v3文件，是以“ - BEGIN …”前缀的ASCII（Base64）数据
-
-.CRT 扩展名
-CRT扩展用于证书。 证书可以被编码为二进制DER或ASCII PEM。 CER和CRT扩展几乎是同义词。 最常见的于Unix 或类Unix系统
-
-.CER 扩展名
-.crt的替代形式
-
-.KEY 扩展名
-
-KEY扩展名用于公钥和私钥PKCS＃8。 键可以被编码为二进制DER或ASCII PEM
-```
-
-### springboot开启https
-> 项目使用的PKCS12类型证书，步骤：使用示例2创建证书、然后导出证书、项目配置application.yml文件。
-- 在application.properties或者application.yml中进行配置
-```yml
-server:
-  port: 9987
-  non-ssl-port: 8089
-  # 用于 非ssl请求 强制转成 ssl 请求
-  # 当使用 访问地址：http://127.0.0.1:8089/hello 访问时 后台会 将请求 转换成 https://127.0.0.1:9987/hello
-  #  servlet:
-  #    context-path: /ssl-service
-  ssl:
-    key-store: classpath:xxx.p12  #类路径下的自签证书
-    key-alias: cmp # 证书别名
-    key-store-password: WSX #证书密码
-    key-store-type: PKCS12 # 证书类型
-    enabled: true  # 开启证书验证
-```  
-> 配置了如上属性后，默认开启了https，此时配置文件中的server.port配置的端口为https请求的端口
-
-- springboot兼容http方式开启https
-> 以下可配置为http、https共同使用，实现思路是监听http请求转发到https请求
-```java
-package com.bisp.common.config;
-
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-/**
- * @ClassName TomcatConfig
- * @Description TODO
- * @Author yzx
- * @Date 2022/11/24 10:59
- **/
-@Configuration
-public class TomcatConfig {
-    /**获取配置端口*/
-    @Value("${server.port}")
-    private Integer httpPort;
-
-    @Bean
-    public ServletWebServerFactory servletContainer() {
-        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory(){
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint constraint = new SecurityConstraint();
-                constraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
-                constraint.addCollection(collection);
-                context.addConstraint(constraint);
-            }
-        };
-        factory.addAdditionalTomcatConnectors(tomcatConnector());
-        return factory;
-    }
-
-    private Connector tomcatConnector() {
-        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-        connector.setScheme("http");
-        //http端口号，可以自行指定（不能和其它已经使用的端口重复，否则会报错）
-        //设置http的监听端口为80端口，这样访问的时候也可以不用带上端口号
-        connector.setPort(9090);
-        connector.setSecure(false);
-        //监听到的http的端口号后转向到https的端口号，可以自行指定
-        connector.setRedirectPort(httpPort);
-        return connector;
-    }
-
-}
 ```
 
 ### Postman使用 - 如果需要使用postman则导出证书使用

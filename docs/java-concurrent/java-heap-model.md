@@ -2,7 +2,7 @@
 
 ## 什么是java内存模型
 
-### Java内存模型与JVM内存模型的区别。 
+### Java内存模型与JVM内存模型的区别
 1) Java内存模型定义了一套规范，能使JVM按需禁用cpu缓存和禁止编译优化。这套规范包括对volatile, synchronized, final三个关键字的解析，和6个Happen-Before规则。 
 2) JVM内存模型是指程序计数器，JVM方法栈，本地方法栈，堆，方法区这5个要素。
 
