@@ -88,6 +88,10 @@ module.exports = {
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
+                        title: '学好并发编程',
+                        path: '/java-concurrent/learn-concurrent',
+                    },
+                    {
                         title: '并发编程bug源头 - 可见性、原子性、有序性',
                         path: '/java-concurrent/concurrent-bug-source',
                     },
