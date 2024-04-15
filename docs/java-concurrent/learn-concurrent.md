@@ -11,6 +11,7 @@
 - 互斥 可重入锁
 > java sdk并发包大部分都是按照这三个维度组织的
 
+<img width="600" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/general.jpg" alt="jpg"> 
 
 # 如何学好并发编程
 

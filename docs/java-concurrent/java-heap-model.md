@@ -53,10 +53,10 @@ class VolatileExample {
 管程中的锁是隐式实现的，进入synchronized代码块自动加锁，执行完代码块自动解锁。加锁和释放锁是编译器帮我们实现的。
 
 ## 5.线程start()规则
-**主线程A启动线程B，线程A调用线程B start()方法之前的操作对线程B可见、即start()操作happens-before于线程B中的任意操作**
+**主线程A启动线程B，线程A调用线程B start()方法之前的操作对线程B可见**
 
 ## 6.线程join()规则
-**主线程A调用线程B.join()方法，当join()方法返回时，线程B中的操作对主线程A可见、即线程B中的操作happens-before于join()方法的返回**
+**主线程A调用线程B.join()方法，当join()方法返回时，线程B中的操作对主线程A可见**
 ```java
 Thread B = new Thread(()->{
   // 此处对共享变量var修改
