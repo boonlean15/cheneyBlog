@@ -98,6 +98,14 @@ module.exports = {
                     {
                         title: 'Java内存模型：看Java如何解决可见性和有序性问题',
                         path: '/java-concurrent/java-heap-model',
+                    },
+                    {
+                        title: '互斥锁 解决原子性问题',
+                        path: '/java-concurrent/mutual-exclusion',
+                    },
+                    {
+                        title: '死锁处理',
+                        path: '/java-concurrent/dead-lock-how',
                     }
                 ]
             },
