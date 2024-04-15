@@ -80,7 +80,7 @@ synchronized 修饰的临界区是互斥的、管程中锁的规则：对一个�
 <img width="600" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/mutual-exclusion/4.png" alt="png"> 
 
 
-## 用一把锁保护多个资源
+## 细粒度锁 - 保护没有关联关系的多个资源
 
 用一把锁有个问题，就是性能太差，会导致取款、查看余额、修改密码、查看密码这四个操作都是串行的。而我们用两把锁，取款和修改密码是可以并行的。用不同的锁对受保护资源进行精细化管理，能够提升性能。这种锁还有个名字，叫细粒度锁。
 
@@ -126,11 +126,80 @@ class Account {
   }
 }
 ```
+## 用一把锁保护多个资源 有关联关系的多个资源
 
+账号转账问题
+```java
+class Account {
+  private int balance;
+  // 转账
+  void transfer(
+      Account target, int amt){
+    if (this.balance > amt) {
+      this.balance -= amt;
+      target.balance += amt;
+    }
+  } 
+}
 
+class Account {
+  private int balance;
+  // 转账
+  synchronized void transfer(
+      Account target, int amt){
+    if (this.balance > amt) {
+      this.balance -= amt;
+      target.balance += amt;
+    }
+  } 
+}
+//线程 1 锁定的是账户 A 的实例（A.this），而线程 2 锁定的是账户 B 的实例（B.this），所以这两个线程可以同时进入临界区 transfer()
+```
+> this 这把锁可以保护自己的余额 this.balance，却保护不了别人的余额 target.balance，就像你不能用自家的锁来保护别人家的资产，也不能用自己的票来保护别人的座位一样
 
+<img width="600" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/mutual-exclusion/5.png" alt="png"> 
 
+## 使用锁的正确姿势
+让 A 对象和 B 对象共享一把锁
+```java
+class Account {
+  private Object lock；
+  private int balance;
+  private Account();
+  // 创建Account时传入同一个lock对象
+  public Account(Object lock) {
+    this.lock = lock;
+  } 
+  // 转账
+  void transfer(Account target, int amt){
+    // 此处检查所有对象共享的锁
+    synchronized(lock) {
+      if (this.balance > amt) {
+        this.balance -= amt;
+        target.balance += amt;
+      }
+    }
+  }
+}
+//用 Account.class 作为共享的锁
+class Account {
+  private int balance;
+  // 转账
+  void transfer(Account target, int amt){
+    synchronized(Account.class) {
+      if (this.balance > amt) {
+        this.balance -= amt;
+        target.balance += amt;
+      }
+    }
+  } 
+}
+```
+<img width="600" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/mutual-exclusion/6.png" alt="png"> 
 
-
-
-
+## 总结
+如何保护多个资源已经很有心得了，关键是要分析多个资源之间的关系
+- 资源之间没有关系，很好处理，每个资源一把锁
+- 资源之间有关联关系，就要选择一个粒度更大的锁
+- 要梳理出有哪些访问路径，所有的访问路径都要设置合适的锁
+- **不能用可变对象做锁**
