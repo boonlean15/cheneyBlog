@@ -92,6 +92,10 @@ module.exports = {
                         path: '/java-concurrent/learn-concurrent',
                     },
                     {
+                        title: 'java 管程实现的一些关键字总结',
+                        path: '/java-concurrent/general',
+                    },
+                    {
                         title: '并发编程bug源头 - 可见性、原子性、有序性',
                         path: '/java-concurrent/concurrent-bug-source',
                     },
@@ -106,6 +110,10 @@ module.exports = {
                     {
                         title: '死锁处理',
                         path: '/java-concurrent/dead-lock-how',
+                    },
+                    {
+                        title: '等待-通知机制',
+                        path: '/java-concurrent/wait-notify',
                     }
                 ]
             },
