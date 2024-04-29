@@ -114,6 +114,10 @@ module.exports = {
                     {
                         title: '等待-通知机制',
                         path: '/java-concurrent/wait-notify',
+                    },
+                    {
+                        title: '安全性、活跃性、性能问题',
+                        path: '/java-concurrent/safety-active-performance',
                     }
                 ]
             },
