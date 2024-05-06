@@ -138,6 +138,10 @@ module.exports = {
                     {
                         title: '面向对象的思想写好并发程序',
                         path: '/java-concurrent/part1/how-to-code',
+                    },
+                    {
+                        title: '学好理论有思路，关注细节定成败',
+                        path: '/java-concurrent/part1/thinking-and-doing',
                     }
                 ]
             },
