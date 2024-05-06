@@ -122,6 +122,18 @@ module.exports = {
                     {
                         title: '管程 并发编程的万能钥匙',
                         path: '/java-concurrent/monitor',
+                    },
+                    {
+                        title: 'java线程的生命周期',
+                        path: '/java-concurrent/java-thread-life',
+                    },
+                    {
+                        title: '创建多少线程合适',
+                        path: '/java-concurrent/how-many-thread',
+                    },
+                    {
+                        title: '面向对象的思想写好并发程序',
+                        path: '/java-concurrent/how-to-code',
                     }
                 ]
             },
