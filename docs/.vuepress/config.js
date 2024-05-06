@@ -83,7 +83,7 @@ module.exports = {
                 path: '/rpc/rpc',
             },
             {
-                title: 'java并发编程实战',   // 必要的
+                title: 'java并发编程实战 并发理论基础',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
@@ -118,6 +118,10 @@ module.exports = {
                     {
                         title: '安全性、活跃性、性能问题',
                         path: '/java-concurrent/safety-active-performance',
+                    },
+                    {
+                        title: '管程 并发编程的万能钥匙',
+                        path: '/java-concurrent/monitor',
                     }
                 ]
             },
