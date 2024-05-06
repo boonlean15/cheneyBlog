@@ -89,51 +89,55 @@ module.exports = {
                 children: [
                     {
                         title: '学好并发编程',
-                        path: '/java-concurrent/learn-concurrent',
+                        path: '/java-concurrent/part1/learn-concurrent',
                     },
                     {
                         title: 'java 管程实现的一些关键字总结',
-                        path: '/java-concurrent/general',
+                        path: '/java-concurrent/part1/general',
                     },
                     {
                         title: '并发编程bug源头 - 可见性、原子性、有序性',
-                        path: '/java-concurrent/concurrent-bug-source',
+                        path: '/java-concurrent/part1/concurrent-bug-source',
                     },
                     {
                         title: 'Java内存模型：看Java如何解决可见性和有序性问题',
-                        path: '/java-concurrent/java-heap-model',
+                        path: '/java-concurrent/part1/java-heap-model',
                     },
                     {
                         title: '互斥锁 解决原子性问题',
-                        path: '/java-concurrent/mutual-exclusion',
+                        path: '/java-concurrent/part1/mutual-exclusion',
                     },
                     {
                         title: '死锁处理',
-                        path: '/java-concurrent/dead-lock-how',
+                        path: '/java-concurrent/part1/dead-lock-how',
                     },
                     {
                         title: '等待-通知机制',
-                        path: '/java-concurrent/wait-notify',
+                        path: '/java-concurrent/part1/wait-notify',
                     },
                     {
                         title: '安全性、活跃性、性能问题',
-                        path: '/java-concurrent/safety-active-performance',
+                        path: '/java-concurrent/part1/safety-active-performance',
                     },
                     {
                         title: '管程 并发编程的万能钥匙',
-                        path: '/java-concurrent/monitor',
+                        path: '/java-concurrent/part1/monitor',
                     },
                     {
                         title: 'java线程的生命周期',
-                        path: '/java-concurrent/java-thread-life',
+                        path: '/java-concurrent/part1/java-thread-life',
                     },
                     {
                         title: '创建多少线程合适',
-                        path: '/java-concurrent/how-many-thread',
+                        path: '/java-concurrent/part1/how-many-thread',
+                    },
+                    {
+                        title: '局部变量是线程安全的',
+                        path: '/java-concurrent/part1/local-thread-is-safe',
                     },
                     {
                         title: '面向对象的思想写好并发程序',
-                        path: '/java-concurrent/how-to-code',
+                        path: '/java-concurrent/part1/how-to-code',
                     }
                 ]
             },
