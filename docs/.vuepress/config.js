@@ -146,6 +146,15 @@ module.exports = {
                 ]
             },
             {
+                title: 'java并发编程实战 并发工具类',   // 必要的
+                children: [
+                    {
+                        title: 'Lock和Condition 隐藏在并发包中的管程',
+                        path: '/java-concurrent/part2/lock',
+                    }
+                ]    
+            },
+            {
                 title: 'Netty in action',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1

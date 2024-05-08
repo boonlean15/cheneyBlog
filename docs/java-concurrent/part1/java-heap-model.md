@@ -1,4 +1,5 @@
 # Java内存模型：看Java如何解决可见性和有序性问题
+**java的happens-before是一种可见性，A事件happens-before 于B事件，即A事件的操作结果对B事件是可见的。不管是不是发生在同一个线程，A事件的操作结果对B事件也是可见的。代码的顺序下来，代表的是事件的发生顺序，也是第一条Happens-before规则。**
 
 ## 什么是java内存模型
 
