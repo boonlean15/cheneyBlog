@@ -1,5 +1,5 @@
 # Lock和Condition 隐藏在并发包中的管程
-<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/lock/1.jpg" alt="png"> 
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/lock/1.png" alt="png"> 
 
 java sdk并发包内容丰富包罗万象，但最重要的还是对管程的实现。因为通过管程的方式，理论上可以实现并发包里所有的工具类
 - Lock实现互斥
