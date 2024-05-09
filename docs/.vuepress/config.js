@@ -155,6 +155,14 @@ module.exports = {
                     {
                         title: 'Lock和Condition Dubbo实现异步转同步',
                         path: '/java-concurrent/part2/condition',
+                    },
+                    {
+                        title: 'Semaphore 信号量实现池化',
+                        path: '/java-concurrent/part2/semaphore',
+                    },
+                    {
+                        title: 'ReadWriteLock 实现缓存',
+                        path: '/java-concurrent/part2/readWriteLock',
                     }
                 ]    
             },
