@@ -151,6 +151,10 @@ module.exports = {
                     {
                         title: 'Lock和Condition 隐藏在并发包中的管程',
                         path: '/java-concurrent/part2/lock',
+                    },
+                    {
+                        title: 'Lock和Condition Dubbo实现异步转同步',
+                        path: '/java-concurrent/part2/condition',
                     }
                 ]    
             },
