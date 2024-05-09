@@ -1,8 +1,138 @@
 # ReadWriteLock 实现快速完备的缓存
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/readWriteLock/1.png" alt="png"> 
 
+## ReadWriteLock基本原则
+- 允许多个线程读共享变量
+- 只允许一个线程写共享变量
+- 如果有写线程执行写操作，禁止其他线程读共享变量
 
+## ReadwriteLock实现缓存
+```java
+class Cache<K,V> {
+  final Map<K, V> m =
+    new HashMap<>();
+  final ReadWriteLock rwl =
+    new ReentrantReadWriteLock();
+  // 读锁
+  final Lock r = rwl.readLock();
+  // 写锁
+  final Lock w = rwl.writeLock();
+  // 读缓存
+  V get(K key) {
+    r.lock();
+    try { return m.get(key); }
+    finally { r.unlock(); }
+  }
+  // 写缓存
+  V put(K key, V value) {
+    w.lock();
+    try { return m.put(key, v); }
+    finally { w.unlock(); }
+  }
+  // 按需加载
+  V get(K key) {
+    V v = null;
+    //读缓存
+    r.lock();         ①
+    try {
+      v = m.get(key); ②
+    } finally{
+      r.unlock();     ③
+    }
+    //缓存中存在，返回
+    if(v != null) {   ④
+      return v;
+    }  
+    //缓存中不存在，查询数据库
+    w.lock();         ⑤
+    try {
+      //再次验证
+      //其他线程可能已经查询过数据库
+      v = m.get(key); ⑥
+      if(v == null){  ⑦
+        //查询数据库
+        v=省略代码无数
+        m.put(key, v);
+      }
+    } finally{
+      w.unlock();
+    }
+    return v; 
+  }
+}
+```
+- 一次性加载缓存
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/readWriteLock/2.png" alt="png"> 
 
+- 按需加载
+  - 释放读锁后再获取写锁
+  - 再次验证的方式，能够避免高并发场景下重复查询数据的问题
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/readWriteLock/3.png" alt="png"> 
 
+## ReadWriteLock不允许升级允许降级
+```java
+//升级
+//读缓存
+r.lock();         ①
+try {
+  v = m.get(key); ②
+  if (v == null) {
+    w.lock();
+    try {
+      //再次验证并更新缓存
+      //省略详细代码
+    } finally{
+      w.unlock();
+    }
+  }
+} finally{
+  r.unlock();     ③
+}
 
+//降级
+class CachedData {
+  Object data;
+  volatile boolean cacheValid;
+  final ReadWriteLock rwl =
+    new ReentrantReadWriteLock();
+  // 读锁  
+  final Lock r = rwl.readLock();
+  //写锁
+  final Lock w = rwl.writeLock();
+  
+  void processCachedData() {
+    // 获取读锁
+    r.lock();
+    if (!cacheValid) {
+      // 释放读锁，因为不允许读锁的升级
+      r.unlock();
+      // 获取写锁
+      w.lock();
+      try {
+        // 再次检查状态  
+        if (!cacheValid) {
+          data = ...
+          cacheValid = true;
+        }
+        // 释放写锁前，降级为读锁
+        // 降级是可以的
+        r.lock(); ①
+      } finally {
+        // 释放写锁
+        w.unlock(); 
+      }
+    }
+    // 此处仍然持有读锁
+    try {use(data);} 
+    finally {r.unlock();}
+  }
+}
+```
+### 原因分析
+- 允许升级的话，那多个线程读，同时有写，那数据就乱套了
+- 获取了写锁，那么当前线程自然也允许读了，因不允许其他线程读和写
+### 疑问解答
+- 获取写锁的前提是读锁和写锁均未被占用
+- 获取读锁的前提是没有其他线程占用写锁
+- 申请写锁时不中断其他线程申请读锁 (公平锁如果有写申请，能禁止读锁)
 
