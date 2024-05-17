@@ -1,7 +1,8 @@
 # ReadWriteLock 实现快速完备的缓存
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/readWriteLock/1.png" alt="png"> 
 
-## ReadWriteLock基本原则
+## 读写锁遵循的基本原则
+读写锁不是java特有的，所有的读写锁都遵循一下三个基本原则
 - 允许多个线程读共享变量
 - 只允许一个线程写共享变量
 - 如果有写线程执行写操作，禁止其他线程读共享变量
@@ -69,9 +70,14 @@ class Cache<K,V> {
   - 再次验证的方式，能够避免高并发场景下重复查询数据的问题
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/readWriteLock/3.png" alt="png"> 
 
-## ReadWriteLock不允许升级允许降级
+- 按需加载数据同步问题
+  - 超时机制
+  - 数据库和缓存双写方案
+  - 数据库数据更新后通知缓存方案
+
+## ReadWriteLock不允许升级、允许降级
 ```java
-//升级
+//升级 这里写锁获取不到锁，导致这个线程阻塞住，并且第一步的读锁不会释放，导致死锁
 //读缓存
 r.lock();         ①
 try {
@@ -89,7 +95,7 @@ try {
   r.unlock();     ③
 }
 
-//降级
+//降级 降级是允许的，获取写锁后，允许获取读锁，这是同一个线程
 class CachedData {
   Object data;
   volatile boolean cacheValid;
@@ -128,8 +134,29 @@ class CachedData {
   }
 }
 ```
+## ReentrantReadWriteLock
+
+0000 0000 0000 0000 0000 0000 0000 0000  0
+0000 0000 0000 0000 0000 0000 0000 0001  1
+0000 0000 0000 0001 0000 0000 0000 0000  65536 
+0000 0000 0000 0000 1111 1111 1111 1111  65535
+```java
+static final int EXCLUSIVE_MASK = (1 << SHARED_SHIFT) - 1;  //65535
+/** Returns the number of exclusive holds represented in count 1到65535数据执行exclusiveCount返回的是1-65535的值 */
+static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
+
+static final int SHARED_SHIFT   = 16;
+/** Returns the number of shared holds represented in count  */
+static int sharedCount(int c)    { return c >>> SHARED_SHIFT; }
+```
+1 << 16 
+0000 0000 0000 0000 0000 0000 0000 0001
+0000 0000 0000 0000 1111 1111 1111 1111
+1 & 65535 == 1      2 & 65535 == 2
+
+- ReentrantReadWriteLock 的state 低16位用于独占模式锁、高16位用于共享read锁，以此来实现读写
+
 ### 原因分析
-- 允许升级的话，那多个线程读，同时有写，那数据就乱套了
 - 获取了写锁，那么当前线程自然也允许读了，因不允许其他线程读和写
 ### 疑问解答
 - 获取写锁的前提是读锁和写锁均未被占用
