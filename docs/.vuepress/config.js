@@ -146,7 +146,7 @@ module.exports = {
                 ]
             },
             {
-                title: 'java并发编程实战 并发工具类',   // 必要的
+                title: '并发工具类',   // 必要的
                 children: [
                     {
                         title: 'Lock和Condition 隐藏在并发包中的管程',
@@ -163,6 +163,14 @@ module.exports = {
                     {
                         title: 'ReadWriteLock 实现缓存',
                         path: '/java-concurrent/part2/readWriteLock',
+                    },
+                    {
+                        title: 'StampedLock 比ReadWriteLock还快的锁',
+                        path: '/java-concurrent/part2/stampedLock',
+                    },
+                    {
+                        title: 'CountDownLatch-CyclicBarrier',
+                        path: '/java-concurrent/part2/countdownlatch-cyclicbarrier',
                     }
                 ]    
             },
