@@ -171,6 +171,10 @@ module.exports = {
                     {
                         title: 'CountDownLatch-CyclicBarrier',
                         path: '/java-concurrent/part2/countdownlatch-cyclicbarrier',
+                    },
+                    {
+                        title: '并发容器需要填的坑',
+                        path: '/java-concurrent/part2/container',
                     }
                 ]    
             },
