@@ -76,6 +76,17 @@ CopyOnWriteArrayList内部维护了一个数组array，迭代器Iterator遍历�
 - 它们的 key 和 value 都不能为空，否则会抛出NullPointerException这个运行时异常
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/container/4.png" alt="png"> 
 
+#### ConcurrentHashMap 并发底层实现 (1.8)
+- 底层数据结构：Node数组 + 红黑树
+  <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/container/7.png" alt="png"> 
+- 保证线程安全的方式：乐观锁 + Sysnchronized
+- 读操作是无锁：Node 的 val 和 next 使用 volatile 修饰，读写线程对该变量互相可见
+- 为什么在有Synchronized 的情况下还要使用CAS
+  > 因为CAS是乐观锁,在一些场景中（并发不激烈的情况下）它比Synchronized和ReentrentLock的效率要，当CAS保障不了线程安全的情况下（扩容或者hash冲突的情况下）转成Synchronized 来保证线程安全，大大提高了低并发下的性能。
+##### get put 流程
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/container/5.png" alt="png"> 
+<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/container/6.png" alt="png"> 
+
 #### SkipList 跳表
 SkipList 本身就是一种数据结构，中文一般都翻译为“跳表”。跳表插入、删除、查询操作平均的时间复杂度是 O(log n)
 > 理论上和并发线程数没有关系，所以在并发度非常高的情况下，若你对 ConcurrentHashMap 的性能还不满意，可以尝试一下 ConcurrentSkipListMap。
@@ -107,4 +118,9 @@ SkipList 本身就是一种数据结构，中文一般都翻译为“跳表”�
 
 ## HashMap 线程不安全
 并发场景里使用了 HashMap，因为在 1.8 之前的版本里并发执行 HashMap.put() 可能会导致 CPU 飙升到 100%
+- 在jdk1.7中，在多线程环境下，扩容时会造成环形链或数据丢失。
+  > resize->transfer的时候采用indexFor头插法导致形成环形链
+- 在jdk1.8中，在多线程环境下，会发生数据覆盖的情况
+  > 在发生hash碰撞，不再采用头插法方式，而是直接插入链表尾部，因此不会出现环形链表的情况。但并发时存在数据覆盖的问题
+
 [HashMap 线程不安全，它为啥不安全呢？](https://mp.weixin.qq.com/s/yxn47A4UcsrORoDJyREEuQ)
