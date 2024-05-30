@@ -62,28 +62,7 @@ module.exports = {
                 ]
             },
             {
-                title: 'NIO',   // 必要的
-                // collapsable: false, // 可选的, 默认值是 true,
-                // sidebarDepth: 0,    // 可选的, 默认值是 1
-                children: [
-                    {
-                        title: '网络编程',
-                        path: '/nio/net_program',
-                    },
-                    {
-                        title: 'NIO基础-相关模型和概念',
-                        path: '/nio/nio_base_model',
-                    }
-                ]
-            },
-            {
-                title: 'RPC',   // 必要的
-                collapsable: false, // 可选的, 默认值是 true,
-                sidebarDepth: 0,
-                path: '/rpc/rpc',
-            },
-            {
-                title: 'java并发编程实战 并发理论基础',   // 必要的
+                title: '并发理论基础',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
@@ -175,8 +154,37 @@ module.exports = {
                     {
                         title: '并发容器需要填的坑',
                         path: '/java-concurrent/part2/container',
+                    },
+                    {
+                        title: '原子类',
+                        path: '/java-concurrent/part2/atomic',
+                    },
+                    {
+                        title: 'executor 线程池',
+                        path: '/java-concurrent/part2/executor',
                     }
                 ]    
+            },
+            {
+                title: 'NIO',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: '网络编程',
+                        path: '/nio/net_program',
+                    },
+                    {
+                        title: 'NIO基础-相关模型和概念',
+                        path: '/nio/nio_base_model',
+                    }
+                ]
+            },
+            {
+                title: 'RPC',   // 必要的
+                collapsable: false, // 可选的, 默认值是 true,
+                sidebarDepth: 0,
+                path: '/rpc/rpc',
             },
             {
                 title: 'Netty in action',   // 必要的
