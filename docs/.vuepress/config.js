@@ -1,6 +1,6 @@
 module.exports = {
-    title: '我的知识库',
-    description: '一蓑烟雨任平生',
+    title: 'my blog',
+    description: 'human is animal',
     base: '/cheneyBlog/',
     themeConfig: {
         nav: [
