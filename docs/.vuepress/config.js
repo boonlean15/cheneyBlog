@@ -162,6 +162,10 @@ module.exports = {
                     {
                         title: 'executor 线程池',
                         path: '/java-concurrent/part2/executor',
+                    },
+                    {
+                        title: 'Future',
+                        path: '/java-concurrent/part2/future',
                     }
                 ]    
             },
