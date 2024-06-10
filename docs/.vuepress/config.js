@@ -166,6 +166,10 @@ module.exports = {
                     {
                         title: 'Future',
                         path: '/java-concurrent/part2/future',
+                    },
+                    {
+                        title: 'CompletableFuture',
+                        path: '/java-concurrent/part2/completableFuture',
                     }
                 ]    
             },
