@@ -170,6 +170,10 @@ module.exports = {
                     {
                         title: 'CompletableFuture',
                         path: '/java-concurrent/part2/completableFuture',
+                    },
+                    {
+                        title: 'CompletableService',
+                        path: '/java-concurrent/part2/completableService',
                     }
                 ]    
             },
