@@ -174,6 +174,10 @@ module.exports = {
                     {
                         title: 'CompletableService',
                         path: '/java-concurrent/part2/completableService',
+                    },
+                    {
+                        title: 'Fork Join',
+                        path: '/java-concurrent/part2/forkJoin',
                     }
                 ]    
             },
