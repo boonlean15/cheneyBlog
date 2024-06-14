@@ -29,6 +29,7 @@
 - 只有cpu计算的程序，(线程数=cpu核心数+1)，+1可以在当线程因为偶尔的内存页失效或其他原因导致阻塞时，另外这个线程可以顶上
 ### IO密集型
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/how-many-thread/5.png" alt="png">
+
 - 线程数=1+IO耗时/CPU耗时 单核
 - 线程数=cpu核心数*(1+IO耗时/CPU耗时)
 

@@ -15,6 +15,7 @@
 > 实现方式: 把共享变量和共享变量的操作过程封装起来。提供入队和出队的方法
 
 <img width="600" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/monitor/1.png" alt="png">
+
 > 线程 A 和线程 B 如果想访问共享变量 queue，只能通过调用管程提供的 enq()、deq() 方法来实现；enq()、deq() 保证互斥性，只允许一个线程进入管程。
 
 ## 管程解决同步的方式

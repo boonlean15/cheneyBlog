@@ -3,7 +3,7 @@ CPU、内存、IO设备之间的一个核心矛盾，三者之间的速度，CPU
 
 计算机体系结构，操作系统，编译程序都为三者的速度差异做出了贡献：
 - 增加了CPU缓存以均衡和内存之间的速度差异
-- 操作系统增加了进程和线程，以分时服用CPU，进而均衡CPU和IO设备之间的速度差异
+- 操作系统增加了进程和线程，以分时复用CPU，进而均衡CPU和IO设备之间的速度差异
 - 编译程序优化指令执行次序，以更合理的利用CPU缓存
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/studyjava.jpg" alt="png"> 
