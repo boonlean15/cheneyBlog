@@ -178,6 +178,10 @@ module.exports = {
                     {
                         title: 'Fork Join',
                         path: '/java-concurrent/part2/forkJoin',
+                    },
+                    {
+                        title: 'AQS分析',
+                        path: '/java-concurrent/part2/lock-source',
                     }
                 ]    
             },
