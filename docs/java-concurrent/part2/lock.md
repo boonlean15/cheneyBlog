@@ -7,7 +7,7 @@ java sdk并发包内容丰富包罗万象，但最重要的还是对管程的实
 > sdk并发包通过Lock和Condition实现管程
 
 ## 再造管程的理由
-- synchronized java内置的管程，条件变量只有多个，通过Condition可以实现多个条件变量
+- synchronized java内置的管程，条件变量只有1个，通过Condition可以实现多个条件变量
 - synchronized获取不到锁则阻塞了，针对synchronized获取多个锁资源导致死锁的问题
 - 针对不可抢占的条件的破解，可以采取如下方式：
   - 能够响应中断 (响应中断时，有机会释放曾经持有的锁)
