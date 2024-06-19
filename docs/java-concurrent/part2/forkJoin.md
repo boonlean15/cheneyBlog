@@ -2,6 +2,7 @@
 简单并行、AND聚合，批量并行、三种任务模型，基本上能覆盖日常工作的并发场景。但还有一个分治模型没有覆盖到，分治模型的使用非常广泛(归并排序、二分排序、快速排序、大数据MapReduce)
 ## 分治模型
 > 把一个复杂问题分解成多个相似的子问题，然后再把子问题分解成更小的子问题，直到子问题简单到可以直接求解。
+
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/forkJoin/1.png" alt="png"> 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/forkJoin/2.png" alt="png"> 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/forkJoin/3.png" alt="png"> 

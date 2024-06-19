@@ -182,6 +182,10 @@ module.exports = {
                     {
                         title: 'AQS分析',
                         path: '/java-concurrent/part2/lock-source',
+                    },
+                    {
+                        title: '并发注意事项',
+                        path: '/java-concurrent/part2/summary',
                     }
                 ]    
             },
