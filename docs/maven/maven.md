@@ -66,3 +66,39 @@
         </repository>
        </repositories>
 ```
+
+## lib包下打不进jar包解决方案
+> 第三方jar放在resources/lib里，在pom文件里引入，能正常运行，但是打jar的时候，引入的第三方jar死活进不去，很多第三方的jar，并不能在maven仓库中找到
+
+- 将第三方的jar的加入到本地库中即可
+```java
+mvn install:install-file -Dfile="G:\examples.jar" -DgroupId=com.sun.jna.examples -DartifactId=examples -Dversion=1.0 -Dpackaging=jar
+```
+- 命令说明
+  - -DgroupId=自定义groupId设置groupId 名
+  - -DartifactId=自定义artifactId设置该包artifactId名
+  - -Dversion=自定义版本1.0.0设置版本号
+  - -Dpackaging=jar设置该包的类型，有如下值：pom、jar、war、maven-plugin。但是一般常用的是jar类型
+  - -Dfile=文件路径设置该jar包文件所在的路径与文件名
+  - 如果是windows环境，在cmd窗口下运行上面命令可以将c盘myfile下的test.jar安装到maven仓库。注意 需要安装maven环境变量
+- 成功之后，配置pom.xml
+```xml
+        <dependency>
+            <groupId>com.sun.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>1.0</version>
+        </dependency>
+ 
+        <dependency>
+            <groupId>com.sun.jna.examples</groupId>
+            <artifactId>examples</artifactId>
+            <version>1.0</version>
+        </dependency>
+```
+
+
+
+
+
+
+
