@@ -72,7 +72,9 @@
 
 - 将第三方的jar的加入到本地库中即可
 ```java
-mvn install:install-file -Dfile="G:\examples.jar" -DgroupId=com.sun.jna.examples -DartifactId=examples -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile="G:\yhk-common-core-5.3.0.jar" -DgroupId=yhk.common.core -DartifactId=yhk-common-core-5.3.0 -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile="G:\yhk-common-data-5.3.0.jar" -DgroupId=yhk.common.data -DartifactId=yhk-common-data-5.3.0 -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile="G:\yhk-common-security-5.3.0.jar" -DgroupId=yhk.common.security -DartifactId=yhk-common-security-5.3.0 -Dversion=1.0.0 -Dpackaging=jar
 ```
 - 命令说明
   - -DgroupId=自定义groupId设置groupId 名
