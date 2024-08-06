@@ -190,6 +190,15 @@ module.exports = {
                 ]    
             },
             {
+                title: '并发设计模式',   // 必要的
+                children: [
+                    {
+                        title: 'Immutability模式',
+                        path: '/java-concurrent/part3/immutability',
+                    }
+                ]    
+            },
+            {
                 title: 'NIO',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
