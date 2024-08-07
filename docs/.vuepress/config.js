@@ -195,6 +195,12 @@ module.exports = {
                     {
                         title: 'Immutability模式',
                         path: '/java-concurrent/part3/immutability',
+                    },{
+                        title: 'COW模式',
+                        path: '/java-concurrent/part3/cow',
+                    },{
+                        title: 'ThreadLocal',
+                        path: '/java-concurrent/part3/threadLocal',
                     }
                 ]    
             },
