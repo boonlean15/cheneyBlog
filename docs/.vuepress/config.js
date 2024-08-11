@@ -201,6 +201,9 @@ module.exports = {
                     },{
                         title: 'ThreadLocal',
                         path: '/java-concurrent/part3/threadLocal',
+                    },{
+                        title: '等待唤醒机制的规范实现',
+                        path: '/java-concurrent/part3/guard_suspension',
                     }
                 ]    
             },
