@@ -207,6 +207,9 @@ module.exports = {
                     },{
                         title: 'balking模式',
                         path: '/java-concurrent/part3/balking',
+                    },{
+                        title: 'Thread-Per-Message模式：最简单实用的分工方法',
+                        path: '/java-concurrent/part3/thread-per-message',
                     }
                 ]    
             },
