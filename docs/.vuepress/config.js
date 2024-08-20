@@ -204,6 +204,9 @@ module.exports = {
                     },{
                         title: '等待唤醒机制的规范实现',
                         path: '/java-concurrent/part3/guard_suspension',
+                    },{
+                        title: 'balking模式',
+                        path: '/java-concurrent/part3/balking',
                     }
                 ]    
             },
