@@ -210,6 +210,12 @@ module.exports = {
                     },{
                         title: 'Thread-Per-Message模式：最简单实用的分工方法',
                         path: '/java-concurrent/part3/thread-per-message',
+                    },{
+                        title: 'Work-Thread模式：线程池模式',
+                        path: '/java-concurrent/part3/work-thread',
+                    },{
+                        title: '优雅的终止线程',
+                        path: '/java-concurrent/part3/grace-shutdown',
                     }
                 ]    
             },
