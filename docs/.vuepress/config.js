@@ -216,6 +216,9 @@ module.exports = {
                     },{
                         title: '优雅的终止线程',
                         path: '/java-concurrent/part3/grace-shutdown',
+                    },{
+                        title: '生产者-消费者模式',
+                        path: '/java-concurrent/part3/provider-comsumer',
                     }
                 ]    
             },
