@@ -223,6 +223,15 @@ module.exports = {
                 ]    
             },
             {
+                title: '并发案例分析',   // 必要的
+                children: [
+                    {
+                        title: 'Guava RateLimiter限流器',
+                        path: '/java-concurrent/part4/guava-ratelimiter',
+                    }
+                ]    
+            },
+            {
                 title: 'NIO',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
