@@ -228,6 +228,10 @@ module.exports = {
                     {
                         title: 'Guava RateLimiter限流器',
                         path: '/java-concurrent/part4/guava-ratelimiter',
+                    },
+                    {
+                        title: '高性能网络应用框架Netty',
+                        path: '/java-concurrent/part4/netty',
                     }
                 ]    
             },

@@ -67,10 +67,6 @@ google的guava ratelimiter不是采用生产者-消费者模式+定时器的方�
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part4/6.png" alt="png"> 
 
-<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part4/7.png" alt="png"> 
-
-<img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part4/8.png" alt="png"> 
-
 ### 只需要记录一个下一令牌产生的时间，并动态更新它，就能够轻松完成限流功能
 ```java
 public class SimpleLimiter{
