@@ -232,6 +232,10 @@ module.exports = {
                     {
                         title: '高性能网络应用框架Netty',
                         path: '/java-concurrent/part4/netty',
+                    },
+                    {
+                        title: '高性能队列Disruptor',
+                        path: '/java-concurrent/part4/disruptor',
                     }
                 ]    
             },
