@@ -73,6 +73,7 @@ public class DisruptorDemo {
 
 ### ArrayBlockingQueue和Disruptor初始化元素对比
 - ArrayBlockingQueue添加元素,添加元素是生产者线程创建的.添加元素的时间是离散的，put元素的地址大概率也是分散的
+  > 数组连续，数组里只有引用，e1 e2这些对象的地址不连续
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part4/31.png" alt="png">
 
 - Disruptor初始化时是一次性添加的，元素的内存地址大概率是连续的
@@ -93,9 +94,9 @@ for (int i=0; i<bufferSize; i++){
   > RingBuffer提升性能：数组中所有元素内存地址连续，根据程序局部性原理，当消费第一个元素1时，元素周围的其他元素也被加载进CPU缓存Cache中。
   > 程序局部性原理，当消费元素1时，元素1周围的其他元素也很可能被消费，由于已经加载到CPU缓存Cache中了，所以不需要再从内存中加载元素，大大提升了性能。
 
+## Disruptor避免伪共享
 ### CPU 内部 Cache
 Cache内部是按照缓存行管理的，缓存行大小通常是64个字节；CPU从内存中加载数据X，会把X后面的64-Size字节的数据也同时加载到Cache中
-
 ### 伪共享
 示例：
 <img width="800" height="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part4/33.png" alt="png">
@@ -107,7 +108,6 @@ Cache内部是按照缓存行管理的，缓存行大小通常是64个字节；C
 > putIndex和其他变量被读取进缓存（在不同的CPU核上的同一缓存行，没有修改的话在不同的CPU核上是一致的），同一缓存行的其中一个变量修改都会使全部的（不同的CPU核的）缓存行失效
 
 **伪共享指的是由于共享缓存行导致缓存无效的场景。**
-
 
 ### 避免伪共享
 - 方案很简单，每个变量独占一个缓存行、不共享缓存行就可以了，具体技术是缓存行填充。
@@ -130,3 +130,59 @@ class Sequence extends RhsPadding{
   //省略实现
 }
 ```
+
+## Disruptor无锁算法
+ArrayBlockingQueue 是利用管程实现的，中规中矩，生产、消费操作都需要加锁，实现起来简单，但是性能并不十分理想.
+Disruptor 采用的是无锁算法，很复杂，但是核心无非是生产和消费两个操作。Disruptor 中最复杂的是入队操作，所以我们重点来看看入队操作是如何实现的
+
+- 对于入队操作，最关键的要求是不能覆盖没有消费的元素；
+- 对于出队操作，最关键的要求是不能读取没有写入的元素
+- Disruptor 中也一定会维护类似出队索引和入队索引这样两个关键变量
+- Disruptor 中的 RingBuffer 维护了入队索引，但是并没有维护出队索引.
+  > 这是因为在 Disruptor 中多个消费者可以同时消费，每个消费者都会有一个出队索引，所以 RingBuffer 的出队索引是所有消费者里面最小的那一个。
+- 逻辑很简单：如果没有足够的空余位置，就出让 CPU 使用权，然后重新计算；反之则用 CAS 设置入队索引
+```java
+//生产者获取n个写入位置
+do {
+  //cursor类似于入队索引，指的是上次生产到这里
+  current = cursor.get();
+  //目标是在生产n个
+  next = current + n;
+  //减掉一个循环
+  long wrapPoint = next - bufferSize;
+  //获取上一次的最小消费位置
+  long cachedGatingSequence = gatingSequenceCache.get();
+  //没有足够的空余位置
+  if (wrapPoint>cachedGatingSequence || cachedGatingSequence>current){
+    //重新计算所有消费者里面的最小值位置
+    long gatingSequence = Util.getMinimumSequence(
+        gatingSequences, current);
+    //仍然没有足够的空余位置，出让CPU使用权，重新执行下一循环
+    if (wrapPoint > gatingSequence){
+      LockSupport.parkNanos(1);
+      continue;
+    }
+    //从新设置上一次的最小消费位置
+    gatingSequenceCache.set(gatingSequence);
+  } else if (cursor.compareAndSet(current, next)){
+    //获取写入位置成功，跳出循环
+    break;
+  }
+} while (true);
+```
+
+## 总结
+Disruptor 在优化并发性能方面可谓是做到了极致，优化的思路大体是两个方面
+- 一个是利用无锁算法避免锁的争用
+- 另外一个则是将硬件（CPU）的性能发挥到极致。尤其是后者，在 Java 领域基本上属于经典之作了。
+
+> 发挥硬件的能力一般是 C 这种面向硬件的语言常干的事儿，C 语言领域经常通过调整内存布局优化内存占用，而 Java 领域则用的很少，原因在于 Java 可以智能地优化内存布局，内存布局对 Java 程序员的透明的。
+> 这种智能的优化大部分场景是很友好的，但是如果你想通过填充方式避免伪共享就必须绕过这种优化，关于这方面 Disruptor 提供了经典的实现，你可以参考
+
+> Java 8 中，提供了避免伪共享的注解：@sun.misc.Contended，通过这个注解就能轻松避免伪共享（需要设置 JVM 参数 -XX:-RestrictContended）。
+> 不过避免伪共享是以牺牲内存为代价的，所以具体使用的时候还是需要仔细斟酌。
+
+
+
+
+

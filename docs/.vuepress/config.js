@@ -236,6 +236,10 @@ module.exports = {
                     {
                         title: '高性能队列Disruptor',
                         path: '/java-concurrent/part4/disruptor',
+                    },
+                    {
+                        title: 'CPU缓存命中率和缓存行详解',
+                        path: '/java-concurrent/part4/cpu-cache',
                     }
                 ]    
             },
