@@ -24,7 +24,7 @@
 
 ## CPU调优
 ### 为什么写代码时，要考虑到通过CPU来提升程序性能呢？
-如下图所示，可以看出cpu cache的访问速度远远大于内存以及辅存速度。所以我们如果能够尽可能的利用cpu cache来存储我们常访问到的速度。
+如下图所示，可以看出cpu cache的访问速度远远大于内存以及辅存速度。所以我们如果能够尽可能的利用cpu cache来存储我们常访问到的数据，速度将大大提升。
 
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part4/04.png" alt="png">
 

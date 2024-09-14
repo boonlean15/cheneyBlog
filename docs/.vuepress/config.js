@@ -238,6 +238,10 @@ module.exports = {
                         path: '/java-concurrent/part4/disruptor',
                     },
                     {
+                        title: '高性能数据库连接池HiKariCP',
+                        path: '/java-concurrent/part4/hk',
+                    },
+                    {
                         title: 'CPU缓存命中率和缓存行详解',
                         path: '/java-concurrent/part4/cpu-cache',
                     }
