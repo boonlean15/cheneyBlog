@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'my blog',
+    title: 'cheney blog',
     description: 'human is animal',
     base: '/cheneyBlog/',
     themeConfig: {
@@ -27,7 +27,7 @@ module.exports = {
                 path: '/how-to-learn-english/how-to-learn-english',
             },
             {
-                title: 'Maven',   // 必要的
+                title: 'SQL',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
