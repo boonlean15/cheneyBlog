@@ -27,6 +27,17 @@ module.exports = {
                 path: '/how-to-learn-english/how-to-learn-english',
             },
             {
+                title: 'Maven',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: '数据库方式思考sql是如何执行的',
+                        path: '/sql/how-sql-exec',
+                    }
+                ]
+            },
+            {
                 title: 'JAVA基础',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
