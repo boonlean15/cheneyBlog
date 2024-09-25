@@ -32,7 +32,7 @@ module.exports = {
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
                 children: [
                     {
-                        title: '数据库方式思考sql是如何执行的',
+                        title: 'sql是如何执行的',
                         path: '/sql/how-sql-exec',
                     }
                 ]
@@ -259,6 +259,15 @@ module.exports = {
                     {
                         title: 'CPU缓存命中率和缓存行详解',
                         path: '/java-concurrent/part4/cpu-cache',
+                    }
+                ]    
+            },
+            {
+                title: '并发模型',   // 必要的
+                children: [
+                    {
+                        title: 'Actor模型',
+                        path: '/java-concurrent/part5/actor',
                     }
                 ]    
             },
