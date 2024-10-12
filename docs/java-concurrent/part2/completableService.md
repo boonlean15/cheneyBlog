@@ -1,4 +1,4 @@
-# CompletableService
+# CompletionService
 <img width="800" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/part2/completableService/1.png" alt="png"> 
 
 批量提交异步任务,需要获取多个任务中先执行完任务的结果。或者需要完成Forking Cluster集群功能

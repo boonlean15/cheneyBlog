@@ -60,7 +60,7 @@ runnable到terminated状态的转换
     - 当线程处于runnable状态时，并阻塞在java.nio.channel.interruptibleChannel上时，调用interrupt方法，线程会触发java.nio.channels.ClosedByInterruptException 这个异常
     - 当线程处于runnable状态时，并阻塞在java.nio.channel.Selector上时，调用interrupt方法，线程 A 的 java.nio.channels.Selector 会立即返回。
 - 主动检测
-    - 线程处于runnable状态时，并没有阻塞在某个I/O操作时，比如线程在执行圆周率计算，此时线程A被调用了interrupt,此时线程可以通过调用is Interrupted方法，主动检测是否被中断
+    - 线程处于runnable状态时，并没有阻塞在某个I/O操作时，比如线程在执行圆周率计算，此时线程A被调用了interrupt,此时线程可以通过调用isInterrupted方法，主动检测是否被中断
 
 ## 总结
 ### 线程状态重要性

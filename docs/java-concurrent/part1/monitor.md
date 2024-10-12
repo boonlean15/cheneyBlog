@@ -25,18 +25,16 @@
 - 2.每个条件变量对应有一个等待队列(条件变量 A 和条件变量 B 分别都有自己的等待队列)，当线程条件不满足时，wait等待。类似需要检查报告，病人去做检查
 - 3.当条件满足时，notify、notifyAll、唤醒通知线程，线程重新进入要进入管程区域的等待队列。类似病人检查完，需要重新分诊
 - 4.当允许进入管程区域时，此时再次跟医生看病
+
 > 阻塞队列和等待队列是不同的
 
 ```java
 public class BlockedQueue<T>{
-  final Lock lock =
-    new ReentrantLock();
+  final Lock lock =  new ReentrantLock();
   // 条件变量：队列不满  
-  final Condition notFull =
-    lock.newCondition();
+  final Condition notFull =  lock.newCondition();
   // 条件变量：队列不空  
-  final Condition notEmpty =
-    lock.newCondition();
+  final Condition notEmpty =  lock.newCondition();
 
   // 入队
   void enq(T x) {
@@ -89,6 +87,7 @@ while(条件不满足){
 
 ## 总结
 管程是一个解决并发问题的万能钥匙，理论上所有的并发问题都可以用管程解决。java语言内置管程对mesa模型进行精简
+
 <img width="600" src="https://boonlean15.github.io/cheneyBlog/images/javaconcurrent/monitor/3.png" alt="png">
 
 Mesa模型里，wait方法增加了参数，代表当等待足够时间后，去到等待进入管程区域的队列。避免条件不满足时，傻等
