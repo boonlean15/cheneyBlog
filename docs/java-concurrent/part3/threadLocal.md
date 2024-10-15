@@ -69,7 +69,7 @@ public class MyThreadLocal<T> {
    > 原因是ThreadLocal持有Thread，而ThreadLocal的存活时间比Thread要持久的多，如果ThreadLocal不回收，那么Thread就不能回收，容易出现内存泄漏
 - java实现的ThreadLocal结合线程池使用时，容易出现内存泄漏
    > 原因：1.线程池的Thread存活时间特别长，则ThreadLocalMap一般不会被回收 2.Entry对ThreadLocal是弱引用，ThreadLocal结束自己的生命周期是可以回收的
-   但是
+   但是value是强引用
 ```JAVA
 /**
  * 手动清理实现value回收，避免内存泄漏

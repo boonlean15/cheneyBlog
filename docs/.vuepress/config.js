@@ -263,11 +263,20 @@ module.exports = {
                 ]    
             },
             {
-                title: '并发模型',   // 必要的
+                title: '其他并发模型',   // 必要的
                 children: [
                     {
-                        title: 'Actor模型',
+                        title: '面向对象原生的并发模型-Actor模型',
                         path: '/java-concurrent/part5/actor',
+                    },{
+                        title: '软件事务内存STM-借鉴数据库事务的并发解决方案',
+                        path: '/java-concurrent/part5/stm',
+                    },{
+                        title: '协程 更轻量级的线程',
+                        path: '/java-concurrent/part5/assist',
+                    },{
+                        title: 'CSP模型 解决协程同步问题',
+                        path: '/java-concurrent/part5/csp',
                     }
                 ]    
             },
