@@ -34,6 +34,12 @@ module.exports = {
                     {
                         title: 'sql是如何执行的',
                         path: '/sql/how-sql-exec',
+                    },{
+                        title: 'DDL创建数据库和数据表时需要注意什么',
+                        path: '/sql/ddl',
+                    },{
+                        title: 'Select基础查询',
+                        path: '/sql/select_base',
                     }
                 ]
             },
