@@ -66,49 +66,6 @@ find /path/to/directory -type d -empty -exec rmdir {} \;
 find /path/to/directory -type f -size +100M -exec rm -f {} \;
 ```
 
-## psql 删除10天前数据
-```sql
-select create_time from custom_nr_performance_day order by create_time desc limit 1;
-
-delete from custom_nr_performance_day where create_time < '2024-10-14 10:38:23'; now() - interval '10 days';
-
-select count(1) from custom_nr_performance_day;
-
--- 使用psql命令行工具，您可以直接运行上面的SQL命令
-psql -d your_database -c "DELETE FROM your_table WHERE date_column < now() - interval '10 days';"
-
-
--- 看这个表的状态信息 n_live_tup          | 12674745   #表示当前表的数据量，n_dead_tup          | 37325572   #表示为回收的空间
-select * from pg_stat_user_tables where relname='custom_nr_performance_hour';
-
-select pg_size_pretty(pg_relation_size('custom_nr_performance_hour')) as size;
-
-VACUUM FULL custom_nr_performance_day;
-
--- 释放特定表的空间
-VACUUM (FULL, VERBOSE, ANALYZE) table_name;
- 
--- 或者，对整个数据库执行VACUUM
-VACUUM (FULL, VERBOSE, ANALYZE);
-
-中文表名	英文表名	用途说明
-现网基站版本	cmp_basedata_network_basestation_version	存储现网基站版本
-现网板卡数据	cmp_basedata_network_piece_msg	存储现网板卡数据
-EOMS工单基础信息	cmp_emos_record	存储EOMS工单基础信息
-4G性能数据_天_自定义指标	custom_lte_performance_day	全量性能数据入库
-4G性能数据_小时_自定义指标	custom_lte_performance_hour	全量性能数据入库
-5G性能数据_天_自定义指标	custom_nr_performance_day	全量性能数据入库
-5G性能数据_小时_自定义指标	custom_nr_performance_hour	全量性能数据入库
-```
-
- 
-select T.PID,T.STATE,T.QUERY,T.WAIT_EVENT_TYPE,T.WAIT_EVENT,T.QUERY_START from PG_STAT_ACTIVITY T where T.DATNAME = 'cmdi_cmp';
-
-
-TRUNCATE custom_lte_performance_hour_history;
-
-DROP TABLE IF EXISTS custom_lte_performance_hour_history;
-
 
 
 
