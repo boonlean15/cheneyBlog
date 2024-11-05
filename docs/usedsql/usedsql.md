@@ -68,6 +68,10 @@ commit;
 docker exec -it postgres pg_dump -U postgres -d cmp -t order  -f order.sql
 docker exec -it postgres pg_dump -U postgres -d cmp  -t change_list -f change_list.sql
 ```
+### 备份数据库结构
+```shell
+docker exec -it postgres pg_dump -U postgres -s cmdi_cmp  -f cmdi_cmp_schema_full.sql
+```
 
 ## pg查看表结构信息
 - 通过命令行查询

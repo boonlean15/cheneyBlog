@@ -451,6 +451,14 @@ module.exports = {
                     {
                         title: 'Springboot 常用note',
                         path: '/others/springboot',
+                    },
+                    {
+                        title: 'docker 磁盘问题处理',
+                        path: '/others/docker',
+                    },
+                    {
+                        title: 'windows相关',
+                        path: '/others/win',
                     }
                 ]
             }
