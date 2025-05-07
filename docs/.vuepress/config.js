@@ -428,6 +428,17 @@ module.exports = {
                 ]
             },
             {
+                title: 'springboot',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'springboot log 日志',
+                        path: '/springboot/log',
+                    }
+                ]
+            },
+            {
                 title: '其他',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
