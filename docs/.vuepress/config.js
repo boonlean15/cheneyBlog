@@ -428,6 +428,17 @@ module.exports = {
                 ]
             },
             {
+                title: 'CICD',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'CICD',
+                        path: '/cicd/harbor',
+                    }
+                ]
+            },
+            {
                 title: 'springboot',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
