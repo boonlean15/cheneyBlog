@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>常用统计和其他sql | cheney blog</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    
+    <meta name="description" content="human is animal">
+    
+    <link rel="preload" href="/cheneyBlog/assets/css/0.styles.f77d735e.css" as="style"><link rel="preload" href="/cheneyBlog/assets/js/app.2a1bc94b.js" as="script"><link rel="preload" href="/cheneyBlog/assets/js/2.74bbeaff.js" as="script"><link rel="preload" href="/cheneyBlog/assets/js/1.893c586b.js" as="script"><link rel="preload" href="/cheneyBlog/assets/js/121.b48f6d49.js" as="script"><link rel="prefetch" href="/cheneyBlog/assets/js/10.6a8c38aa.js"><link rel="prefetch" href="/cheneyBlog/assets/js/100.95e5021c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/101.06202c38.js"><link rel="prefetch" href="/cheneyBlog/assets/js/102.f6b0fe8b.js"><link rel="prefetch" href="/cheneyBlog/assets/js/103.c61e99ca.js"><link rel="prefetch" href="/cheneyBlog/assets/js/104.99642148.js"><link rel="prefetch" href="/cheneyBlog/assets/js/105.2ffa3b1f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/106.51eefa60.js"><link rel="prefetch" href="/cheneyBlog/assets/js/107.dabe6fb6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/108.9be5f1d7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/109.6fefe289.js"><link rel="prefetch" href="/cheneyBlog/assets/js/11.fea60cf3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/110.d31f031f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/111.13279446.js"><link rel="prefetch" href="/cheneyBlog/assets/js/112.31d069b8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/113.6cff2a43.js"><link rel="prefetch" href="/cheneyBlog/assets/js/114.1eba6be8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/115.3238d6ad.js"><link rel="prefetch" href="/cheneyBlog/assets/js/116.a9a22106.js"><link rel="prefetch" href="/cheneyBlog/assets/js/117.fa2d4d36.js"><link rel="prefetch" href="/cheneyBlog/assets/js/118.301c5e19.js"><link rel="prefetch" href="/cheneyBlog/assets/js/119.705ed344.js"><link rel="prefetch" href="/cheneyBlog/assets/js/12.56b65f1c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/120.bd50b801.js"><link rel="prefetch" href="/cheneyBlog/assets/js/13.86734518.js"><link rel="prefetch" href="/cheneyBlog/assets/js/14.95961084.js"><link rel="prefetch" href="/cheneyBlog/assets/js/15.b08f5e79.js"><link rel="prefetch" href="/cheneyBlog/assets/js/16.a1ae088e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/17.aa2b462d.js"><link rel="prefetch" href="/cheneyBlog/assets/js/18.6be81e2e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/19.8ef002e9.js"><link rel="prefetch" href="/cheneyBlog/assets/js/20.2b975910.js"><link rel="prefetch" href="/cheneyBlog/assets/js/21.ba290175.js"><link rel="prefetch" href="/cheneyBlog/assets/js/22.c26c4966.js"><link rel="prefetch" href="/cheneyBlog/assets/js/23.cf3ffada.js"><link rel="prefetch" href="/cheneyBlog/assets/js/24.b96b79d1.js"><link rel="prefetch" href="/cheneyBlog/assets/js/25.b2f6097f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/26.3ed02549.js"><link rel="prefetch" href="/cheneyBlog/assets/js/27.a1654b4e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/28.bf32292c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/29.2aa47805.js"><link rel="prefetch" href="/cheneyBlog/assets/js/3.4dcf44ec.js"><link rel="prefetch" href="/cheneyBlog/assets/js/30.319dc4f2.js"><link rel="prefetch" href="/cheneyBlog/assets/js/31.8f00303a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/32.7596994e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/33.5f609bb9.js"><link rel="prefetch" href="/cheneyBlog/assets/js/34.dc9b8b8c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/35.061afdb0.js"><link rel="prefetch" href="/cheneyBlog/assets/js/36.d11c9e8e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/37.c5066515.js"><link rel="prefetch" href="/cheneyBlog/assets/js/38.d6778771.js"><link rel="prefetch" href="/cheneyBlog/assets/js/39.05994203.js"><link rel="prefetch" href="/cheneyBlog/assets/js/4.f2aa92b5.js"><link rel="prefetch" href="/cheneyBlog/assets/js/40.b8f601e0.js"><link rel="prefetch" href="/cheneyBlog/assets/js/41.957ff061.js"><link rel="prefetch" href="/cheneyBlog/assets/js/42.58b92311.js"><link rel="prefetch" href="/cheneyBlog/assets/js/43.2d130ce6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/44.6d78ab81.js"><link rel="prefetch" href="/cheneyBlog/assets/js/45.25898937.js"><link rel="prefetch" href="/cheneyBlog/assets/js/46.ca07bbf9.js"><link rel="prefetch" href="/cheneyBlog/assets/js/47.8c80545a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/48.b5322896.js"><link rel="prefetch" href="/cheneyBlog/assets/js/49.9368b4fb.js"><link rel="prefetch" href="/cheneyBlog/assets/js/5.7e868145.js"><link rel="prefetch" href="/cheneyBlog/assets/js/50.ea5e2b58.js"><link rel="prefetch" href="/cheneyBlog/assets/js/51.68eb1490.js"><link rel="prefetch" href="/cheneyBlog/assets/js/52.f3948645.js"><link rel="prefetch" href="/cheneyBlog/assets/js/53.6218805a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/54.96cd8581.js"><link rel="prefetch" href="/cheneyBlog/assets/js/55.fdea5d39.js"><link rel="prefetch" href="/cheneyBlog/assets/js/56.97d4b64f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/57.91b248d3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/58.b056e048.js"><link rel="prefetch" href="/cheneyBlog/assets/js/59.680956e8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/6.197d190f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/60.eb17eee3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/61.d45b47d8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/62.f7960757.js"><link rel="prefetch" href="/cheneyBlog/assets/js/63.f447bf98.js"><link rel="prefetch" href="/cheneyBlog/assets/js/64.f4ec515f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/65.2405c942.js"><link rel="prefetch" href="/cheneyBlog/assets/js/66.5bd91fb7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/67.8f12da6a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/68.611bfb1c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/69.43ed7d12.js"><link rel="prefetch" href="/cheneyBlog/assets/js/7.a32ca284.js"><link rel="prefetch" href="/cheneyBlog/assets/js/70.8b00c2ae.js"><link rel="prefetch" href="/cheneyBlog/assets/js/71.dcd77349.js"><link rel="prefetch" href="/cheneyBlog/assets/js/72.7b34136e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/73.ab4ef9bb.js"><link rel="prefetch" href="/cheneyBlog/assets/js/74.e2630224.js"><link rel="prefetch" href="/cheneyBlog/assets/js/75.15f7dcb5.js"><link rel="prefetch" href="/cheneyBlog/assets/js/76.f893ca76.js"><link rel="prefetch" href="/cheneyBlog/assets/js/77.54a2add0.js"><link rel="prefetch" href="/cheneyBlog/assets/js/78.3b264378.js"><link rel="prefetch" href="/cheneyBlog/assets/js/79.66881ae7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/80.2e5615f6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/81.270576ba.js"><link rel="prefetch" href="/cheneyBlog/assets/js/82.02352aa6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/83.54d83062.js"><link rel="prefetch" href="/cheneyBlog/assets/js/84.2e26223b.js"><link rel="prefetch" href="/cheneyBlog/assets/js/85.023319ec.js"><link rel="prefetch" href="/cheneyBlog/assets/js/86.19288d57.js"><link rel="prefetch" href="/cheneyBlog/assets/js/87.55c31ac7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/88.34d079a6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/89.857e35a8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/90.dc99d8c5.js"><link rel="prefetch" href="/cheneyBlog/assets/js/91.734ff8ad.js"><link rel="prefetch" href="/cheneyBlog/assets/js/92.9adf7eb3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/93.4de9a7a4.js"><link rel="prefetch" href="/cheneyBlog/assets/js/94.b481eb28.js"><link rel="prefetch" href="/cheneyBlog/assets/js/95.a0996300.js"><link rel="prefetch" href="/cheneyBlog/assets/js/96.235a4969.js"><link rel="prefetch" href="/cheneyBlog/assets/js/97.a8dc967f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/98.27bc98d8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/99.95e5b063.js"><link rel="prefetch" href="/cheneyBlog/assets/js/vendors~docsearch.d856fa52.js">
+    <link rel="stylesheet" href="/cheneyBlog/assets/css/0.styles.f77d735e.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/cheneyBlog/" class="home-link router-link-active"><!----> <span class="site-name">cheney blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/cheneyBlog/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/cheneyBlog/java/jdkRelationship.html" class="nav-link">
+  JAVA
+</a></div><div class="nav-item"><a href="http://www.lvyestudy.com/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  前端
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="https://github.com/boonlean15" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/cheneyBlog/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/cheneyBlog/java/jdkRelationship.html" class="nav-link">
+  JAVA
+</a></div><div class="nav-item"><a href="http://www.lvyestudy.com/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  前端
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="https://github.com/boonlean15" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/cheneyBlog/markdown/" class="sidebar-link">Markdown语法</a></li><li><a href="/cheneyBlog/buildBlog/buildBlog.html" class="sidebar-link">Vuepress构建项目</a></li><li><a href="/cheneyBlog/how-to-learn-english/how-to-learn-english.html" class="sidebar-link">学好英语</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>SQL</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>JAVA基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发理论基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发工具类</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发设计模式</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发案例分析</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>其他并发模型</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>NIO</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/cheneyBlog/rpc/rpc.html" class="sidebar-link">RPC</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Netty in action</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>spring cloud</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/cheneyBlog/authentication/authentication.html" class="sidebar-link">认证</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Mybatis</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Maven</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>CICD</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>AI知识</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>springboot</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>其他</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/cheneyBlog/others/xss.html" class="sidebar-link">xss漏洞</a></li><li><a href="/cheneyBlog/others/https-active.html" class="sidebar-link">springboot+vue 前后端开启https</a></li><li><a href="/cheneyBlog/linux-shell/linux-shell.html" class="sidebar-link">Linux常用命令</a></li><li><a href="/cheneyBlog/usedsql/usedsql.html" aria-current="page" class="active sidebar-link">常用统计和其他sql</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/cheneyBlog/usedsql/usedsql.html#postgresql去除完全相同的数据" class="sidebar-link">Postgresql去除完全相同的数据</a></li><li class="sidebar-sub-header"><a href="/cheneyBlog/usedsql/usedsql.html#数据备份" class="sidebar-link">数据备份</a></li><li class="sidebar-sub-header"><a href="/cheneyBlog/usedsql/usedsql.html#数据空间清理" class="sidebar-link">数据空间清理</a></li><li class="sidebar-sub-header"><a href="/cheneyBlog/usedsql/usedsql.html#pg查看表结构信息" class="sidebar-link">pg查看表结构信息</a></li><li class="sidebar-sub-header"><a href="/cheneyBlog/usedsql/usedsql.html#统计大小" class="sidebar-link">统计大小</a></li><li class="sidebar-sub-header"><a href="/cheneyBlog/usedsql/usedsql.html#查询数据库空间-mysql和oracle" class="sidebar-link">查询数据库空间(mysql和oracle)</a></li></ul></li><li><a href="/cheneyBlog/others/springboot.html" class="sidebar-link">Springboot 常用note</a></li><li><a href="/cheneyBlog/others/docker.html" class="sidebar-link">docker 磁盘问题处理</a></li><li><a href="/cheneyBlog/others/win.html" class="sidebar-link">windows相关</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="常用统计和其他sql"><a href="#常用统计和其他sql" class="header-anchor">#</a> 常用统计和其他sql</h1> <h2 id="postgresql去除完全相同的数据"><a href="#postgresql去除完全相同的数据" class="header-anchor">#</a> Postgresql去除完全相同的数据</h2> <p><a href="https://zhuanlan.zhihu.com/p/642309567?utm_id=0" target="_blank" rel="noopener noreferrer">参考Postgresql 如何去除完全相同的数据<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <ul><li>去重思路</li></ul> <blockquote><p>主要的思路是找到字段的唯一条件，根据字段取出掉重复记录。Postgresql的去重是通过 ctid 完成的。注意本文针对的是 单表 的数据库数据去重处理。</p> <p>ctid 是什么？ ctid： 表示数据记录的物理行当信息，指的是 一条记录位于哪个数据块的哪个位移上面。</p></blockquote> <ul><li>数据查看<div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> ctid<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp<span class="token punctuation">;</span>
+</code></pre></div></li> <li>重复数据查询<div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> <span class="token keyword">distinct</span> id<span class="token punctuation">,</span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">from</span> emp <span class="token keyword">group</span> <span class="token keyword">by</span> id <span class="token keyword">having</span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+</code></pre></div></li> <li>保留需要的数据<div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> ctid<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp <span class="token keyword">where</span> ctid <span class="token operator">in</span> <span class="token punctuation">(</span><span class="token keyword">select</span> <span class="token function">min</span><span class="token punctuation">(</span>ctid<span class="token punctuation">)</span> <span class="token keyword">from</span> emp <span class="token keyword">group</span> <span class="token keyword">by</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ctid	id	name
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>	<span class="token number">1</span>	david
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span>	<span class="token number">2</span>	sandy
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span>	<span class="token number">3</span>	renee
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">)</span>	<span class="token number">4</span>	jack
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span>	<span class="token number">5</span>	rose
+</code></pre></div></li> <li>删除重复数据<div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">delete</span> <span class="token keyword">from</span> emp <span class="token keyword">where</span> ctid <span class="token operator">not</span> <span class="token operator">in</span> <span class="token punctuation">(</span><span class="token keyword">select</span> <span class="token function">min</span><span class="token punctuation">(</span>ctid<span class="token punctuation">)</span> <span class="token keyword">from</span> emp <span class="token keyword">group</span> <span class="token keyword">by</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div></li> <li>查看最后结果<div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> ctid<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp<span class="token punctuation">;</span>
+  ctid	id	name
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>	<span class="token number">1</span>	david
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span>	<span class="token number">2</span>	sandy
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span>	<span class="token number">3</span>	renee
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">)</span>	<span class="token number">4</span>	jack
+  <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span>	<span class="token number">5</span>	rose
+</code></pre></div></li></ul> <p><strong>关于Postgresql去重的小技巧，不同数据库实现细节不同，但是多数的思路是类似的</strong></p> <h3 id="数据库字段做了脱敏处理"><a href="#数据库字段做了脱敏处理" class="header-anchor">#</a> 数据库字段做了脱敏处理：</h3> <ul><li>通过查询找出当前表的重复记录</li> <li>删除重复数据（PS：如果重复数据是海量数据，需要使用 limit 配合 for 循环进行多次处理，不允许一次性大批量删除数据）</li> <li>检查去重之后的结果</li></ul> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">begin</span><span class="token punctuation">;</span>
+<span class="token comment">-- 通过查询找出当前表的重复记录</span>
+<span class="token keyword">select</span> ctid<span class="token punctuation">,</span> <span class="token operator">*</span> <span class="token keyword">from</span> results <span class="token keyword">where</span> ctid <span class="token operator">in</span> <span class="token punctuation">(</span><span class="token keyword">select</span> <span class="token function">min</span><span class="token punctuation">(</span>ctid<span class="token punctuation">)</span> <span class="token keyword">from</span> results  <span class="token keyword">where</span> code <span class="token operator">=</span> <span class="token string">'BANK1'</span> <span class="token operator">and</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token number">0</span> <span class="token keyword">group</span> <span class="token keyword">by</span> trade_numeber<span class="token punctuation">)</span> <span class="token operator">and</span> code <span class="token operator">=</span> <span class="token string">'BANK1'</span> <span class="token operator">and</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token number">0</span> <span class="token keyword">order</span> <span class="token keyword">by</span> trade_numeber<span class="token punctuation">;</span>
+
+<span class="token comment">-- 删除重复数据</span>
+<span class="token comment">-- 如果这里有海量数据，需要使用limit配合for循环进行多次处理，不允许一次性大批量删除数据</span>
+<span class="token keyword">delete</span> <span class="token keyword">from</span> results <span class="token keyword">where</span> ctid <span class="token operator">in</span> <span class="token punctuation">(</span><span class="token keyword">select</span> <span class="token function">min</span><span class="token punctuation">(</span>ctid<span class="token punctuation">)</span> <span class="token keyword">from</span> results  <span class="token keyword">where</span> code <span class="token operator">=</span> <span class="token string">'BANK1'</span> <span class="token operator">and</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token number">0</span> <span class="token keyword">group</span> <span class="token keyword">by</span> trade_numeber<span class="token punctuation">)</span> <span class="token operator">and</span> code <span class="token operator">=</span> <span class="token string">'BANK1'</span> <span class="token operator">and</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token number">0</span> <span class="token keyword">order</span> <span class="token keyword">by</span> trade_numeber<span class="token punctuation">;</span>
+
+<span class="token comment">-- 检查去重之后的结果</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> results <span class="token keyword">where</span> code <span class="token operator">=</span> <span class="token string">'BANK1'</span> <span class="token operator">and</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token number">0</span> <span class="token punctuation">;</span>
+<span class="token keyword">commit</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="数据备份"><a href="#数据备份" class="header-anchor">#</a> 数据备份</h2> <h3 id="备份单表数据"><a href="#备份单表数据" class="header-anchor">#</a> 备份单表数据</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> postgres pg_dump <span class="token parameter variable">-U</span> postgres <span class="token parameter variable">-d</span> <span class="token builtin class-name">test</span> <span class="token parameter variable">-t</span> order  <span class="token parameter variable">-f</span> order.sql
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> postgres pg_dump <span class="token parameter variable">-U</span> postgres <span class="token parameter variable">-d</span> <span class="token builtin class-name">test</span>  <span class="token parameter variable">-t</span> change_list <span class="token parameter variable">-f</span> change_list.sql
+</code></pre></div><h3 id="备份数据库结构"><a href="#备份数据库结构" class="header-anchor">#</a> 备份数据库结构</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> postgres pg_dump <span class="token parameter variable">-U</span> postgres <span class="token parameter variable">-s</span> database  <span class="token parameter variable">-f</span> schema_full.sql
+</code></pre></div><h2 id="数据空间清理"><a href="#数据空间清理" class="header-anchor">#</a> 数据空间清理</h2> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token comment">-- 删除十天前数据</span>
+<span class="token keyword">delete</span> <span class="token keyword">from</span> table_name <span class="token keyword">where</span> create_time <span class="token operator">&lt;</span> <span class="token string">'2024-10-14 10:38:23'</span><span class="token punctuation">;</span> <span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token keyword">interval</span> <span class="token string">'10 days'</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 使用psql命令行工具，您可以直接运行上面的SQL命令</span>
+psql <span class="token operator">-</span>d your_database <span class="token operator">-</span>c <span class="token string">&quot;DELETE FROM your_table WHERE date_column &lt; now() - interval '10 days';&quot;</span>
+
+
+<span class="token comment">-- 看这个表的状态信息 n_live_tup          | 12674745   #表示当前表的数据量，n_dead_tup          | 37325572   #表示为回收的空间</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> pg_stat_user_tables <span class="token keyword">where</span> relname<span class="token operator">=</span><span class="token string">'table_name'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">select</span> pg_size_pretty<span class="token punctuation">(</span>pg_relation_size<span class="token punctuation">(</span><span class="token string">'table_name'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">as</span> size<span class="token punctuation">;</span>
+
+VACUUM <span class="token keyword">FULL</span> table_name<span class="token punctuation">;</span>
+
+<span class="token comment">-- 释放特定表的空间</span>
+VACUUM <span class="token punctuation">(</span><span class="token keyword">FULL</span><span class="token punctuation">,</span> VERBOSE<span class="token punctuation">,</span> <span class="token keyword">ANALYZE</span><span class="token punctuation">)</span> table_name<span class="token punctuation">;</span>
+ 
+<span class="token comment">-- 或者，对整个数据库执行VACUUM</span>
+VACUUM <span class="token punctuation">(</span><span class="token keyword">FULL</span><span class="token punctuation">,</span> VERBOSE<span class="token punctuation">,</span> <span class="token keyword">ANALYZE</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="pg查看表结构信息"><a href="#pg查看表结构信息" class="header-anchor">#</a> pg查看表结构信息</h2> <ul><li>通过命令行查询</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token punctuation">\</span>d 数据库 —— 得到所有表的名字
+<span class="token punctuation">\</span>d 表名 —— 得到表结构
+</code></pre></div><ul><li>通过SQL语句查询</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token string">&quot;select * from pg_tables&quot;</span> —— 得到当前db中所有表的信息
+<span class="token string">&quot;select tablename from pg_tables where schemaname='public'&quot;</span> —— 得到所有用户自定义表的名字
+<span class="token keyword">select</span> count<span class="token punctuation">(</span>tablename<span class="token punctuation">)</span> from pg_tables where <span class="token assign-left variable">schemaname</span><span class="token operator">=</span><span class="token string">'public'</span> --- 得到用户自定义表数量
+<span class="token comment"># &quot;tablename&quot;字段是表的名字 &quot;schemaname&quot;是schema的名字 用户自定义的表，如果未经特殊处理，默认都是放在名为public的schema下</span>
+</code></pre></div><h2 id="统计大小"><a href="#统计大小" class="header-anchor">#</a> 统计大小</h2> <ul><li>统计数据库大小</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code>单个数据库的大小
+<span class="token keyword">select</span> datname, pg_size_pretty <span class="token punctuation">(</span>pg_database_size<span class="token punctuation">(</span>datname<span class="token punctuation">))</span> AS size from pg_database where datname <span class="token operator">=</span> <span class="token string">'test'</span><span class="token punctuation">;</span> 
+所有数据库的大小
+<span class="token keyword">select</span> datname, pg_size_pretty <span class="token punctuation">(</span>pg_database_size<span class="token punctuation">(</span>datname<span class="token punctuation">))</span> AS size from pg_database<span class="token punctuation">;</span>
+</code></pre></div><ul><li>统计数据表大小</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code>单个表大小
+<span class="token keyword">select</span> pg_size_pretty<span class="token punctuation">(</span>pg_relation_size<span class="token punctuation">(</span>‘mytab’<span class="token punctuation">))</span> as size<span class="token punctuation">;</span>
+查询单个表的总大小，包括该表的索引大小
+<span class="token keyword">select</span> pg_size_pretty<span class="token punctuation">(</span>pg_total_relation_size<span class="token punctuation">(</span>‘tab’<span class="token punctuation">))</span> as size<span class="token punctuation">;</span>
+所有表大小
+<span class="token keyword">select</span> relname, pg_size_pretty<span class="token punctuation">(</span>pg_relation_size<span class="token punctuation">(</span>relid<span class="token punctuation">))</span> from pg_stat_user_tables order by pg_relation_size<span class="token punctuation">(</span>relid<span class="token punctuation">)</span> desc<span class="token punctuation">;</span>
+</code></pre></div><ul><li>查询单个表的数据大小，索引大小，表大小，并按表大小倒序排列</li></ul> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">SELECT</span>
+    table_name<span class="token punctuation">,</span>
+    pg_size_pretty<span class="token punctuation">(</span>table_size<span class="token punctuation">)</span> <span class="token keyword">AS</span> table_size<span class="token punctuation">,</span>
+    pg_size_pretty<span class="token punctuation">(</span>indexes_size<span class="token punctuation">)</span> <span class="token keyword">AS</span> indexes_size<span class="token punctuation">,</span>
+    pg_size_pretty<span class="token punctuation">(</span>total_size<span class="token punctuation">)</span> <span class="token keyword">AS</span> total_size
+<span class="token keyword">FROM</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span>
+        table_name<span class="token punctuation">,</span>
+        pg_table_size<span class="token punctuation">(</span>table_name<span class="token punctuation">)</span> <span class="token keyword">AS</span> table_size<span class="token punctuation">,</span>
+        pg_indexes_size<span class="token punctuation">(</span>table_name<span class="token punctuation">)</span> <span class="token keyword">AS</span> indexes_size<span class="token punctuation">,</span>
+        pg_total_relation_size<span class="token punctuation">(</span>table_name<span class="token punctuation">)</span> <span class="token keyword">AS</span> total_size
+    <span class="token keyword">FROM</span> <span class="token punctuation">(</span>
+        <span class="token keyword">SELECT</span> <span class="token punctuation">(</span><span class="token string">'&quot;'</span> <span class="token operator">||</span> table_schema <span class="token operator">||</span> <span class="token string">'&quot;.&quot;'</span> <span class="token operator">||</span> table_name <span class="token operator">||</span> <span class="token string">'&quot;'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> table_name
+        <span class="token keyword">FROM</span> information_schema<span class="token punctuation">.</span><span class="token keyword">tables</span>
+    <span class="token punctuation">)</span> <span class="token keyword">AS</span> all_tables
+    <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> total_size <span class="token keyword">DESC</span>
+<span class="token punctuation">)</span> <span class="token keyword">AS</span> pretty_sizes<span class="token punctuation">;</span>
+</code></pre></div><ul><li>所有表的记录数</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token keyword">select</span> relname as TABLE_NAME, reltuples as rowCounts from pg_class where relkind <span class="token operator">=</span> <span class="token string">'r'</span> order by rowCounts desc
+</code></pre></div><ul><li>查询数据库及大小</li></ul> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> pg_database<span class="token punctuation">.</span>datname<span class="token punctuation">,</span> pg_size_pretty <span class="token punctuation">(</span>pg_database_size<span class="token punctuation">(</span>pg_database<span class="token punctuation">.</span>datname<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> size <span class="token keyword">from</span> pg_database<span class="token punctuation">;</span>
+</code></pre></div><ul><li>参考</li></ul> <p><a href="https://www.cnblogs.com/liqiu/p/3922288.html" target="_blank" rel="noopener noreferrer">POSTGRESQL 查看数据库 数据表大小<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://www.cnblogs.com/telwanggs/p/13645310.html" target="_blank" rel="noopener noreferrer">PostgreSQL 查询所有数据库大小，表大小，索引大小，以及表空间大小<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://blog.csdn.net/leo_qi/article/details/84804644" target="_blank" rel="noopener noreferrer">PostgreSQL查询出所有表的记录数<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://blog.csdn.net/DB_su/article/details/77935740" target="_blank" rel="noopener noreferrer">PostgreSQL Daily Maintenance - reindex<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://zhuanlan.zhihu.com/p/592895865" target="_blank" rel="noopener noreferrer">Postgresql 删除大量数据优化表空间<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://www.alibabacloud.com/help/zh/apsaradb-for-rds/latest/solutions-to-sharp-increase-in-disk-space-usage-in-postgresql-or-ppas-databases" target="_blank" rel="noopener noreferrer">PostgreSQL数据库磁盘空间占用剧增后的解决方法<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <h2 id="查询数据库空间-mysql和oracle"><a href="#查询数据库空间-mysql和oracle" class="header-anchor">#</a> 查询数据库空间(mysql和oracle)</h2> <h3 id="mysql版"><a href="#mysql版" class="header-anchor">#</a> Mysql版</h3> <div class="language-shell extra-class"><pre class="language-shell"><code>查看所有数据库容量大小
+-- 查看所有数据库容量大小
+SELECT
+    table_schema AS <span class="token string">'数据库'</span>,
+    sum<span class="token punctuation">(</span> table_rows <span class="token punctuation">)</span> AS <span class="token string">'记录数'</span>,
+    sum<span class="token punctuation">(</span>
+    TRUNCATE <span class="token punctuation">(</span> data_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">))</span> AS <span class="token string">'数据容量(MB)'</span>,
+    sum<span class="token punctuation">(</span>
+    TRUNCATE <span class="token punctuation">(</span> index_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">))</span> AS <span class="token string">'索引容量(MB)'</span> 
+FROM
+    information_schema.TABLES 
+GROUP BY
+    table_schema 
+ORDER BY
+    sum<span class="token punctuation">(</span> data_length <span class="token punctuation">)</span> DESC,
+    sum<span class="token punctuation">(</span> index_length <span class="token punctuation">)</span> DESC<span class="token punctuation">;</span>
+
+查看所有数据库各表容量大小
+SELECT
+    table_schema AS <span class="token string">'数据库'</span>,
+    table_name AS <span class="token string">'表名'</span>,
+    table_rows AS <span class="token string">'记录数'</span>,
+    TRUNCATE <span class="token punctuation">(</span> data_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">)</span> AS <span class="token string">'数据容量(MB)'</span>,
+    TRUNCATE <span class="token punctuation">(</span> index_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">)</span> AS <span class="token string">'索引容量(MB)'</span> 
+FROM
+    information_schema.TABLES 
+ORDER BY
+    data_length DESC,
+    index_length DESC<span class="token punctuation">;</span>
+
+查看指定数据库容量大小
+SELECT
+    table_schema AS <span class="token string">'数据库'</span>,
+    sum<span class="token punctuation">(</span> table_rows <span class="token punctuation">)</span> AS <span class="token string">'记录数'</span>,
+    sum<span class="token punctuation">(</span>
+    TRUNCATE <span class="token punctuation">(</span> data_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">))</span> AS <span class="token string">'数据容量(MB)'</span>,
+    sum<span class="token punctuation">(</span>
+    TRUNCATE <span class="token punctuation">(</span> index_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">))</span> AS <span class="token string">'索引容量(MB)'</span> 
+FROM
+    information_schema.TABLES 
+WHERE
+    table_schema <span class="token operator">=</span> <span class="token string">'数据库名'</span><span class="token punctuation">;</span>
+
+查看指定数据库各表容量大小
+SELECT
+    table_schema AS <span class="token string">'数据库'</span>,
+    table_name AS <span class="token string">'表名'</span>,
+    table_rows AS <span class="token string">'记录数'</span>,
+    TRUNCATE <span class="token punctuation">(</span> data_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">)</span> AS <span class="token string">'数据容量(MB)'</span>,
+    TRUNCATE <span class="token punctuation">(</span> index_length / <span class="token number">1024</span> / <span class="token number">1024</span>, <span class="token number">2</span> <span class="token punctuation">)</span> AS <span class="token string">'索引容量(MB)'</span> 
+FROM
+    information_schema.TABLES 
+WHERE
+    table_schema <span class="token operator">=</span> <span class="token string">'数据库名'</span> 
+ORDER BY
+    data_length DESC,
+    index_length DESC<span class="token punctuation">;</span>
+
+查看指定数据库各表信息
+SHOW TABLE STATUS<span class="token punctuation">;</span>
+</code></pre></div><h3 id="oracle版"><a href="#oracle版" class="header-anchor">#</a> oracle版</h3> <div class="language-shell extra-class"><pre class="language-shell"><code>查看表所占的空间大小
+--  不需要DBA权限
+SELECT SEGMENT_NAME TABLENAME,<span class="token punctuation">(</span>BYTES/1024/1024<span class="token punctuation">)</span> MB
+,RANK<span class="token punctuation">(</span><span class="token punctuation">)</span> OVER <span class="token punctuation">(</span>PARTITION BY NULL ORDER BY BYTES DESC<span class="token punctuation">)</span> RANK_ID  //根据表大小进行排序
+FROM USER_SEGMENTS
+WHERE <span class="token assign-left variable">SEGMENT_TYPE</span><span class="token operator">=</span><span class="token string">'TABLE'</span>
+
+-- 需要DBA权限,一般情况下很少会给这么高的权限,可以说这个权限基本没有,所以一般工作中不是DBA的人不会常用到这个命令
+SELECT t.tablespace_name, round<span class="token punctuation">(</span>SUM<span class="token punctuation">(</span>bytes / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span><span class="token punctuation">))</span>, <span class="token number">0</span><span class="token punctuation">)</span> ts_size 
+FROM dba_tablespaces t, dba_data_files d 
+WHERE t.tablespace_name <span class="token operator">=</span> d.tablespace_name 
+GROUP BY t.tablespace_name<span class="token punctuation">;</span> 
+ 
+
+查看表空间的使用情况
+SELECT a.tablespace_name <span class="token string">&quot;表空间名称&quot;</span>,
+       total / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span><span class="token punctuation">)</span> <span class="token string">&quot;表空间大小(M)&quot;</span>,
+       <span class="token function">free</span> / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span><span class="token punctuation">)</span> <span class="token string">&quot;表空间剩余大小(M)&quot;</span>,
+       <span class="token punctuation">(</span>total - <span class="token function">free</span><span class="token punctuation">)</span> / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span> <span class="token punctuation">)</span> <span class="token string">&quot;表空间使用大小(M)&quot;</span>,
+       total / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span> * <span class="token number">1024</span><span class="token punctuation">)</span> <span class="token string">&quot;表空间大小(G)&quot;</span>,
+       <span class="token function">free</span> / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span> * <span class="token number">1024</span><span class="token punctuation">)</span> <span class="token string">&quot;表空间剩余大小(G)&quot;</span>,
+       <span class="token punctuation">(</span>total - <span class="token function">free</span><span class="token punctuation">)</span> / <span class="token punctuation">(</span><span class="token number">1024</span> * <span class="token number">1024</span> * <span class="token number">1024</span><span class="token punctuation">)</span> <span class="token string">&quot;表空间使用大小(G)&quot;</span>,
+       round<span class="token variable"><span class="token punctuation">((</span>total <span class="token operator">-</span> free<span class="token punctuation">)</span> <span class="token operator">/</span> total<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span> &quot;使用率 <span class="token operator">%</span>&quot;
+FROM <span class="token punctuation">(</span>SELECT tablespace_name<span class="token punctuation">,</span> SUM<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> free
+      FROM dba_free_space
+      GROUP BY tablespace_name<span class="token punctuation">)</span> a<span class="token punctuation">,</span>
+     <span class="token punctuation">(</span>SELECT tablespace_name<span class="token punctuation">,</span> SUM<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> total
+      FROM dba_data_files
+      GROUP BY tablespace_name<span class="token punctuation">)</span> b
+WHERE a.tablespace_name <span class="token operator">=</span> b.tablespace_name
+
+查看回滚段名称及大小
+SELECT segment_name<span class="token punctuation">,</span> 
+tablespace_name<span class="token punctuation">,</span> 
+r.status<span class="token punctuation">,</span> 
+<span class="token punctuation">(</span>initial_extent <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span> initialextent<span class="token punctuation">,</span> 
+<span class="token punctuation">(</span>next_extent <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span> nextextent<span class="token punctuation">,</span> 
+max_extents<span class="token punctuation">,</span> 
+v.curext curextent 
+FROM dba_rollback_segs r<span class="token punctuation">,</span> v$rollstat v 
+WHERE r.segment_id <span class="token operator">=</span> v.usn<span class="token punctuation">(</span><span class="token operator">+</span><span class="token punctuation">)</span> 
+ORDER BY segment_name<span class="token punctuation">;</span> 
+
+查看控制文件
+SELECT NAME FROM v$controlfile<span class="token punctuation">;</span> 
+
+查看日志文件
+SELECT MEMBER FROM v$logfile<span class="token punctuation">;</span> 
+
+查看数据库对象
+SELECT owner<span class="token punctuation">,</span> object_type<span class="token punctuation">,</span> status<span class="token punctuation">,</span> COUNT<span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> count# 
+FROM all_objects 
+GROUP BY owner<span class="token punctuation">,</span> object_type<span class="token punctuation">,</span> status<span class="token punctuation">;</span> 
+
+查看数据库版本
+SELECT version 
+FROM product_component_version 
+WHERE substr<span class="token punctuation">(</span>product<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">=</span> 'Oracle'<span class="token punctuation">;</span> 
+
+查看数据库的创建日期和归档方式
+SELECT created<span class="token punctuation">,</span> log_mode<span class="token punctuation">,</span> log_mode FROM v$database<span class="token punctuation">;</span> 
+
+查看表空间是否具有自动扩展的能力
+SELECT T.TABLESPACE_NAME<span class="token punctuation">,</span>D.FILE_NAME<span class="token punctuation">,</span>
+D.AUTOEXTENSIBLE<span class="token punctuation">,</span>D.BYTES<span class="token punctuation">,</span>D.MAXBYTES<span class="token punctuation">,</span>D.STATUS
+FROM DBA_TABLESPACES T<span class="token punctuation">,</span>DBA_DATA_FILES D
+WHERE T.TABLESPACE_NAME <span class="token operator">=</span>D.TABLESPACE_NAME
+ ORDER BY TABLESPACE_NAME<span class="token punctuation">,</span>FILE_NAME<span class="token punctuation">;</span>
+
+oracle加强版
+一、查看表空间使用率
+<span class="token number">1.</span>查看数据库表空间文件<span class="token operator">:</span>
+<span class="token operator">--</span>查看数据库表空间文件
+select <span class="token operator">*</span> from dba_data_files<span class="token punctuation">;</span>
+
+<span class="token operator">--</span>查看所有表空间的总容量
+select dba.TABLESPACE_NAME<span class="token punctuation">,</span> sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">1024</span><span class="token operator">/</span><span class="token number">1024</span> as MB  
+from dba_data_files dba 
+group by dba.TABLESPACE_NAME<span class="token punctuation">;</span>
+
+<span class="token operator">--</span>查看数据库表空间使用率
+select total.tablespace_name<span class="token punctuation">,</span>round<span class="token punctuation">(</span>total.MB<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> as Total_MB<span class="token punctuation">,</span>round<span class="token punctuation">(</span>total.MB <span class="token operator">-</span> free.MB<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> as Used_MB<span class="token punctuation">,</span>round<span class="token punctuation">((</span><span class="token number">1</span><span class="token operator">-</span>free.MB <span class="token operator">/</span> total.MB<span class="token punctuation">)</span><span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">||</span> '<span class="token operator">%</span>' as Used_Pct 
+from <span class="token punctuation">(</span>
+select tablespace_name<span class="token punctuation">,</span> sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> <span class="token operator">/</span><span class="token number">1024</span><span class="token operator">/</span><span class="token number">1024</span> as MB 
+from dba_free_space group by tablespace_name<span class="token punctuation">)</span> free<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span> sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">1024</span> <span class="token operator">/</span> <span class="token number">1024</span> as MB 
+from dba_data_files group by tablespace_name<span class="token punctuation">)</span> total     
+where free.tablespace_name <span class="token operator">=</span> total.tablespace_name 
+order by used_pct desc<span class="token punctuation">;</span>
+
+<span class="token operator">--</span>查看表空间总大小、使用率、剩余空间
+select a.tablespace_name<span class="token punctuation">,</span> total<span class="token punctuation">,</span> free<span class="token punctuation">,</span> total<span class="token operator">-</span>free as used<span class="token punctuation">,</span> substr<span class="token punctuation">(</span>free<span class="token operator">/</span>total <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span> as &quot;FREE<span class="token operator">%</span>&quot;<span class="token punctuation">,</span> substr<span class="token punctuation">((</span>total <span class="token operator">-</span> free<span class="token punctuation">)</span><span class="token operator">/</span>total <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span> as &quot;USED<span class="token operator">%</span>&quot;
+from
+<span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span> sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">1024</span><span class="token operator">/</span><span class="token number">1024</span> as total from dba_data_files group by tablespace_name<span class="token punctuation">)</span> a<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span> sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">1024</span><span class="token operator">/</span><span class="token number">1024</span> as free from dba_free_space group by tablespace_name<span class="token punctuation">)</span> b
+where a.tablespace_name <span class="token operator">=</span> b.tablespace_name
+order by a.tablespace_name
+
+<span class="token operator">--</span>查看表空间使用率<span class="token punctuation">(</span>包含临时表空间<span class="token punctuation">)</span>
+select <span class="token operator">*</span> from <span class="token punctuation">(</span>
+Select a.tablespace_name<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>a.bytes<span class="token operator">-</span> b.bytes<span class="token punctuation">)</span> &quot;表空间使用大小<span class="token punctuation">(</span>BYTE<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+a.bytes<span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token punctuation">)</span> &quot;表空间大小<span class="token punctuation">(</span>GB<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+b.bytes<span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token punctuation">)</span> &quot;表空间剩余大小<span class="token punctuation">(</span>GB<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>a.bytes<span class="token operator">-</span> b.bytes<span class="token punctuation">)</span><span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token punctuation">)</span> &quot;表空间使用大小<span class="token punctuation">(</span>GB<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+to_char<span class="token punctuation">((</span><span class="token number">1</span> <span class="token operator">-</span> b.bytes<span class="token operator">/</span>a.bytes<span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">100</span><span class="token punctuation">,</span>'<span class="token number">99.99999</span>'<span class="token punctuation">)</span> <span class="token operator">||</span> '<span class="token operator">%</span>' &quot;使用率&quot;
+from <span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span>
+sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> bytes
+from dba_data_files
+group by tablespace_name<span class="token punctuation">)</span> a<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span>
+sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> bytes
+from dba_free_space
+group by tablespace_name<span class="token punctuation">)</span> b
+where a.tablespace_name <span class="token operator">=</span> b.tablespace_name
+union all
+select c.tablespace_name<span class="token punctuation">,</span>
+d.bytes_used &quot;表空间使用大小<span class="token punctuation">(</span>BYTE<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+c.bytes<span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token punctuation">)</span> &quot;表空间大小<span class="token punctuation">(</span>GB<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>c.bytes<span class="token operator">-</span>d.bytes_used<span class="token punctuation">)</span><span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token punctuation">)</span> &quot;表空间剩余大小<span class="token punctuation">(</span>GB<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+d.bytes_used<span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">1024</span><span class="token punctuation">)</span> &quot;表空间使用大小<span class="token punctuation">(</span>GB<span class="token punctuation">)</span>&quot;<span class="token punctuation">,</span>
+to_char<span class="token punctuation">(</span>d.bytes_used<span class="token operator">*</span><span class="token number">100</span><span class="token operator">/</span>c.bytes<span class="token punctuation">,</span>'<span class="token number">99.99999</span>'<span class="token punctuation">)</span> <span class="token operator">||</span> '<span class="token operator">%</span>' &quot;使用率&quot;
+from
+<span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span>sum<span class="token punctuation">(</span>bytes<span class="token punctuation">)</span> bytes
+from dba_temp_files group by tablespace_name<span class="token punctuation">)</span> c<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>select tablespace_name<span class="token punctuation">,</span>sum<span class="token punctuation">(</span>bytes_cached<span class="token punctuation">)</span> bytes_used
+from v$temp_extent_pool group by tablespace_name<span class="token punctuation">)</span> d
+where c.tablespace_name <span class="token operator">=</span> d.tablespace_name
+<span class="token punctuation">)</span>
+order by tablespace_name
+
+<span class="token operator">--</span>查看具体表的占用空间大小
+select <span class="token operator">*</span> from <span class="token punctuation">(</span>
+select t.tablespace_name<span class="token punctuation">,</span>t.owner<span class="token punctuation">,</span> t.segment_name<span class="token punctuation">,</span> t.segment_type<span class="token punctuation">,</span> sum<span class="token punctuation">(</span>t.bytes <span class="token operator">/</span> <span class="token number">1024</span> <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">)</span> mb
+from dba_segments t
+where t.segment_type<span class="token operator">=</span>'TABLE'
+group by t.tablespace_name<span class="token punctuation">,</span>t.OWNER<span class="token punctuation">,</span> t.segment_name<span class="token punctuation">,</span> t.segment_type
+<span class="token punctuation">)</span> t
+order by t.mb desc
+
+
+扩展大小或增加表空间文
+更改表空间的dbf数据文件分配空间大小
+alter database datafile ‘...\system_01.dbf' autoextend on<span class="token punctuation">;</span>
+alter database datafile ‘...\system_01.dbf' resize <span class="token number">1024</span>M<span class="token punctuation">;</span>
+
+为表空间新增一个数据文件<span class="token punctuation">(</span>表空间满<span class="token number">32</span>G不能扩展则增加表空间文件<span class="token punctuation">)</span>
+alter tablespace SYSTEM add datafile '<span class="token operator">/</span><span class="token operator">**</span><span class="token operator">**</span>' size <span class="token number">1000</span>m autoextend on next <span class="token number">100</span>m<span class="token punctuation">;</span>
+
+如果是temp临时表新增表空间会报错<span class="token operator">:</span>
+<span class="token number">0</span>RA<span class="token operator">-</span><span class="token number">03217</span><span class="token operator">:</span> 变更TEMPORARY TABLESPACE 无效的选项
+解决方法<span class="token operator">:</span> datafile改为tempfile
+alter tablespace TEMP01 add tempfile'<span class="token operator">/</span><span class="token operator">**</span><span class="token operator">**</span>' size <span class="token number">1000</span>m autoextend on next <span class="token number">100</span>m maxsize <span class="token number">10000</span>m
+
+针对temp临时表空间使用率爆满问题
+临时表空间主要用途是在数据库进行排序运算、管理索引、访问视图等操作时提供临时的运算空间，当运算完成之后系统会自动清理，但有些时候我们会遇到临时段没有被释放，TEMP表空间几乎满使用率情况；
+引起临时表空间增大主要使用在以下几种情况：
+<span class="token number">1</span>、order by or group by <span class="token punctuation">(</span>disc sort占主要部分<span class="token punctuation">)</span>；
+<span class="token number">2</span>、索引的创建和重创建；
+<span class="token number">3</span>、distinct操作；
+<span class="token number">4</span>、union <span class="token operator">&amp;</span> intersect <span class="token operator">&amp;</span> minus sort<span class="token operator">-</span>merge joins；
+<span class="token number">5</span>、Analyze 操作；
+<span class="token number">6</span>、有些异常也会引起TEMP的暴涨。
+解决方法一：用上述方法给temp增加表空间文件
+解决方法二：在服务器资源空间有限的情况下，重新建立新的临时表空间替换当前的表空间
+<span class="token operator">--</span><span class="token number">1.</span>查看当前的数据库默认表空间：
+select <span class="token operator">*</span> from database_properties
+where property_name<span class="token operator">=</span>'DEFAULT_TEMP_TABLESPACE'<span class="token punctuation">;</span>
+ 
+<span class="token operator">--</span><span class="token number">2.</span>创建新的临时表空间
+create temporary tablespace TEMP01 tempfile 
+'<span class="token operator">/</span>home<span class="token operator">/</span>temp01.dbf' size <span class="token number">31</span>G<span class="token punctuation">;</span>
+ 
+<span class="token operator">--</span><span class="token number">3.</span>更改默认临时表空间
+alter database default temporary tablespace TEMP01<span class="token punctuation">;</span>
+ 
+<span class="token operator">--</span><span class="token number">4.</span>删除原来的临时表空间
+drop tablespace TEMP02 including contents and datafiles<span class="token punctuation">;</span>
+ 
+<span class="token operator">--</span>如果删除原来临时表空间报错ORA<span class="token operator">-</span><span class="token number">60100</span>：由于排序段，已阻止删除表空间...
+<span class="token operator">--</span>（说明有语句正在使用原来的临时表空间，需要将其kill掉再删除，此语句多为排序的语句）
+<span class="token operator">--</span>查询语句
+Select se.username<span class="token punctuation">,</span>se.sid<span class="token punctuation">,</span>se.serial#<span class="token punctuation">,</span>su.extents<span class="token punctuation">,</span>su.blocks<span class="token operator">*</span>to_number<span class="token punctuation">(</span>rtrim<span class="token punctuation">(</span>p.value<span class="token punctuation">))</span></span>as Space,
+tablespace,segtype,sql_text
+from <span class="token function">v</span><span class="token variable">$sort_usage</span> su,v<span class="token variable">$parameter</span> p,v<span class="token variable">$session</span> se,v<span class="token variable">$sql</span> s
+where <span class="token assign-left variable">p.name</span><span class="token operator">=</span><span class="token string">'db_block_size'</span> and <span class="token assign-left variable">su.session_addr</span><span class="token operator">=</span>se.saddr and <span class="token assign-left variable">s.hash_value</span><span class="token operator">=</span>su.sqlhash
+and <span class="token assign-left variable">s.address</span><span class="token operator">=</span>su.sqladdr
+order by se.username,se.sid<span class="token punctuation">;</span>
+ 
+--删除对应的<span class="token string">'sid,serial#'</span>
+alter system <span class="token function">kill</span> session <span class="token string">'sid,serial#'</span>
+
+附：查看表空间是否具有自动扩展的能力
+--查看表空间是否具有自动扩展的能力     
+SELECT T.TABLESPACE_NAME,D.FILE_NAME,     
+D.AUTOEXTENSIBLE,D.BYTES,D.MAXBYTES,D.STATUS     
+FROM DBA_TABLESPACES T,DBA_DATA_FILES D     
+WHERE T.TABLESPACE_NAME <span class="token operator">=</span>D.TABLESPACE_NAME     
+ ORDER BY TABLESPACE_NAME,FILE_NAME<span class="token punctuation">;</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/cheneyBlog/linux-shell/linux-shell.html" class="prev">
+        Linux常用命令
+      </a></span> <span class="next"><a href="/cheneyBlog/others/springboot.html">
+        Springboot 常用note
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/cheneyBlog/assets/js/app.2a1bc94b.js" defer></script><script src="/cheneyBlog/assets/js/2.74bbeaff.js" defer></script><script src="/cheneyBlog/assets/js/1.893c586b.js" defer></script><script src="/cheneyBlog/assets/js/121.b48f6d49.js" defer></script>
+  </body>
+</html>

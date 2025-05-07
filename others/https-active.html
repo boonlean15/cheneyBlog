@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>基于SpringBoot+Vue开发的Web应用进行双向Https部署 | cheney blog</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    
+    <meta name="description" content="human is animal">
+    
+    <link rel="preload" href="/cheneyBlog/assets/css/0.styles.f77d735e.css" as="style"><link rel="preload" href="/cheneyBlog/assets/js/app.2a1bc94b.js" as="script"><link rel="preload" href="/cheneyBlog/assets/js/2.74bbeaff.js" as="script"><link rel="preload" href="/cheneyBlog/assets/js/1.893c586b.js" as="script"><link rel="preload" href="/cheneyBlog/assets/js/105.2ffa3b1f.js" as="script"><link rel="prefetch" href="/cheneyBlog/assets/js/10.6a8c38aa.js"><link rel="prefetch" href="/cheneyBlog/assets/js/100.95e5021c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/101.06202c38.js"><link rel="prefetch" href="/cheneyBlog/assets/js/102.f6b0fe8b.js"><link rel="prefetch" href="/cheneyBlog/assets/js/103.c61e99ca.js"><link rel="prefetch" href="/cheneyBlog/assets/js/104.99642148.js"><link rel="prefetch" href="/cheneyBlog/assets/js/106.51eefa60.js"><link rel="prefetch" href="/cheneyBlog/assets/js/107.dabe6fb6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/108.9be5f1d7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/109.6fefe289.js"><link rel="prefetch" href="/cheneyBlog/assets/js/11.fea60cf3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/110.d31f031f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/111.13279446.js"><link rel="prefetch" href="/cheneyBlog/assets/js/112.31d069b8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/113.6cff2a43.js"><link rel="prefetch" href="/cheneyBlog/assets/js/114.1eba6be8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/115.3238d6ad.js"><link rel="prefetch" href="/cheneyBlog/assets/js/116.a9a22106.js"><link rel="prefetch" href="/cheneyBlog/assets/js/117.fa2d4d36.js"><link rel="prefetch" href="/cheneyBlog/assets/js/118.301c5e19.js"><link rel="prefetch" href="/cheneyBlog/assets/js/119.705ed344.js"><link rel="prefetch" href="/cheneyBlog/assets/js/12.56b65f1c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/120.bd50b801.js"><link rel="prefetch" href="/cheneyBlog/assets/js/121.b48f6d49.js"><link rel="prefetch" href="/cheneyBlog/assets/js/13.86734518.js"><link rel="prefetch" href="/cheneyBlog/assets/js/14.95961084.js"><link rel="prefetch" href="/cheneyBlog/assets/js/15.b08f5e79.js"><link rel="prefetch" href="/cheneyBlog/assets/js/16.a1ae088e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/17.aa2b462d.js"><link rel="prefetch" href="/cheneyBlog/assets/js/18.6be81e2e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/19.8ef002e9.js"><link rel="prefetch" href="/cheneyBlog/assets/js/20.2b975910.js"><link rel="prefetch" href="/cheneyBlog/assets/js/21.ba290175.js"><link rel="prefetch" href="/cheneyBlog/assets/js/22.c26c4966.js"><link rel="prefetch" href="/cheneyBlog/assets/js/23.cf3ffada.js"><link rel="prefetch" href="/cheneyBlog/assets/js/24.b96b79d1.js"><link rel="prefetch" href="/cheneyBlog/assets/js/25.b2f6097f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/26.3ed02549.js"><link rel="prefetch" href="/cheneyBlog/assets/js/27.a1654b4e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/28.bf32292c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/29.2aa47805.js"><link rel="prefetch" href="/cheneyBlog/assets/js/3.4dcf44ec.js"><link rel="prefetch" href="/cheneyBlog/assets/js/30.319dc4f2.js"><link rel="prefetch" href="/cheneyBlog/assets/js/31.8f00303a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/32.7596994e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/33.5f609bb9.js"><link rel="prefetch" href="/cheneyBlog/assets/js/34.dc9b8b8c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/35.061afdb0.js"><link rel="prefetch" href="/cheneyBlog/assets/js/36.d11c9e8e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/37.c5066515.js"><link rel="prefetch" href="/cheneyBlog/assets/js/38.d6778771.js"><link rel="prefetch" href="/cheneyBlog/assets/js/39.05994203.js"><link rel="prefetch" href="/cheneyBlog/assets/js/4.f2aa92b5.js"><link rel="prefetch" href="/cheneyBlog/assets/js/40.b8f601e0.js"><link rel="prefetch" href="/cheneyBlog/assets/js/41.957ff061.js"><link rel="prefetch" href="/cheneyBlog/assets/js/42.58b92311.js"><link rel="prefetch" href="/cheneyBlog/assets/js/43.2d130ce6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/44.6d78ab81.js"><link rel="prefetch" href="/cheneyBlog/assets/js/45.25898937.js"><link rel="prefetch" href="/cheneyBlog/assets/js/46.ca07bbf9.js"><link rel="prefetch" href="/cheneyBlog/assets/js/47.8c80545a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/48.b5322896.js"><link rel="prefetch" href="/cheneyBlog/assets/js/49.9368b4fb.js"><link rel="prefetch" href="/cheneyBlog/assets/js/5.7e868145.js"><link rel="prefetch" href="/cheneyBlog/assets/js/50.ea5e2b58.js"><link rel="prefetch" href="/cheneyBlog/assets/js/51.68eb1490.js"><link rel="prefetch" href="/cheneyBlog/assets/js/52.f3948645.js"><link rel="prefetch" href="/cheneyBlog/assets/js/53.6218805a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/54.96cd8581.js"><link rel="prefetch" href="/cheneyBlog/assets/js/55.fdea5d39.js"><link rel="prefetch" href="/cheneyBlog/assets/js/56.97d4b64f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/57.91b248d3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/58.b056e048.js"><link rel="prefetch" href="/cheneyBlog/assets/js/59.680956e8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/6.197d190f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/60.eb17eee3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/61.d45b47d8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/62.f7960757.js"><link rel="prefetch" href="/cheneyBlog/assets/js/63.f447bf98.js"><link rel="prefetch" href="/cheneyBlog/assets/js/64.f4ec515f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/65.2405c942.js"><link rel="prefetch" href="/cheneyBlog/assets/js/66.5bd91fb7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/67.8f12da6a.js"><link rel="prefetch" href="/cheneyBlog/assets/js/68.611bfb1c.js"><link rel="prefetch" href="/cheneyBlog/assets/js/69.43ed7d12.js"><link rel="prefetch" href="/cheneyBlog/assets/js/7.a32ca284.js"><link rel="prefetch" href="/cheneyBlog/assets/js/70.8b00c2ae.js"><link rel="prefetch" href="/cheneyBlog/assets/js/71.dcd77349.js"><link rel="prefetch" href="/cheneyBlog/assets/js/72.7b34136e.js"><link rel="prefetch" href="/cheneyBlog/assets/js/73.ab4ef9bb.js"><link rel="prefetch" href="/cheneyBlog/assets/js/74.e2630224.js"><link rel="prefetch" href="/cheneyBlog/assets/js/75.15f7dcb5.js"><link rel="prefetch" href="/cheneyBlog/assets/js/76.f893ca76.js"><link rel="prefetch" href="/cheneyBlog/assets/js/77.54a2add0.js"><link rel="prefetch" href="/cheneyBlog/assets/js/78.3b264378.js"><link rel="prefetch" href="/cheneyBlog/assets/js/79.66881ae7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/80.2e5615f6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/81.270576ba.js"><link rel="prefetch" href="/cheneyBlog/assets/js/82.02352aa6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/83.54d83062.js"><link rel="prefetch" href="/cheneyBlog/assets/js/84.2e26223b.js"><link rel="prefetch" href="/cheneyBlog/assets/js/85.023319ec.js"><link rel="prefetch" href="/cheneyBlog/assets/js/86.19288d57.js"><link rel="prefetch" href="/cheneyBlog/assets/js/87.55c31ac7.js"><link rel="prefetch" href="/cheneyBlog/assets/js/88.34d079a6.js"><link rel="prefetch" href="/cheneyBlog/assets/js/89.857e35a8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/90.dc99d8c5.js"><link rel="prefetch" href="/cheneyBlog/assets/js/91.734ff8ad.js"><link rel="prefetch" href="/cheneyBlog/assets/js/92.9adf7eb3.js"><link rel="prefetch" href="/cheneyBlog/assets/js/93.4de9a7a4.js"><link rel="prefetch" href="/cheneyBlog/assets/js/94.b481eb28.js"><link rel="prefetch" href="/cheneyBlog/assets/js/95.a0996300.js"><link rel="prefetch" href="/cheneyBlog/assets/js/96.235a4969.js"><link rel="prefetch" href="/cheneyBlog/assets/js/97.a8dc967f.js"><link rel="prefetch" href="/cheneyBlog/assets/js/98.27bc98d8.js"><link rel="prefetch" href="/cheneyBlog/assets/js/99.95e5b063.js"><link rel="prefetch" href="/cheneyBlog/assets/js/vendors~docsearch.d856fa52.js">
+    <link rel="stylesheet" href="/cheneyBlog/assets/css/0.styles.f77d735e.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/cheneyBlog/" class="home-link router-link-active"><!----> <span class="site-name">cheney blog</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/cheneyBlog/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/cheneyBlog/java/jdkRelationship.html" class="nav-link">
+  JAVA
+</a></div><div class="nav-item"><a href="http://www.lvyestudy.com/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  前端
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="https://github.com/boonlean15" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/cheneyBlog/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/cheneyBlog/java/jdkRelationship.html" class="nav-link">
+  JAVA
+</a></div><div class="nav-item"><a href="http://www.lvyestudy.com/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  前端
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="https://github.com/boonlean15" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/cheneyBlog/markdown/" class="sidebar-link">Markdown语法</a></li><li><a href="/cheneyBlog/buildBlog/buildBlog.html" class="sidebar-link">Vuepress构建项目</a></li><li><a href="/cheneyBlog/how-to-learn-english/how-to-learn-english.html" class="sidebar-link">学好英语</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>SQL</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>JAVA基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发理论基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发工具类</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发设计模式</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发案例分析</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>其他并发模型</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>NIO</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/cheneyBlog/rpc/rpc.html" class="sidebar-link">RPC</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Netty in action</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>spring cloud</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/cheneyBlog/authentication/authentication.html" class="sidebar-link">认证</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Mybatis</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Maven</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>CICD</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>AI知识</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>springboot</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>其他</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/cheneyBlog/others/xss.html" class="sidebar-link">xss漏洞</a></li><li><a href="/cheneyBlog/others/https-active.html" aria-current="page" class="active sidebar-link">springboot+vue 前后端开启https</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/cheneyBlog/others/https-active.html#后端开启https示例" class="sidebar-link">后端开启https示例</a></li><li class="sidebar-sub-header"><a href="/cheneyBlog/others/https-active.html#基于nginx实现双向https" class="sidebar-link">基于NGINX实现双向HTTPS</a></li></ul></li><li><a href="/cheneyBlog/linux-shell/linux-shell.html" class="sidebar-link">Linux常用命令</a></li><li><a href="/cheneyBlog/usedsql/usedsql.html" class="sidebar-link">常用统计和其他sql</a></li><li><a href="/cheneyBlog/others/springboot.html" class="sidebar-link">Springboot 常用note</a></li><li><a href="/cheneyBlog/others/docker.html" class="sidebar-link">docker 磁盘问题处理</a></li><li><a href="/cheneyBlog/others/win.html" class="sidebar-link">windows相关</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="基于springboot-vue开发的web应用进行双向https部署"><a href="#基于springboot-vue开发的web应用进行双向https部署" class="header-anchor">#</a> 基于SpringBoot+Vue开发的Web应用进行双向Https部署</h1> <img width="600" src="https://boonlean15.github.io/cheneyBlog/images/others/1.jpg" alt="png"> <blockquote><p>客户端到Nginx采用双向Https访问，客户端选择数字证书进行登录，由Nginx配置双向Https认证，Nginx可以自动解析数字证书，并且我们可以拿到Nginx解析数字证书后的信息，获取到Nginx中的DN值后，放入请求头中，当Nginx反向代理请求Web应用时，就可以将数字证书中的用户信息数据DN传递给Web应用，应用拿到后就可以进行登录。</p> <blockquote><p>在此过程中，为了安全起见，Nginx到Web应用的请求采用的是单向Https。</p></blockquote></blockquote> <h2 id="后端开启https示例"><a href="#后端开启https示例" class="header-anchor">#</a> 后端开启https示例</h2> <h3 id="生成证书"><a href="#生成证书" class="header-anchor">#</a> 生成证书</h3> <div class="language-shell extra-class"><pre class="language-shell"><code>keytool <span class="token parameter variable">-genkey</span> <span class="token parameter variable">-alias</span> myhttps <span class="token parameter variable">-keyalg</span> RSA <span class="token parameter variable">-keysize</span> <span class="token number">3068</span> <span class="token parameter variable">-validity</span> <span class="token number">36500</span> <span class="token parameter variable">-keystore</span>  <span class="token string">&quot;/Users/myhttps.jks&quot;</span>
+<span class="token comment"># 然后输入密钥库口令</span>
+<span class="token comment"># 再次输入新口令</span>
+<span class="token comment"># 输入名字姓氏那些，然后y确认生成证书</span>
+
+Warning:
+JKS 密钥库使用专用格式。建议使用 <span class="token string">&quot;keytool -importkeystore -srckeystore /Users/myhttps.jks -destkeystore /Users/myhttps.jks -deststoretype pkcs12&quot;</span> 迁移到行业标准格式 PKCS12。
+
+<span class="token comment"># 执行命令迁移到PKCS12</span>
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> /Users/myhttps.jks <span class="token parameter variable">-destkeystore</span> /Users/myhttps.jks <span class="token parameter variable">-deststoretype</span> pkcs12
+
+<span class="token comment"># JKS转换为P12</span>
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> /Users/myhttps.jks <span class="token parameter variable">-srcstoretype</span> JKS <span class="token parameter variable">-deststoretype</span> PKCS12 <span class="token parameter variable">-destkeystore</span> /Users/myhttps.p12
+</code></pre></div><h3 id="springboot开启https"><a href="#springboot开启https" class="header-anchor">#</a> springboot开启https</h3> <blockquote><p>项目使用的PKCS12类型证书，步骤：使用示例创建证书、项目配置application.yml文件。</p></blockquote> <ul><li>在application.properties或者application.yml中进行配置</li></ul> <div class="language-yml extra-class"><pre class="language-yml"><code><span class="token key atrule">server</span><span class="token punctuation">:</span>
+  <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">9987</span>
+  <span class="token key atrule">non-ssl-port</span><span class="token punctuation">:</span> <span class="token number">8089</span>
+  <span class="token comment"># 用于 非ssl请求 强制转成 ssl 请求</span>
+  <span class="token comment"># 当使用 访问地址：http://127.0.0.1:8089/hello 访问时 后台会 将请求 转换成 https://127.0.0.1:9987/hello</span>
+  <span class="token comment">#  servlet:</span>
+  <span class="token comment">#    context-path: /ssl-service</span>
+  <span class="token key atrule">ssl</span><span class="token punctuation">:</span>
+    <span class="token key atrule">key-store</span><span class="token punctuation">:</span> classpath<span class="token punctuation">:</span>myhttps.p12  <span class="token comment">#类路径下的自签证书</span>
+    <span class="token key atrule">key-alias</span><span class="token punctuation">:</span> myhttps <span class="token comment"># 证书别名</span>
+    <span class="token key atrule">key-store-password</span><span class="token punctuation">:</span> myhttps <span class="token comment">#证书密码</span>
+    <span class="token key atrule">key-store-type</span><span class="token punctuation">:</span> PKCS12 <span class="token comment"># 证书类型</span>
+    <span class="token key atrule">enabled</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>  <span class="token comment"># 开启证书验证</span>
+</code></pre></div><blockquote><p>配置了如上属性后，默认开启了https，此时配置文件中的server.port配置的端口为https请求的端口</p></blockquote> <ul><li>springboot兼容http方式开启https</li></ul> <blockquote><p>以下可配置为http、https共同使用，实现思路是监听http请求转发到https请求</p></blockquote> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>bisp<span class="token punctuation">.</span>common<span class="token punctuation">.</span>config</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>catalina<span class="token punctuation">.</span></span><span class="token class-name">Context</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>catalina<span class="token punctuation">.</span>connector<span class="token punctuation">.</span></span><span class="token class-name">Connector</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>tomcat<span class="token punctuation">.</span>util<span class="token punctuation">.</span>descriptor<span class="token punctuation">.</span>web<span class="token punctuation">.</span></span><span class="token class-name">SecurityCollection</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>tomcat<span class="token punctuation">.</span>util<span class="token punctuation">.</span>descriptor<span class="token punctuation">.</span>web<span class="token punctuation">.</span></span><span class="token class-name">SecurityConstraint</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Value</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>web<span class="token punctuation">.</span>embedded<span class="token punctuation">.</span>tomcat<span class="token punctuation">.</span></span><span class="token class-name">TomcatServletWebServerFactory</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>server<span class="token punctuation">.</span></span><span class="token class-name">ServletWebServerFactory</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Bean</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Configuration</span></span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @ClassName TomcatConfig
+ * @Description TODO
+ * @Author yzx
+ * @Date 2022/11/24 10:59
+ **/</span>
+<span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TomcatConfig</span> <span class="token punctuation">{</span>
+    <span class="token comment">/**获取配置端口*/</span>
+    <span class="token annotation punctuation">@Value</span><span class="token punctuation">(</span><span class="token string">&quot;${server.port}&quot;</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> httpPort<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">ServletWebServerFactory</span> <span class="token function">servletContainer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">TomcatServletWebServerFactory</span> factory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TomcatServletWebServerFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">postProcessContext</span><span class="token punctuation">(</span><span class="token class-name">Context</span> context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token class-name">SecurityConstraint</span> constraint <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SecurityConstraint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                constraint<span class="token punctuation">.</span><span class="token function">setUserConstraint</span><span class="token punctuation">(</span><span class="token string">&quot;CONFIDENTIAL&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">SecurityCollection</span> collection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SecurityCollection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                collection<span class="token punctuation">.</span><span class="token function">addPattern</span><span class="token punctuation">(</span><span class="token string">&quot;/*&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                constraint<span class="token punctuation">.</span><span class="token function">addCollection</span><span class="token punctuation">(</span>collection<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                context<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span>constraint<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        factory<span class="token punctuation">.</span><span class="token function">addAdditionalTomcatConnectors</span><span class="token punctuation">(</span><span class="token function">tomcatConnector</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> factory<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">private</span> <span class="token class-name">Connector</span> <span class="token function">tomcatConnector</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Connector</span> connector <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Connector</span><span class="token punctuation">(</span><span class="token string">&quot;org.apache.coyote.http11.Http11NioProtocol&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        connector<span class="token punctuation">.</span><span class="token function">setScheme</span><span class="token punctuation">(</span><span class="token string">&quot;http&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//http端口号，可以自行指定（不能和其它已经使用的端口重复，否则会报错）</span>
+        <span class="token comment">//设置http的监听端口为80端口，这样访问的时候也可以不用带上端口号</span>
+        connector<span class="token punctuation">.</span><span class="token function">setPort</span><span class="token punctuation">(</span><span class="token number">9090</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        connector<span class="token punctuation">.</span><span class="token function">setSecure</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//监听到的http的端口号后转向到https的端口号，可以自行指定</span>
+        connector<span class="token punctuation">.</span><span class="token function">setRedirectPort</span><span class="token punctuation">(</span>httpPort<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> connector<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="证书格式"><a href="#证书格式" class="header-anchor">#</a> 证书格式</h3> <div class="language-shell extra-class"><pre class="language-shell"><code>.DER 扩展名
+用于二进制DER编码证书
+
+.PEM 扩展名
+用于不同类型的X.509v3文件，是以“ - BEGIN …”前缀的ASCII（Base64）数据
+
+.CRT 扩展名
+CRT扩展用于证书。 证书可以被编码为二进制DER或ASCII PEM。 CER和CRT扩展几乎是同义词。 最常见的于Unix 或类Unix系统
+
+.CER 扩展名
+.crt的替代形式
+
+.KEY 扩展名
+
+KEY扩展名用于公钥和私钥PKCS＃8。 键可以被编码为二进制DER或ASCII PEM
+</code></pre></div><h3 id="证书格式转换"><a href="#证书格式转换" class="header-anchor">#</a> 证书格式转换</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment">#查看PEM编码证书</span>
+openssl x509 <span class="token parameter variable">-in</span> cert.pem <span class="token parameter variable">-text</span> <span class="token parameter variable">-noout</span>
+openssl x509 <span class="token parameter variable">-in</span> cert.cer <span class="token parameter variable">-text</span> <span class="token parameter variable">-noout</span>
+openssl x509 <span class="token parameter variable">-in</span> cert.crt <span class="token parameter variable">-text</span> <span class="token parameter variable">-noout</span>
+<span class="token comment">#查看DER编码证书</span>
+openssl x509 <span class="token parameter variable">-in</span> certificate.der <span class="token parameter variable">-inform</span> der <span class="token parameter variable">-text</span> <span class="token parameter variable">-noout</span>
+
+<span class="token comment">#转换证书格式</span>
+<span class="token comment">#转换可以将一种类型的编码证书存入另一种。（即PEM到DER转换）</span>
+<span class="token comment">#PEM到DER</span>
+openssl x509 <span class="token parameter variable">-in</span> cert.crt <span class="token parameter variable">-outform</span> der <span class="token parameter variable">-out</span> cert.der
+<span class="token comment">#DER到PEM</span>
+openssl x509 <span class="token parameter variable">-in</span> cert.crt <span class="token parameter variable">-inform</span> der <span class="token parameter variable">-outform</span> pem <span class="token parameter variable">-out</span> cert.pem
+
+<span class="token comment">#PEM -&gt; DER -&gt; JKS的转换(无私钥情况下转换pem格式证书为jks格式)</span>
+<span class="token comment">#pem文件 转换为 der文件</span>
+openssl x509 <span class="token parameter variable">-outform</span> der <span class="token parameter variable">-in</span> cert.pem <span class="token parameter variable">-out</span> cert.der
+<span class="token comment">#der文件 转换为 jks文件</span>
+keytool <span class="token parameter variable">-import</span> <span class="token parameter variable">-keystore</span> cert.jks <span class="token parameter variable">-file</span> cert.der
+
+<span class="token comment">#查看证书信息</span>
+keytool <span class="token parameter variable">-list</span> <span class="token parameter variable">-v</span> <span class="token parameter variable">-keystore</span>  D:/demo.jks <span class="token parameter variable">-storepass</span> <span class="token number">123456</span>@store2
+
+<span class="token comment"># JKS与P12相互转换</span>
+<span class="token comment"># JKS转换为P12</span>
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> /Users/myhttps.jks <span class="token parameter variable">-srcstoretype</span> JKS <span class="token parameter variable">-deststoretype</span> PKCS12 <span class="token parameter variable">-destkeystore</span> /Users/myhttps.p12
+<span class="token comment"># P12转换为JKS</span>
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> server.p12 <span class="token parameter variable">-srcstoretype</span> PKCS12 <span class="token parameter variable">-deststoretype</span> JKS <span class="token parameter variable">-destkeystore</span> server.jks
+
+<span class="token comment"># JKS与PEM转换</span>
+<span class="token comment"># JKS——&gt;PEM</span>
+JSK转换为PEM需要先，JKS–<span class="token operator">&gt;</span>P12–<span class="token operator">&gt;</span>PEM
+//jks---<span class="token operator">&gt;</span>p12<span class="token punctuation">[</span>需要注意这里必须add <span class="token parameter variable">-alias</span> keyOwnerAlias 否则会报错<span class="token punctuation">]</span>
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> sert.jks <span class="token parameter variable">-destkeystore</span> sert.p12 <span class="token parameter variable">-srcstoretype</span> jks <span class="token parameter variable">-deststoretype</span> pkcs12 <span class="token parameter variable">-alias</span> keyOwnerAlias
+//p12---<span class="token operator">&gt;</span>pem
+openssl pkcs12 <span class="token parameter variable">-in</span> sert.p12 <span class="token parameter variable">-out</span> sert.pem
+<span class="token comment"># PEM——&gt;JKS</span>
+//PEM---<span class="token operator">&gt;</span>PFX
+openssl pkcs12 <span class="token parameter variable">-export</span> <span class="token parameter variable">-out</span> test.pfx <span class="token parameter variable">-inkey</span> test.key <span class="token parameter variable">-in</span> test.pem
+//PFX---<span class="token operator">&gt;</span>JKS
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> test.pfx <span class="token parameter variable">-destkeystore</span> test.jks <span class="token parameter variable">-srcstoretype</span> PKCS12 <span class="token parameter variable">-deststoretype</span> JKS
+<span class="token comment"># P12证书库导出CER</span>
+keytool <span class="token parameter variable">-export</span> <span class="token parameter variable">-alias</span> server <span class="token parameter variable">-keystore</span> server.p12 <span class="token parameter variable">-storetype</span> PKCS12 <span class="token parameter variable">-storepass</span> huawei <span class="token parameter variable">-rfc</span> <span class="token parameter variable">-file</span> huawei.cer
+<span class="token comment"># 证书库JKS，添加为一个信任证书CER/PEM</span>
+<span class="token comment"># 导出CER</span>
+keytool <span class="token parameter variable">-import</span> <span class="token parameter variable">-v</span> <span class="token parameter variable">-file</span> server.cer <span class="token parameter variable">-keystore</span> client.jks
+<span class="token comment"># 导出PEM</span>
+openssl pkcs12 <span class="token parameter variable">-in</span> server.p12 <span class="token parameter variable">-out</span> server.pem <span class="token parameter variable">-nokeys</span> 
+
+<span class="token comment"># 查看证书库</span>
+keytool <span class="token parameter variable">-list</span> <span class="token parameter variable">-keystore</span> client.jks
+
+<span class="token comment"># JKS—–&gt;KEYSTORE</span>
+//JKS---<span class="token operator">&gt;</span>P12
+keytool <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> D:<span class="token punctuation">\</span>test.keystore <span class="token parameter variable">-srcstoretype</span> JKS <span class="token parameter variable">-deststoretype</span> PKCS12 <span class="token parameter variable">-destkeystore</span> test1.p12
+//P12----<span class="token operator">&gt;</span>KEYSTORE
+keytool <span class="token parameter variable">-v</span> <span class="token parameter variable">-importkeystore</span> <span class="token parameter variable">-srckeystore</span> D:<span class="token punctuation">\</span>test.p12 <span class="token parameter variable">-srcstoretype</span> PKCS12 <span class="token parameter variable">-destkeystore</span> D:<span class="token punctuation">\</span>test.keystore <span class="token parameter variable">-deststoretype</span> JKS
+
+<span class="token comment"># KEYSTORE——&gt;JKS</span>
+//keystore---<span class="token operator">&gt;</span>crt
+keytool <span class="token parameter variable">-export</span> <span class="token parameter variable">-alias</span> <span class="token builtin class-name">test</span> <span class="token parameter variable">-file</span> D:<span class="token punctuation">\</span>test.crt <span class="token parameter variable">-keystore</span> D:<span class="token punctuation">\</span>test.keystore
+//CRT--<span class="token operator">&gt;</span>CER
+openssl x509 <span class="token parameter variable">-inform</span> pem <span class="token parameter variable">-in</span> test.crt <span class="token parameter variable">-outform</span> der <span class="token parameter variable">-out</span> test.cer
+//CER---<span class="token operator">&gt;</span>JKS
+keytool <span class="token parameter variable">-import</span> <span class="token parameter variable">-v</span> <span class="token parameter variable">-alias</span> <span class="token builtin class-name">test</span> <span class="token parameter variable">-file</span> test.cer <span class="token parameter variable">-keystore</span> test.jks <span class="token parameter variable">-storepass</span> <span class="token number">123456</span> <span class="token parameter variable">-noprompt</span> 
+</code></pre></div><h3 id="制作证书命令"><a href="#制作证书命令" class="header-anchor">#</a> 制作证书命令</h3> <ul><li><strong>制作证书采用jdk自带keytool工具创建.示例1:</strong></li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code>keytool <span class="token parameter variable">-genkey</span> <span class="token parameter variable">-alias</span> myhttps <span class="token parameter variable">-keyalg</span> RSA <span class="token parameter variable">-keysize</span> <span class="token number">2048</span> <span class="token parameter variable">-validity</span> <span class="token number">36500</span> <span class="token parameter variable">-keystore</span>  <span class="token string">&quot;D:/tmp/ssl/myhttps.keystore&quot;</span>
+
+命令：keytool <span class="token parameter variable">-genkey</span> <span class="token parameter variable">-alias</span> testhttps <span class="token parameter variable">-keyalg</span> RSA <span class="token parameter variable">-keysize</span> <span class="token number">2048</span> <span class="token parameter variable">-validity</span> <span class="token number">36500</span> <span class="token parameter variable">-keystore</span>  <span class="token string">&quot;D:/tmp/ssl/testhttps.keystore&quot;</span>
+
+<span class="token comment"># 命令解释:</span>
+• <span class="token parameter variable">-genkey</span> 表示要创建一个新的密钥。 
+
+• <span class="token parameter variable">-alias</span> 表示 keystore 的别名。 
+
+• <span class="token parameter variable">-keyalg</span> 表示使用的加密算法是 RSA。
+
+• <span class="token parameter variable">-keysize</span> 表示密钥的长度．。
+
+• <span class="token parameter variable">-keystore</span> 表示生成的密钥存放位直。 
+
+• <span class="token parameter variable">-validity</span> 表示密钥的有效时间，单位为天。
+</code></pre></div><ul><li><strong>制作证书，示例2:</strong></li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code>keytool <span class="token parameter variable">-genkeypair</span> <span class="token parameter variable">-alias</span> demo <span class="token parameter variable">-keypass</span> <span class="token number">123456</span>@key <span class="token parameter variable">-keyalg</span> RSA <span class="token parameter variable">-keysize</span> <span class="token number">1024</span> <span class="token parameter variable">-validity</span> <span class="token number">365</span> <span class="token parameter variable">-keystore</span> D:/demo.jks <span class="token parameter variable">-storepass</span> <span class="token number">123456</span>@store
+您的名字与姓氏是什么?
+  <span class="token punctuation">[</span>Unknown<span class="token punctuation">]</span>:  lihz
+您的组织单位名称是什么?
+  <span class="token punctuation">[</span>Unknown<span class="token punctuation">]</span>:  org
+您的组织名称是什么?
+  <span class="token punctuation">[</span>Unknown<span class="token punctuation">]</span>:  org
+您所在的城市或区域名称是什么?
+  <span class="token punctuation">[</span>Unknown<span class="token punctuation">]</span>:  wuhan
+您所在的省/市/自治区名称是什么?
+  <span class="token punctuation">[</span>Unknown<span class="token punctuation">]</span>:  hubei
+该单位的双字母国家/地区代码是什么?
+  <span class="token punctuation">[</span>Unknown<span class="token punctuation">]</span>:  CN
+<span class="token assign-left variable">CN</span><span class="token operator">=</span>lihz, <span class="token assign-left variable">OU</span><span class="token operator">=</span>org, <span class="token assign-left variable">O</span><span class="token operator">=</span>org, <span class="token assign-left variable">L</span><span class="token operator">=</span>wuhan, <span class="token assign-left variable">ST</span><span class="token operator">=</span>hubei, <span class="token assign-left variable">C</span><span class="token operator">=</span>CN是否正确?
+  <span class="token punctuation">[</span>否<span class="token punctuation">]</span>:  y
+Warning:
+JKS 密钥库使用专用格式。建议使用 <span class="token string">&quot;keytool -importkeystore -srckeystore D:/demo.jks -destkeystore D:/demo.jks -deststoretype pkcs12&quot;</span> 迁移到行业标准格式 PKCS12。
+</code></pre></div><blockquote><p><strong>可以按照提示生成PKCS12格式证书</strong></p></blockquote> <ul><li>keytool参数</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code>keytool <span class="token parameter variable">-help</span>
+密钥和证书管理工具
+
+命令:
+
+ <span class="token parameter variable">-certreq</span>            生成证书请求
+ <span class="token parameter variable">-changealias</span>        更改条目的别名
+ <span class="token parameter variable">-delete</span>             删除条目
+ <span class="token parameter variable">-exportcert</span>         导出证书
+ <span class="token parameter variable">-genkeypair</span>         生成密钥对
+ <span class="token parameter variable">-genseckey</span>          生成密钥
+ <span class="token parameter variable">-gencert</span>            根据证书请求生成证书
+ <span class="token parameter variable">-importcert</span>         导入证书或证书链
+ <span class="token parameter variable">-importpass</span>         导入口令
+ <span class="token parameter variable">-importkeystore</span>     从其他密钥库导入一个或所有条目
+ <span class="token parameter variable">-keypasswd</span>          更改条目的密钥口令
+ <span class="token parameter variable">-list</span>               列出密钥库中的条目
+ <span class="token parameter variable">-printcert</span>          打印证书内容
+ <span class="token parameter variable">-printcertreq</span>       打印证书请求的内容
+ <span class="token parameter variable">-printcrl</span>           打印 CRL 文件的内容
+ <span class="token parameter variable">-storepasswd</span>        更改密钥库的存储口令
+
+
+keytool <span class="token parameter variable">-genkeypair</span> <span class="token parameter variable">-help</span>
+keytool <span class="token parameter variable">-genkeypair</span> <span class="token punctuation">[</span>OPTION<span class="token punctuation">]</span><span class="token punctuation">..</span>.
+
+生成密钥对
+
+选项:
+
+ <span class="token parameter variable">-alias</span> <span class="token operator">&lt;</span>alias<span class="token operator">&gt;</span>                  要处理的条目的别名
+ <span class="token parameter variable">-keyalg</span> <span class="token operator">&lt;</span>keyalg<span class="token operator">&gt;</span>                密钥算法名称
+ <span class="token parameter variable">-keysize</span> <span class="token operator">&lt;</span>keysize<span class="token operator">&gt;</span>              密钥位大小
+ <span class="token parameter variable">-sigalg</span> <span class="token operator">&lt;</span>sigalg<span class="token operator">&gt;</span>                签名算法名称
+ <span class="token parameter variable">-destalias</span> <span class="token operator">&lt;</span>destalias<span class="token operator">&gt;</span>          目标别名
+ <span class="token parameter variable">-dname</span> <span class="token operator">&lt;</span>dname<span class="token operator">&gt;</span>                  唯一判别名
+ <span class="token parameter variable">-startdate</span> <span class="token operator">&lt;</span>startdate<span class="token operator">&gt;</span>          证书有效期开始日期/时间
+ <span class="token parameter variable">-ext</span> <span class="token operator">&lt;</span>value<span class="token operator">&gt;</span>                    X.509 扩展
+ <span class="token parameter variable">-validity</span> <span class="token operator">&lt;</span>valDays<span class="token operator">&gt;</span>             有效天数
+ <span class="token parameter variable">-keypass</span> <span class="token operator">&lt;</span>arg<span class="token operator">&gt;</span>                  密钥口令
+ <span class="token parameter variable">-keystore</span> <span class="token operator">&lt;</span>keystore<span class="token operator">&gt;</span>            密钥库名称
+ <span class="token parameter variable">-storepass</span> <span class="token operator">&lt;</span>arg<span class="token operator">&gt;</span>                密钥库口令
+ <span class="token parameter variable">-storetype</span> <span class="token operator">&lt;</span>storetype<span class="token operator">&gt;</span>          密钥库类型
+ <span class="token parameter variable">-providername</span> <span class="token operator">&lt;</span>providername<span class="token operator">&gt;</span>    提供方名称
+ <span class="token parameter variable">-providerclass</span> <span class="token operator">&lt;</span>providerclass<span class="token operator">&gt;</span>  提供方类名
+ <span class="token parameter variable">-providerarg</span> <span class="token operator">&lt;</span>arg<span class="token operator">&gt;</span>              提供方参数
+ <span class="token parameter variable">-providerpath</span> <span class="token operator">&lt;</span>pathlist<span class="token operator">&gt;</span>        提供方类路径
+ <span class="token parameter variable">-v</span>                              详细输出
+ <span class="token parameter variable">-protected</span>                      通过受保护的机制的口令
+</code></pre></div><h3 id="导出证书"><a href="#导出证书" class="header-anchor">#</a> 导出证书</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment">#导出证书</span>
+keytool <span class="token parameter variable">-export</span> <span class="token parameter variable">-alias</span> demo <span class="token parameter variable">-keystore</span> D:/demo.jks <span class="token parameter variable">-rfc</span> <span class="token parameter variable">-file</span> D:/demo.cer <span class="token parameter variable">-storepass</span> <span class="token number">123456</span>@store
+存储在文件 <span class="token operator">&lt;</span>D:/demo.cer<span class="token operator">&gt;</span> 中的证书
+
+Warning:
+JKS 密钥库使用专用格式。建议使用 <span class="token string">&quot;keytool -importkeystore -srckeystore D:/demo.jks -destkeystore D:/demo.jks -deststoretype pkcs12&quot;</span> 迁移到行业标准格式 PKCS12。
+
+<span class="token comment"># .cer 转换成 .crt  (方式1)</span>
+keytool <span class="token parameter variable">-printcert</span> <span class="token parameter variable">-rfc</span> <span class="token parameter variable">-file</span> D:/demo.cer <span class="token operator">&gt;</span> D:/demo.crt 
+
+<span class="token comment">#可以使用openssl 工具转换，一般linux操作系统上都有，windows没有。</span>
+openssl  x509 <span class="token parameter variable">-inform</span> PEM <span class="token parameter variable">-in</span> D:/demo.cer <span class="token parameter variable">-out</span> D:/demo.crt 
+</code></pre></div><h3 id="postman使用-如果需要使用postman则导出证书使用"><a href="#postman使用-如果需要使用postman则导出证书使用" class="header-anchor">#</a> Postman使用 - 如果需要使用postman则导出证书使用</h3> <div class="language-shell extra-class"><pre class="language-shell"><code>Postman的证书
+Postman会对证书进行验证，只有正规机构颁发的证书才能验证通过，如果是自签的证书，则需要关闭验证 SSL certificate verification 。
+
+Postman增加客户端证书涉及3个文件和一个密码：
+
+.pfx 同时包含了公钥信息和私钥信息（cer只包含公钥信息）
+
+.cer 为客户端密钥库的公钥
+
+.key 为客户端密钥库的私钥
+
+Passphrase 为密钥库的密码。创建证书时设置的密码，-keypass 参数。
+</code></pre></div><h2 id="基于nginx实现双向https"><a href="#基于nginx实现双向https" class="header-anchor">#</a> 基于NGINX实现双向HTTPS</h2> <blockquote><p>vue开启https方式存在问题，由于证书不能在本地主机上工作，所有证书只能在域名上工作。推荐使用nginx添加ssl</p></blockquote> <ul><li>制作证书</li></ul> <div class="language-shell extra-class"><pre class="language-shell"><code>C:<span class="token punctuation">\</span>nginx-1.16.1<span class="token punctuation">\</span>ssl<span class="token operator">&gt;</span>openssl genrsa <span class="token parameter variable">-des3</span> <span class="token parameter variable">-out</span> server.key <span class="token number">2048</span>  创建服务器私钥
+Generating RSA private key, <span class="token number">2048</span> bit long modulus <span class="token punctuation">(</span><span class="token number">2</span> primes<span class="token punctuation">)</span>
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>.+++++
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>.+++++
+e is <span class="token number">65537</span> <span class="token punctuation">(</span>0x010001<span class="token punctuation">)</span>
+Enter pass phrase <span class="token keyword">for</span> server.key:
+Verifying - Enter pass phrase <span class="token keyword">for</span> server.key:
+ 
+C:<span class="token punctuation">\</span>nginx-1.16.1<span class="token punctuation">\</span>ssl<span class="token operator">&gt;</span>openssl req <span class="token parameter variable">-new</span> <span class="token parameter variable">-key</span> server.key <span class="token parameter variable">-out</span> server.csr  创建CSR证书请求文件
+Enter pass phrase <span class="token keyword">for</span> server.key:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter <span class="token string">'.'</span>, the field will be left blank.
+-----
+Country Name <span class="token punctuation">(</span><span class="token number">2</span> letter code<span class="token punctuation">)</span> <span class="token punctuation">[</span>AU<span class="token punctuation">]</span>:CN
+State or Province Name <span class="token punctuation">(</span>full name<span class="token punctuation">)</span> <span class="token punctuation">[</span>Some-State<span class="token punctuation">]</span>:Shanghai
+Locality Name <span class="token punctuation">(</span>eg, city<span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>:Shanghai
+Organization Name <span class="token punctuation">(</span>eg, company<span class="token punctuation">)</span> <span class="token punctuation">[</span>Internet Widgits Pty Ltd<span class="token punctuation">]</span>:XXXXX
+Organizational Unit Name <span class="token punctuation">(</span>eg, section<span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>:Software
+Common Name <span class="token punctuation">(</span>e.g. server FQDN or YOUR name<span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>:YYYY
+Email Address <span class="token punctuation">[</span><span class="token punctuation">]</span>:
+ 
+Please enter the following <span class="token string">'extra'</span> attributes
+to be sent with your certificate request
+A challenge password <span class="token punctuation">[</span><span class="token punctuation">]</span>:
+An optional company name <span class="token punctuation">[</span><span class="token punctuation">]</span>:
+ 
+C:<span class="token punctuation">\</span>nginx-1.16.1<span class="token punctuation">\</span>ssl<span class="token operator">&gt;</span>copy server.key server.key.orig  备份有秘密的私钥文件
+已复制         <span class="token number">1</span> 个文件。
+ 
+C:<span class="token punctuation">\</span>nginx-1.16.1<span class="token punctuation">\</span>ssl<span class="token operator">&gt;</span>openssl rsa <span class="token parameter variable">-in</span> server.key <span class="token parameter variable">-out</span> server.key  去掉私钥文件的密码
+Enter pass phrase <span class="token keyword">for</span> server.key:
+writing RSA key
+ 
+C:<span class="token punctuation">\</span>nginx-1.16.1<span class="token punctuation">\</span>ssl<span class="token operator">&gt;</span>openssl x509 <span class="token parameter variable">-req</span> <span class="token parameter variable">-days</span> <span class="token number">3650</span> <span class="token parameter variable">-in</span> server.csr <span class="token parameter variable">-signkey</span> server.key <span class="token parameter variable">-out</span> server.crt    使用服务器私钥签署服务器公钥证书
+Signature ok
+<span class="token assign-left variable">subject</span><span class="token operator">=</span>C <span class="token operator">=</span> CN, ST <span class="token operator">=</span> Shanghai, L <span class="token operator">=</span> Shanghai, O <span class="token operator">=</span> Intel, OU <span class="token operator">=</span> Software, CN <span class="token operator">=</span> server1
+Getting Private key
+</code></pre></div><ul><li>部署自签证书到nginx服务器</li></ul> <blockquote><p>Nginx的配置是最关键的，首先，需要将Vue生成的静态资源交给Nginx处理。其次，需要将Nginx配置成双向Https认证，客户端的证书交给Nginx认证并解析</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 二级路由跳转、接口代理、https信任自签证书</span>
+server <span class="token punctuation">{</span>
+        server_name localhost<span class="token punctuation">;</span>
+        listen <span class="token number">443</span> ssl<span class="token punctuation">;</span> <span class="token comment"># 监听443端口, 开启ssl(必须)</span>
+        root /usr/share/nginx/html<span class="token punctuation">;</span>
+        
+        <span class="token comment">#ssl</span>
+        <span class="token comment"># 引用ssl证书(必须,如果放在nginx/conf/ssl下可以用相对路径,其他位置必须用绝对路径)</span>
+        ssl_certificate /etc/nginx/cert/server.crt<span class="token punctuation">;</span>
+        ssl_certificate_key /etc/nginx/cert/server.key<span class="token punctuation">;</span>
+        <span class="token comment"># 协议优化(可选,优化https协议,增强安全性)</span>
+        ssl_session_cache  shared:SSL:10m<span class="token punctuation">;</span>
+        ssl_session_timeout 10m<span class="token punctuation">;</span>
+        ssl_protocols TLSv1.2 TLSv1.3<span class="token punctuation">;</span>
+        ssl_prefer_server_ciphers on<span class="token punctuation">;</span>
+        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:<span class="token operator">!</span>NULL:<span class="token operator">!</span>aNULL:<span class="token operator">!</span>MD5:<span class="token operator">!</span>ADH:<span class="token operator">!</span>RC4<span class="token punctuation">;</span>
+
+        <span class="token comment">#gzip</span>
+        <span class="token function">gzip</span> on<span class="token punctuation">;</span> <span class="token comment">#启动</span>
+        gzip_buffers <span class="token number">32</span> 4K<span class="token punctuation">;</span>
+        gzip_comp_level <span class="token number">6</span><span class="token punctuation">;</span> <span class="token comment">#压缩级别，1-10，数字越大压缩的越好</span>
+        gzip_min_length <span class="token number">100</span><span class="token punctuation">;</span> <span class="token comment">#不压缩临界值，大于100的才压缩，一般不用改</span>
+        gzip_types application/javascript text/css text/xml<span class="token punctuation">;</span>
+        gzip_disable <span class="token string">&quot;MSIE [1-6]\.&quot;</span><span class="token punctuation">;</span> <span class="token comment"># IE6对Gzip不友好，对Gzip</span>
+        gzip_vary on<span class="token punctuation">;</span>
+
+        client_max_body_size  500m<span class="token punctuation">;</span>
+        location / <span class="token punctuation">{</span>
+                try_files <span class="token variable">$uri</span> <span class="token variable">$uri</span>/ @router<span class="token punctuation">;</span>
+                index  index.html index.htm <span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        location @router<span class="token punctuation">{</span>
+                rewrite ^.*$ /index.html last<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment"># 当遇到/api （也就是我们的接口）对其进行反向代理</span>
+        location ~^/xxx <span class="token punctuation">{</span>
+                proxy_set_header Upgrade <span class="token variable">$http_upgrade</span><span class="token punctuation">;</span>
+                proxy_set_header Connection <span class="token string">&quot;upgrade&quot;</span><span class="token punctuation">;</span>
+                proxy_pass   https://<span class="token variable">${API_PATH}</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        location ~^/cmp-xxx <span class="token punctuation">{</span>
+                proxy_set_header Upgrade <span class="token variable">$http_upgrade</span><span class="token punctuation">;</span>
+                proxy_set_header Connection <span class="token string">&quot;upgrade&quot;</span><span class="token punctuation">;</span>
+                proxy_pass   http://<span class="token variable">${MINIO_PATH}</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p>参考：
+<a href="https://www.freesion.com/article/49521570591/" target="_blank" rel="noopener noreferrer">基于NGINX实现双向HTTPS部署并实现数字证书登录<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> <a href="https://www.cnblogs.com/lasding/p/16924679.html" target="_blank" rel="noopener noreferrer">自签名证书<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://blog.csdn.net/weixin_41463944/article/details/131604251" target="_blank" rel="noopener noreferrer">springboot开启https<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p><a href="https://blog.csdn.net/demon7552003/article/details/125631771" target="_blank" rel="noopener noreferrer">springboot使用https协议<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/cheneyBlog/others/xss.html" class="prev">
+        xss漏洞
+      </a></span> <span class="next"><a href="/cheneyBlog/linux-shell/linux-shell.html">
+        Linux常用命令
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/cheneyBlog/assets/js/app.2a1bc94b.js" defer></script><script src="/cheneyBlog/assets/js/2.74bbeaff.js" defer></script><script src="/cheneyBlog/assets/js/1.893c586b.js" defer></script><script src="/cheneyBlog/assets/js/105.2ffa3b1f.js" defer></script>
+  </body>
+</html>
