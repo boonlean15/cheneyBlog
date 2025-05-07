@@ -439,6 +439,23 @@ module.exports = {
                 ]
             },
             {
+                title: 'AI知识',   // 必要的
+                // collapsable: false, // 可选的, 默认值是 true,
+                // sidebarDepth: 0,    // 可选的, 默认值是 1
+                children: [
+                    {
+                        title: 'AI相关概念',
+                        path: '/ai/concept',
+                    },{
+                        title: '大模型训练基础',
+                        path: '/ai/llm-bash',
+                    },{
+                        title: '神经网络',
+                        path: '/ai/network',
+                    }
+                ]
+            },
+            {
                 title: 'springboot',   // 必要的
                 // collapsable: false, // 可选的, 默认值是 true,
                 // sidebarDepth: 0,    // 可选的, 默认值是 1
