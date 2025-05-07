@@ -65,9 +65,37 @@ commit;
 ## 数据备份
 ### 备份单表数据
 ```shell
-docker exec -it postgres pg_dump -U postgres -d cmp -t order  -f order.sql
-docker exec -it postgres pg_dump -U postgres -d cmp  -t change_list -f change_list.sql
+docker exec -it postgres pg_dump -U postgres -d test -t order  -f order.sql
+docker exec -it postgres pg_dump -U postgres -d test  -t change_list -f change_list.sql
 ```
+### 备份数据库结构
+```shell
+docker exec -it postgres pg_dump -U postgres -s database  -f schema_full.sql
+```
+
+## 数据空间清理
+```sql
+-- 删除十天前数据
+delete from table_name where create_time < '2024-10-14 10:38:23'; now() - interval '10 days';
+
+-- 使用psql命令行工具，您可以直接运行上面的SQL命令
+psql -d your_database -c "DELETE FROM your_table WHERE date_column < now() - interval '10 days';"
+
+
+-- 看这个表的状态信息 n_live_tup          | 12674745   #表示当前表的数据量，n_dead_tup          | 37325572   #表示为回收的空间
+select * from pg_stat_user_tables where relname='table_name';
+
+select pg_size_pretty(pg_relation_size('table_name')) as size;
+
+VACUUM FULL table_name;
+
+-- 释放特定表的空间
+VACUUM (FULL, VERBOSE, ANALYZE) table_name;
+ 
+-- 或者，对整个数据库执行VACUUM
+VACUUM (FULL, VERBOSE, ANALYZE);
+```
+
 
 ## pg查看表结构信息
 - 通过命令行查询
@@ -87,7 +115,7 @@ select count(tablename) from pg_tables where schemaname='public' --- 得到用�
 - 统计数据库大小
 ```shell
 单个数据库的大小
-select datname, pg_size_pretty (pg_database_size(datname)) AS size from pg_database where datname = 'cmp'; 
+select datname, pg_size_pretty (pg_database_size(datname)) AS size from pg_database where datname = 'test'; 
 所有数据库的大小
 select datname, pg_size_pretty (pg_database_size(datname)) AS size from pg_database;
 ```
