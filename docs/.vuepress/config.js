@@ -448,7 +448,7 @@ module.exports = {
                         path: '/ai/concept',
                     },{
                         title: '大模型训练基础',
-                        path: '/ai/llm-bash',
+                        path: '/ai/llm-base',
                     },{
                         title: '神经网络',
                         path: '/ai/network',
