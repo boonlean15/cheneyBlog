@@ -452,6 +452,9 @@ module.exports = {
                     },{
                         title: '神经网络',
                         path: '/ai/network',
+                    },{
+                        title: 'Dify',
+                        path: '/ai/dify',
                     }
                 ]
             },
